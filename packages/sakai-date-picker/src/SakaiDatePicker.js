@@ -4,13 +4,6 @@ import { getOffsetFromServerMillis } from "sakai-portal-utils";
 /**
  * Renders an input which, when clicked, launches a date picker.
  *
- * @example <caption>Usage:</caption>
- * <sakai-date-picker epoch-millis="345922925445" @/>
- *
- * The tag fires the event 'datetime-selected'. You'd handle that with (vanillajs):
- *
- * sakaiDatePicker.addEventListener("datetime-selected", e => console.log(e.detail.epochMillis));
- *
  * @extends LitElement
  * @property {number} [epochMillis] The milliseconds since the unix epoch to set this datetime to
  * @property {string} [isoDate] The ISO8601 string to set this datetime to
