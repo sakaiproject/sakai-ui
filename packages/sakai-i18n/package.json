@@ -1,0 +1,49 @@
+{
+  "name": "@sakai-ui/sakai-i18n",
+  "version": "0.12.0",
+  "description": "A collection of functions to allow code to get Sakai translations",
+  "license": "MIT",
+  "author": "The Sakai Project",
+  "homepage": "https://github.com/sakaiproject/sakai-ui/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sakaiproject/sakai-ui",
+    "directory": "packages/sakai-i18n"
+  },
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "*.js",
+    "custom-elements.json",
+    "docs",
+    "src",
+    "test",
+    "test-helpers",
+    "translations",
+    "types"
+  ],
+  "scripts": {
+    "custom-elements-manifest": "custom-elements-manifest analyze --litelement --exclude \"docs/**/*\" \"test-helpers/**/*\"",
+    "debug": "cd ../../ && npm run debug -- --group button",
+    "debug:firefox": "cd ../../ && npm run debug:firefox -- --group button",
+    "debug:webkit": "cd ../../ && npm run debug:webkit -- --group button",
+    "publish-docs": "node ../../packages-node/publish-docs/src/cli.js --github-url https://github.com/sakaiproject/sakai-ui/ --git-root-dir ../../",
+    "prepublishOnly": "npm run publish-docs && npm run custom-elements-manifest",
+    "test": "web-test-runner --coverage"
+  },
+  "keywords": [
+    "Sakai"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "customElementsManifest": "custom-elements.json",
+  "exports": {
+    ".": "./index.js",
+    "./docs/": "./docs/"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^3.1.7",
+    "@web/test-runner": "^0.15.0"
+  }
+}
