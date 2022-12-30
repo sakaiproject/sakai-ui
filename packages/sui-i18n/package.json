@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-i18n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A collection of functions to allow code to get Sakai translations",
   "license": "MIT",
   "author": "The Sakai Project",

@@ -32,7 +32,7 @@
     ".": "./index.js"
   },
   "dependencies": {
-    "@sakai-ui/sui-i18n": "^1.0.0",
+    "@sakai-ui/sui-i18n": "1.0.1",
     "lit-element": "2.5.1"
   },
   "devDependencies": {
