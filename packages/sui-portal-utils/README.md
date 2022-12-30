@@ -1,17 +1,17 @@
-# sakai-portal-utils
+# sui-portal-utils
 
 A set of utility functions for accessing Sakai's portal js object
 
 ## Installation
 
 ```bash
-npm i @sakai-ui/sakai-portal-utils
+npm i @sakai-ui/sui-portal-utils
 ```
 
 ## Usage
 
 ```html
-import { getUserId } from "@sakai-ui/sakai-portal-utils";
+import { getUserId } from "@sakai-ui/sui-portal-utils";
 
 const userId = getUserId();
 ```

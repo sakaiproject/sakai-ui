@@ -1,4 +1,4 @@
-import { getOffsetFromServerMillis, getUserId, getUserLocale } from "../sakai-portal-utils.js";
+import { getOffsetFromServerMillis, getUserId, getUserLocale } from '../sui-portal-utils.js';
 import { expect } from '@open-wc/testing';
 
 describe("sakai-portal-utils tests", () => {
