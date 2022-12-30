@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sakai-element",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A base class for Sakai UI web components",
   "license": "MIT",
   "author": "The Sakai Project",
