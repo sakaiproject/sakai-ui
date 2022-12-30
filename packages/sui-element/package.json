@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-element",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A base class for Sakai UI web components",
   "license": "MIT",
   "author": "The Sakai Project",
@@ -32,7 +32,7 @@
     ".": "./index.js"
   },
   "dependencies": {
-    "@sakai-ui/sui-i18n": "1.0.1",
+    "@sakai-ui/sui-i18n": "1.0.2",
     "lit-element": "2.5.1"
   },
   "devDependencies": {
