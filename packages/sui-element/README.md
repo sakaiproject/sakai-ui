@@ -1,4 +1,4 @@
-# sakai-element
+# sui-element
 
 A base class for Sakai UI elements. It renders to the light dom and gives us the
 loadTranslations and tr methods.
@@ -6,15 +6,15 @@ loadTranslations and tr methods.
 ## Installation
 
 ```bash
-npm i @sakai-ui/sakai-element
+npm i @sakai-ui/sui-element
 ```
 
 ## Usage
 
 ```html
-import { SakaiElement } from "@sakai-ui/sakai-element";
+import { SuiElement } from "@sakai-ui/sui-element";
 
-class MyElement extends SakaiElement {
+class MyElement extends SuiElement {
 
     constructor() {
 

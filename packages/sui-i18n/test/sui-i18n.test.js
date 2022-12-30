@@ -1,7 +1,7 @@
-import { loadProperties, tr } from '../src/sakai-i18n.js';
+import { loadProperties, tr } from '../src/sui-i18n.js';
 import { expect } from '@open-wc/testing';
 
-describe("sakai-i18n tests", () => {
+describe("sui-i18n tests", () => {
 
   const value = "nog{0}";
   const testUrl = "/sakai-ws/rest/i18n/getI18nProperties?locale=en_GB&resourceclass=org.sakaiproject.i18n.InternationalizedMessages&resourcebundle=test";

@@ -1,14 +1,14 @@
 {
-  "name": "@sakai-ui/sakai-i18n",
+  "name": "@sakai-ui/sui-element",
   "version": "1.0.0",
-  "description": "A collection of functions to allow code to get Sakai translations",
+  "description": "A base class for Sakai UI web components",
   "license": "MIT",
   "author": "The Sakai Project",
   "homepage": "https://github.com/sakaiproject/sakai-ui/",
   "repository": {
     "type": "git",
     "url": "https://github.com/sakaiproject/sakai-ui",
-    "directory": "packages/sakai-i18n"
+    "directory": "packages/sui-element"
   },
   "main": "index.js",
   "module": "index.js",
@@ -18,6 +18,8 @@
     "test"
   ],
   "scripts": {
+    "lint": "eslint src",
+    "format": "eslint src --fix",
     "test": "web-test-runner --coverage"
   },
   "keywords": [
@@ -29,8 +31,14 @@
   "exports": {
     ".": "./index.js"
   },
+  "dependencies": {
+    "@sakai-ui/sui-i18n": "^1.0.0",
+    "lit-element": "2.5.1"
+  },
   "devDependencies": {
-    "@open-wc/testing": "^3.1.7",
-    "@web/test-runner": "^0.15.0"
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0",
+    "eslint": "^8.30.0",
+    "husky": "^8.0.2"
   }
 }

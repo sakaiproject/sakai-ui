@@ -1,12 +1,12 @@
-import { SakaiElement } from '../src/SakaiElement.js';
+import { SuiElement } from '../src/SuiElement.js';
 import { expect, fixture, waitUntil } from '@open-wc/testing';
 import { html } from "lit-element";
 
-describe("sakai-element tests", () => {
+describe("sui-element tests", () => {
 
   it ("render", async () => {
 
-    class MyElement extends SakaiElement {
+    class MyElement extends SuiElement {
 
       render() {
         return html`<h1>CHIPS</h1>`;
@@ -26,7 +26,7 @@ describe("sakai-element tests", () => {
 
     window.top.portal = { locale: 'en_GB' };
 
-    // Mock up the i18n fetch that SakaiElement will make.
+    // Mock up the i18n fetch that SuiElement will make.
     window.fetch = url => {
 
       if (url === testUrl) {
@@ -36,7 +36,7 @@ describe("sakai-element tests", () => {
       }
     };
 
-    class MyElement2 extends SakaiElement {
+    class MyElement2 extends SuiElement {
 
       constructor() {
 

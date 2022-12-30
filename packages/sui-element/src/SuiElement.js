@@ -1,7 +1,7 @@
 import { LitElement } from 'lit-element';
-import { loadProperties, tr } from '@sakai-ui/sakai-i18n';
+import { loadProperties, tr } from '@sakai-ui/sui-i18n';
 
-export class SakaiElement extends LitElement {
+export class SuiElement extends LitElement {
 
   /**
    * Convenience wrapper for sakai-18n.tr.
@@ -9,7 +9,7 @@ export class SakaiElement extends LitElement {
    * Example:
    *
    * confirm_coolness=This is {} cool
-   * let translated = mySakaiElementSubclass.tr("confirm_coolness", ["really"]);
+   * let translated = mySuiElementSubclass.tr("confirm_coolness", ["really"]);
    *
    * @param {string} key The i18n key we want to translate
    * @params {(string[]|Object)} options This can either be an array of replacement strings, or an object
