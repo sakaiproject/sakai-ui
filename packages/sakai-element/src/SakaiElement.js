@@ -1,6 +1,5 @@
 import { LitElement } from 'lit-element';
 import { loadProperties, tr } from '@sakai-ui/sakai-i18n';
-//import { loadProperties, tr } from '../../sakai-i18n/index.js';
 
 export class SakaiElement extends LitElement {
 
