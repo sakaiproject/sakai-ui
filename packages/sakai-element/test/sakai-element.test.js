@@ -1,6 +1,6 @@
 import { SakaiElement } from '../src/SakaiElement.js';
 import { expect, fixture, waitUntil } from '@open-wc/testing';
-import { html } from "lit";
+import { html } from "lit-element";
 
 describe("sakai-element tests", () => {
 
