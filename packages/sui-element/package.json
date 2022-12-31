@@ -2,7 +2,7 @@
   "name": "@sakai-ui/sui-element",
   "version": "1.0.1",
   "description": "A base class for Sakai UI web components",
-  "license": "MIT",
+  "license": "ECL-2.0",
   "author": "The Sakai Project",
   "homepage": "https://github.com/sakaiproject/sakai-ui/",
   "repository": {

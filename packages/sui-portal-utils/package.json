@@ -1,14 +1,14 @@
 {
   "name": "@sakai-ui/sui-portal-utils",
-  "description": "Utils for accessing Sakai portal variables",
-  "license": "MIT",
-  "author": "Adrian Fish <adrian.r.fish@gmail.com>",
-  "main": "sui-portal-utils.js",
+  "description": "Functions for accessing Sakai portal variables",
+  "license": "ECL-2.0",
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "main": "index.js",
   "private": false,
   "version": "1.0.0",
   "scripts": {
-    "lint": "eslint sui-portal-utils.js",
-    "format": "eslint sui-portal-utils.js --fix",
+    "lint": "eslint src",
+    "format": "eslint src --fix",
     "test": "web-test-runner --coverage",
     "test:watch": "web-test-runner --watch"
   },

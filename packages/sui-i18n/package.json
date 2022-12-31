@@ -2,7 +2,7 @@
   "name": "@sakai-ui/sui-i18n",
   "version": "1.0.2",
   "description": "A collection of functions to allow code to get Sakai translations",
-  "license": "MIT",
+  "license": "ECL-2.0",
   "author": "The Sakai Project",
   "homepage": "https://github.com/sakaiproject/sakai-ui/",
   "repository": {

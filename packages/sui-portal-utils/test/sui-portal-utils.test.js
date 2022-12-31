@@ -1,7 +1,7 @@
-import { getOffsetFromServerMillis, getUserId, getUserLocale } from '../sui-portal-utils.js';
+import { getOffsetFromServerMillis, getUserId, getUserLocale, getTimezone } from '../src/sui-portal-utils.js';
 import { expect } from '@open-wc/testing';
 
-describe("sakai-portal-utils tests", () => {
+describe("sui-portal-utils tests", () => {
 
   it ("getUserId", () => {
 
@@ -47,5 +47,16 @@ describe("sakai-portal-utils tests", () => {
     };
 
     expect(getOffsetFromServerMillis()).to.equal(minusFiveHours);
+  });
+
+  it ("getTimezone", () => {
+
+    const timezone = "Europe/London";
+
+    window.top.portal = {
+      user: { timezone },
+    }
+
+    expect(getTimezone()).to.equal(timezone);
   });
 });
