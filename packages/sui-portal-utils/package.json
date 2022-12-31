@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.13.31",
+    "@web/test-runner": "^0.15.0",
     "eslint": "^8.30.0",
     "husky": "^8.0.2"
   }
