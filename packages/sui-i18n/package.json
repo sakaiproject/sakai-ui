@@ -3,7 +3,7 @@
   "version": "1.0.2",
   "description": "A collection of functions to allow code to get Sakai translations",
   "license": "ECL-2.0",
-  "author": "The Sakai Project",
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
   "homepage": "https://github.com/sakaiproject/sakai-ui/",
   "repository": {
     "type": "git",
