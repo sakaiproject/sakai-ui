@@ -1,4 +1,4 @@
-import { getOffsetFromServerMillis, getUserId, getUserLocale, getTimezone } from '../src/sui-portal-utils.js';
+import { getOffsetFromServerMillis, getUserId, getUserLocale, getTimezone } from '../index.js';
 import { expect } from '@open-wc/testing';
 
 describe("sui-portal-utils tests", () => {

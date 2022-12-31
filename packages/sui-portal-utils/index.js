@@ -1,1 +1,1 @@
-export * from 'src/sui-portal-utils.js';
+export * from './src/sui-portal-utils.js';
