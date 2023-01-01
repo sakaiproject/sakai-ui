@@ -4,7 +4,9 @@
   "license": "ECL-2.0",
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",
   "main": "index.js",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint src",
