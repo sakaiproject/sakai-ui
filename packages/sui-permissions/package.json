@@ -1,0 +1,23 @@
+{
+  "name": "sui-permissions",
+  "version": "1.0.0",
+  "description": "The Sakai permissions component",
+  "main": "index.js",
+  "scripts": {
+    "test": "web-test-runner --coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakaiproject/sakai-ui.git"
+  },
+  "keywords": [
+    "sakai",
+    "permissions"
+  ],
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "license": "ECL-2.0",
+  "bugs": {
+    "url": "https://github.com/sakaiproject/sakai-ui/issues"
+  },
+  "homepage": "https://github.com/sakaiproject/sakai-ui#readme"
+}
