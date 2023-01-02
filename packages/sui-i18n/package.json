@@ -28,9 +28,5 @@
   },
   "exports": {
     ".": "./index.js"
-  },
-  "devDependencies": {
-    "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.15.0"
   }
 }
