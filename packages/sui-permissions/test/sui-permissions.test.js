@@ -68,5 +68,10 @@ describe("sui-permissions tests", () => {
     expect(el.querySelectorAll('table input:checked').length).to.equal(0);
     el.querySelector('table button:first-child').click();
     expect(el.querySelectorAll('table input:checked').length).to.equal(6);
+
+    // Reset the permissions
+    el.querySelector('button:first-child').click();
+    await el.updateComplete;
+    expect(el.querySelectorAll('table input:checked').length).to.equal(4);
   });
 });

@@ -168,7 +168,7 @@ export class SuiPermissions extends SuiElement {
           </div>
         ` : ""}
         <div class="mb-1 pt-3">
-          <input type="button" value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this.resetPermissions} />
+          <button value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this.resetPermissions}></button>
         </div>
         <table class="permissions-table table table-hover table-striped listHier checkGrid specialLink"
             cellspacing="0"
@@ -290,9 +290,10 @@ export class SuiPermissions extends SuiElement {
         if (role && perm) {
           const elemChanged = (elem.checked != this.on[role].includes(perm));
           elem.checked = this.on[role].includes(perm);
-          if (elemChanged) {
-            elem.dispatchEvent(new Event("change"));
-          }
+          console.log(`checked: ${perm}: ${elem.checked}`);
+          console.log(`changed: ${perm}: ${elemChanged}`);
+          console.log("");
+          elemChanged && elem.dispatchEvent(new Event("change"));
         }
       });
     });
