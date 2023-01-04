@@ -1,6 +1,6 @@
 import { SuiElement } from '@sakai-ui/sui-element';
 import { html } from 'lit-element';
-import '@sakai-ui/sui-group-picker.js';
+import '@sakai-ui/sui-group-picker';
 
 /**
  * Handles display and manipulation of permissions for a Sakai tool.
@@ -21,7 +21,7 @@ import '@sakai-ui/sui-group-picker.js';
  * <sakai-permissions group-reference="/content/group/%SITE_ID%/Podcasts/" disabled-groups=true tool="content" bundle-key="org.sakaiproject.api.podcasts.bundle.Messages" />
  *
  * This component needs to be able to lookup a tool's translations, and this happens via the
- * sui-i18n.js module, loading the translations from a Sakai web service. The translations need
+ * sakai-i18n.js module, loading the translations from a Sakai web service. The translations need
  * to be jarred and put in TOMCAT/lib, and the permission translation keys need to start with "perm-",
  * eg: perm-TOOLPERMISSION.
  *
@@ -81,8 +81,75 @@ export class SuiPermissions extends SuiElement {
 
   get tool() { return this._tool; }
 
-  updated() {
-    this.attachHandlers();
+  _handleDescriptionClick(e) {
+
+    e.preventDefault();
+
+    const all = e.target.closest('tr').querySelectorAll('input');
+    const checked = e.target.closest('tr').querySelectorAll('input:checked');
+
+    if (checked.length < all.length || checked.length === 0) {
+      all.forEach(i => i.checked = true);
+    } else if (checked.length === all.length) {
+      all.forEach(i => i.checked = false);
+    }
+  }
+
+  _handlePermissionMouseEnter() {
+    this.querySelectorAll('.permissions-table td.checkboxCell').forEach(td => td.classList.add('rowHover'));
+  }
+
+  _handlePermissionMouseLeave() {
+    this.querySelectorAll('.permissions-table td.checkboxCell').forEach(td => td.classList.remove('rowHover'));
+  }
+
+  _handlePermissionChange(e) {
+    e.target.closest('td').classList.toggle('active', e.target.checked);
+  }
+
+  _handleRoleHover(e, type) {
+
+    const role = e.target.dataset.role.replace(".", "\\.");
+    this.querySelectorAll(`td.${role.replace(" ", "_")}-checkbox-cell`).forEach(cell => {
+      cell.classList.toggle('rowHover', type === "mouseenter");
+    });
+  }
+
+  _handleRoleMouseEnter(e) {
+    this._handleRoleHover(e, "mouseenter");
+  }
+
+  _handleRoleMouseLeave(e) {
+    this._handleRoleHover(e, "mouseleave");
+  }
+
+  _handleRoleClick(e) {
+
+    e.preventDefault();
+
+    const role = e.target.dataset.role.replace(".", "\\.");
+
+    const anyChecked = this.querySelectorAll(`.permissions-table .${role.replace(" ", "_")}-checkbox-cell input:checked:not(:disabled)`).length > 0;
+    this.querySelectorAll(`.permissions-table .${role.replace(" ", "_")}-checkbox-cell input:not(:disabled)`).forEach(i => i.checked = !anyChecked);
+  }
+
+  _handlePermissionClick(e) {
+
+    e.preventDefault();
+
+    const checked = this.querySelectorAll('.permissions-table input:checked');
+
+    this.querySelectorAll('.permissions-table input').forEach(input => {
+      input.checked = checked.length === 0;
+    });
+  }
+
+  firstUpdated() {
+
+    // Save the default selected
+    this.querySelectorAll('.permissions-table :checked').forEach(el => {
+      el.closest('td').classList.add('defaultSelected');
+    });
   }
 
   shouldUpdate() {
@@ -97,34 +164,46 @@ export class SuiPermissions extends SuiElement {
         ${this.groups && this.groups.length > 0 ? html`
           <div>
             <label for="permissons-group-picker">${this.i18n["per.lis.selectgrp"]}</label>
-            <sui-group-picker groups="${JSON.stringify(this.groups)}" @group-selected=${this.groupSelected} />
+            <sakai-group-picker id="permissions-group-picker" groups="${JSON.stringify(this.groups)}" @group-selected=${this.groupSelected} />
           </div>
         ` : ""}
-        <div class="permissions-undo-button">
+        <div class="mb-1 pt-3">
           <input type="button" value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this.resetPermissions} />
         </div>
-        <table id="${this.tool}-permissions-table" class="permissions-table listHier checkGrid specialLink" cellspacing="0" summary="${this.i18n["per.lis"]}" border="0">
+        <table class="permissions-table table table-hover table-striped listHier checkGrid specialLink"
+            cellspacing="0"
+            summary="${this.i18n["per.lis"]}"
+            border="0">
           <tr>
-            <th id="permission">
-              <a href="#" title="${this.i18n["per.lis.head.title"]}">${this.i18n["per.lis.head"]}</a>
+            <th id="permission" @mouseenter=${this._handlePermissionMouseEnter} @mouseleave=${this._handlePermissionMouseLeave}>
+              <button class="btn btn-transparent" title="${this.i18n["per.lis.head.title"]}" @click=${this._handlePermissionClick}>${this.i18n["per.lis.head"]}</button>
             </th>
             ${this.roles.map(role => html`
-            <th class="role" data-role="${role}"><a href="#" title="${this.i18n["per.lis.role.title"]}" data-role="${role}">${this.roleNameMappings[role]}</a></th>
+            <th class="role" data-role="${role}" @mouseenter=${this._handleRoleMouseEnter} @mouseleave=${this._handleRoleMouseLeave}>
+              <button class="btn btn-transparent" title="${this.i18n["per.lis.role.title"]}" data-role="${role}" @click=${this._handleRoleClick}>${this.roleNameMappings[role]}</button>
+            </th>
             `)}
           </tr>
           ${this.available.map(perm => html`
           <tr>
-            <td class="permissionDescription unclicked" scope="row">
-              <a href="#" title="${this.i18n["per.lis.perm.title"]}">
+            <td class="text-start text-nowrap permissionDescription unclicked" scope="row">
+              <button class="btn btn-transparent" title="${this.i18n["per.lis.perm.title"]}" @click=${this._handleDescriptionClick}>
                 ${this.i18n[perm]}
-              </a>
+              </button>
             </td>
             ${this.roles.map(role => html`
             <td class="${role.replace(" ", "_")}-checkbox-cell checkboxCell">
               <label for="${role}:${perm}" class="sr-only">
                 <span>${this.i18n["gen.enable"]} ${role}</span>
               </label>
-              <input type="checkbox" class="sakai-permission-checkbox" aria-label="${this.i18n["gen.enable"]} ${role}" .checked=${this.on[role].includes(perm)} data-role="${role}" data-perm="${perm}" id="${role}:${perm}"/>
+              <input type="checkbox"
+                  class="sakai-permission-checkbox"
+                  aria-label="${this.i18n["gen.enable"]} ${role}"
+                  .checked=${this.on[role].includes(perm)}
+                  data-role="${role}"
+                  data-perm="${perm}"
+                  @change=${this._handlePermissionChange}
+                  id="${role}:${perm}"/>
             </td>
             `)}
           </tr>
@@ -172,7 +251,7 @@ export class SuiPermissions extends SuiElement {
 
     document.body.style.cursor = "wait";
 
-    const boxes = this.querySelectorAll(`#${this.tool.replace('.', '\\.')}-permissions-table input[type="checkbox"]`);
+    const boxes = this.querySelectorAll('.permissions-table input[type="checkbox"]');
     const params = `ref=${this.groupReference}&${  Array.from(boxes).reduce((acc, b) => {
 
       if (b.checked) {
@@ -228,58 +307,6 @@ export class SuiPermissions extends SuiElement {
     } else {
       window.location.reload();
     }
-  }
-
-  attachHandlers() {
-
-    $('.permissions-table input:checkbox').change((e) => {
-      $(e.target).parents('td').toggleClass('active', e.target.checked);
-    }).change();
-    $(".permissions-table tr:even").addClass("evenrow");
-    // Save the default selected
-    $('.permissions-table :checked').parents('td').addClass('defaultSelected');
-
-    $('.permissions-table .permissionDescription').hover((e) => {
-      $(e.target).parents('tr').children('td').toggleClass('rowHover', e.type === "mouseenter");
-    });
-
-    $('.permissions-table th').hover((e) => {
-
-      if (e.target.dataset.role) {
-        const role = e.target.dataset.role.replace(".", "\\.");
-        $(`.${  role.replace(" ", "_")  }-checkbox-cell`).add(e.target).toggleClass('rowHover', e.type === "mouseenter");
-      }
-    });
-
-    $('.permissions-table th#permission').hover((event) => {
-      $('.permissions-table td.checkboxCell').toggleClass('rowHover', event.type === "mouseenter");
-    });
-
-    $('.permissions-table th#permission a').click((e) => {
-
-      $('.permissions-table input').prop('checked', ($('.permissions-table :checked').length === 0)).change();
-      e.preventDefault();
-    });
-    $('.permissions-table .permissionDescription a').click((e) => {
-
-      const anyChecked = $(e.target).parents('tr').find('input:checked').not('[disabled]').length > 0;
-      $(e.target).parents('tr').find('input:checkbox').not('[disabled]').prop('checked', !anyChecked).change();
-      e.preventDefault();
-    });
-    $('.permissions-table th.role a').click((e) => {
-
-      const role = e.target.dataset.role.replace(".", "\\.");
-
-      const anyChecked = $(`.permissions-table .${  role.replace(" ", "_")  }-checkbox-cell input:checked`).not('[disabled]').length > 0;
-      $(`.permissions-table .${  role.replace(" ", "_")  }-checkbox-cell input`).not('[disabled]').prop('checked', !anyChecked).change();
-      e.preventDefault();
-    });
-
-    $('#clearall').click((e) => {
-
-      $(".permissions-table input").not('[disabled]').prop("checked", false).change();
-      e.preventDefault();
-    });
   }
 
   groupSelected(e) {

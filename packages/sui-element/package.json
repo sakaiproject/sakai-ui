@@ -18,8 +18,7 @@
     "test"
   ],
   "scripts": {
-    "lint": "eslint src",
-    "format": "eslint src --fix",
+    "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"
   },
   "keywords": [
@@ -34,5 +33,9 @@
   "dependencies": {
     "@sakai-ui/sui-i18n": "1.0.2",
     "lit-element": "2.5.1"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0"
   }
 }

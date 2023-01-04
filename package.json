@@ -1,7 +1,12 @@
 {
   "name": "sakai-ui",
   "private": true,
+  "scripts": {
+    "lint:fix": "lerna run lint:fix"
+  },
   "devDependencies": {
-    "lerna": "^5.1.2"
+    "husky": "^8.0.2",
+    "lerna": "^5.1.2",
+    "lint-staged": "^13.1.0"
   }
 }

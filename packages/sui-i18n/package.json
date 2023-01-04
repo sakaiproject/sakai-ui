@@ -11,14 +11,10 @@
     "directory": "packages/sui-i18n"
   },
   "main": "index.js",
-  "module": "index.js",
-  "files": [
-    "*.js",
-    "src",
-    "test"
-  ],
   "scripts": {
-    "test": "web-test-runner --coverage"
+    "lint:fix": "eslint src --fix",
+    "test": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch"
   },
   "keywords": [
     "Sakai"
@@ -28,5 +24,9 @@
   },
   "exports": {
     ".": "./index.js"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0"
   }
 }

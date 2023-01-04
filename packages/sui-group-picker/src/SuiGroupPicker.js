@@ -21,17 +21,6 @@ export class SuiGroupPicker extends SuiElement {
     };
   }
 
-  set groups(value) {
-
-    console.log("setting");
-
-    this._groups = value;
-    console.log(typeof value);
-    console.log(value);
-  }
-
-  get groups() { return this._groups; }
-
   /**
    * If site-id is set, this means the caller wants us to pull the groups map from the server.
    */

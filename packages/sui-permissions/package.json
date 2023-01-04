@@ -4,6 +4,7 @@
   "description": "The Sakai permissions component",
   "main": "index.js",
   "scripts": {
+    "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"
   },
   "repository": {
@@ -19,5 +20,12 @@
   "bugs": {
     "url": "https://github.com/sakaiproject/sakai-ui/issues"
   },
-  "homepage": "https://github.com/sakaiproject/sakai-ui#readme"
+  "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0"
+  },
+  "dependencies": {
+    "@sakai-ui/sui-group-picker": "^1.0.0"
+  }
 }
