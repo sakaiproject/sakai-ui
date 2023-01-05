@@ -23,8 +23,7 @@
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.15.0",
-    "fetch-mock": "^9.11.0"
+    "@web/test-runner": "^0.15.0"
   },
   "dependencies": {
     "@sakai-ui/sui-group-picker": "^1.0.0"

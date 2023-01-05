@@ -57,7 +57,7 @@ describe("sui-permissions tests", () => {
   });
 
   it ("renders correctly", async () => {
-    
+ 
     const el = await fixture(`<sui-permissions tool="tool" site-id="${siteId}"></sui-permissions>`);
 
     await waitUntil(() => el.i18n);

@@ -4,7 +4,7 @@ import { html } from "lit-element";
 
 describe("sui-element tests", () => {
 
-  it ("render", async () => {
+  it ("is subclassed and renders correctly", async () => {
 
     class MyElement extends SuiElement {
 
@@ -19,9 +19,10 @@ describe("sui-element tests", () => {
     expect(el.querySelector("h1").innerHTML).to.equal("CHIPS")
   });
 
-  it ("loadTranslations", async () => {
+  it ("loads translations", async () => {
 
     const greeting = "Hello";
+    const greeting1 = "Hello {}";
     const testUrl = "/sakai-ws/rest/i18n/getI18nProperties?locale=en_GB&resourceclass=org.sakaiproject.i18n.InternationalizedMessages&resourcebundle=myelement2";
 
     window.top.portal = { locale: 'en_GB' };
@@ -30,7 +31,7 @@ describe("sui-element tests", () => {
     window.fetch = url => {
 
       if (url === testUrl) {
-        return Promise.resolve({ text: () => Promise.resolve(`greeting=${greeting}`)});
+        return Promise.resolve({ text: () => Promise.resolve(`greeting=${greeting}\ngreeting1=${greeting1}`)});
       } else {
         throw new Error("No bundle found");
       }
@@ -43,6 +44,7 @@ describe("sui-element tests", () => {
         super();
 
         this.loadTranslations('myelement2').then(r => { this.i18n = r; this.requestUpdate(); });
+        this.loadTranslations({ bundle: "myelement2" }).then(r => { this.i18n = r; this.requestUpdate(); });
       }
 
       shouldUpdate() {
@@ -50,7 +52,10 @@ describe("sui-element tests", () => {
       }
 
       render() {
-        return html`<h1>${this.i18n.greeting} Somebody!</h1>`;
+        return html`
+          <h1>${this.i18n.greeting} Somebody!</h1>
+          <h2>${this.tr("greeting1", [ "Adrian" ])}</h2>
+        `;
       }
     }
 
@@ -58,6 +63,7 @@ describe("sui-element tests", () => {
 
     const el = await fixture('<my-element2></my-element2>');
     await waitUntil(() => el.i18n);
-    expect(el.querySelector("h1").innerText).to.equal(`${greeting} Somebody!`)
+    expect(el.querySelector("h1").innerText).to.equal(`${greeting} Somebody!`);
+    //expect(el.querySelector("h2").innerText).to.equal(`${greeting1.replace({}, "Adrian")}`);
   });
 });

@@ -1,5 +1,6 @@
 import { loadProperties, tr } from '../src/sui-i18n.js';
 import { expect } from '@open-wc/testing';
+import { stub } from "sinon";
 
 describe("sui-i18n tests", () => {
 
@@ -20,7 +21,7 @@ describe("sui-i18n tests", () => {
     window.top.portal = { locale: 'en_GB' };
   });
 
-  it ("loadProperties", async () => {
+  it ("loads properties successfully", async () => {
 
     let i18n = await loadProperties('test');
     expect(i18n.egg).to.equal(value);
@@ -29,19 +30,19 @@ describe("sui-i18n tests", () => {
     expect(i18n.egg).to.equal(value);
   });
 
-  it ("tr", async () => {
+  it ("translates", async () => {
 
     const i18n = await loadProperties('test');
     expect(tr('test', 'egg')).to.equal(value);
   });
 
-  it ("tr with object", async () => {
+  it ("translates with a replacements object", async () => {
 
     const i18n = await loadProperties('test');
     expect(tr('test', 'egg', { "0": "gin" })).to.equal('noggin');
   });
 
-  it ("tr with array", async () => {
+  it ("translates with an array", async () => {
 
     const prefix = "Ogg on";
 
@@ -58,7 +59,30 @@ describe("sui-i18n tests", () => {
     expect(tr('test', 'egg', ["the", "bog"])).to.equal(`${prefix} the bog`);
   });
 
-  it ("caching", async () => {
+  it ("logs an error when no bundle is supplied", async () => {
+
+    const prefix = "Ogg on";
+
+    const errorStub = stub(console, "error");
+    let i18n = await loadProperties({});
+    expect(errorStub).to.have.been.calledWith("You must supply at least a bundle. Doing nothing ...");
+
+    let value = await tr();
+    expect(errorStub).to.have.been.calledWith("You must supply a namespace and a key. Doing nothing.");
+
+    window.sakai = { translations: {} };
+    const warnStub = stub(console, "warn");
+    value = tr("fake", "thing");
+    expect(warnStub).to.have.been.calledWith("No namespace for fake. Returning key ...");
+    expect(value).to.be.equal("thing");
+
+    window.sakai.translations.fake = {};
+    value = tr("fake", "thing");
+    expect(warnStub).to.have.been.calledWith("fake#key thing not found. Returning key ...");
+    expect(value).to.be.equal("thing");
+  });
+
+  it ("caches", async () => {
 
     // This call should cache in sessionStorage
     let i18n = await loadProperties('test');

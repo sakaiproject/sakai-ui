@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.15.0"
+    "@web/test-runner": "^0.15.0",
+    "sinon": "^15.0.1"
   }
 }
