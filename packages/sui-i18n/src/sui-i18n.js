@@ -51,10 +51,10 @@ function loadProperties(suppliedOptions) {
   }
 
   if (options.debug) {
-    console.debug(`lang: ${  options.lang}`);
-    console.debug(`resourceClass: ${  options.resourceClass}`);
-    console.debug(`bundle: ${  options.bundle}`);
-    console.debug(`cache: ${  options.cache}`);
+    console.debug(`lang: ${ options.lang}`);
+    console.debug(`resourceClass: ${ options.resourceClass}`);
+    console.debug(`bundle: ${ options.bundle}`);
+    console.debug(`cache: ${ options.cache}`);
   }
 
   window.sakai.translations[options.bundle] = window.sakai.translations[options.bundle] || {};
@@ -62,13 +62,13 @@ function loadProperties(suppliedOptions) {
   const storageKey = options.lang + options.bundle;
   if (options.cache && window.sessionStorage.getItem(storageKey) !== null) {
     if (options.debug) {
-      console.debug(`Returning ${  storageKey  } from sessions storage ...`);
+      console.debug(`Returning ${ storageKey } from sessions storage ...`);
     }
     window.sakai.translations[options.bundle] = JSON.parse(window.sessionStorage[storageKey]);
     return Promise.resolve(window.sakai.translations[options.bundle]);
   }
   if (options.debug) {
-    console.debug(`${storageKey  } not in sessions storage or cache is false. Pulling from webservice ...`);
+    console.debug(`${storageKey } not in sessions storage or cache is false. Pulling from webservice ...`);
   }
 
   const params = new URLSearchParams();
@@ -87,20 +87,20 @@ function loadProperties(suppliedOptions) {
     if (options.debug) {
       console.debug(url);
     }
-    fetch(url, { headers: { "Content-Type": "application/text" }})
+    fetch(url, { headers: { "Content-Type": "application/text" } })
         .then(r => r.text())
         .then(data => {
 
           data.split("\n").forEach((pair) => {
 
-            const keyValue = pair.split('=');
+            const keyValue = pair.split("=");
             if (keyValue.length == 2) {
               window.sakai.translations[options.bundle][keyValue[0]] = keyValue[1];
             }
           });
 
           if (options.debug) {
-            console.debug('Updated translations: ');
+            console.debug("Updated translations: ");
             console.debug(window.sakai.translations[options.bundle]);
           }
 
@@ -121,14 +121,14 @@ function loadProperties(suppliedOptions) {
 function tr(namespace, key, options) {
 
   if (!namespace || !key) {
-    console.error('You must supply a namespace and a key. Doing nothing.');
+    console.error("You must supply a namespace and a key. Doing nothing.");
     return;
   }
 
   let ret = window.sakai.translations[namespace][key];
 
   if (!ret) {
-    console.warn(`${namespace  }#key ${  key  } not found. Returning key ...`);
+    console.warn(`${namespace }#key ${ key } not found. Returning key ...`);
     return key;
   }
 
@@ -136,10 +136,10 @@ function tr(namespace, key, options) {
     if (Array.isArray(options)) {
       options.forEach(o => ret = ret.replace("{}", o));
     } else if (typeof options === "object") {
-      Object.keys(options).forEach(k => ret = ret.replace(`{${  k  }}`, options[k]));
+      Object.keys(options).forEach(k => ret = ret.replace(`{${ k }}`, options[k]));
     }
   }
   return ret;
 }
 
-export {loadProperties, tr};
+export { loadProperties, tr };

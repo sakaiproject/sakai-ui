@@ -1,6 +1,6 @@
-import { SuiElement } from '@sakai-ui/sui-element';
-import { html } from 'lit-element';
-import '@sakai-ui/sui-group-picker';
+import { SuiElement } from "@sakai-ui/sui-element";
+import { html } from "lit-element";
+import "@sakai-ui/sui-group-picker";
 
 /**
  * Handles display and manipulation of permissions for a Sakai tool.
@@ -41,6 +41,7 @@ export class SuiPermissions extends SuiElement {
     super();
 
     this.available;
+
     this.on;
     this.roles;
     this.roleNameMappings;
@@ -62,10 +63,10 @@ export class SuiPermissions extends SuiElement {
 
     return {
       tool: { type: String },
-      groupReference: { attribute: 'group-reference', type: String },
-      disableGroups: { attribute: 'disabled-groups', type: Boolean },
-      bundleKey: { attribute: 'bundle-key', type: String },
-      onRefresh: { attribute: 'on-refresh', type: String },
+      groupReference: { attribute: "group-reference", type: String },
+      disableGroups: { attribute: "disabled-groups", type: Boolean },
+      bundleKey: { attribute: "bundle-key", type: String },
+      onRefresh: { attribute: "on-refresh", type: String },
       fireEvent: { attribute: "fire-event", type: Boolean },
       roles: { attribute: false, type: Array },
       groups: { attribute: false, type: Array },
@@ -76,7 +77,7 @@ export class SuiPermissions extends SuiElement {
   set tool(newValue) {
 
     this._tool = newValue;
-    this.loadPermissions();
+    this._loadPermissions();
   }
 
   get tool() { return this._tool; }
@@ -85,8 +86,8 @@ export class SuiPermissions extends SuiElement {
 
     e.preventDefault();
 
-    const all = e.target.closest('tr').querySelectorAll('input');
-    const checked = e.target.closest('tr').querySelectorAll('input:checked');
+    const all = e.target.closest("tr").querySelectorAll("input");
+    const checked = e.target.closest("tr").querySelectorAll("input:checked");
 
     if (checked.length < all.length || checked.length === 0) {
       all.forEach(i => i.checked = true);
@@ -96,22 +97,22 @@ export class SuiPermissions extends SuiElement {
   }
 
   _handlePermissionMouseEnter() {
-    this.querySelectorAll('.permissions-table td.checkboxCell').forEach(td => td.classList.add('rowHover'));
+    this.querySelectorAll(".permissions-table td.checkboxCell").forEach(td => td.classList.add("rowHover"));
   }
 
   _handlePermissionMouseLeave() {
-    this.querySelectorAll('.permissions-table td.checkboxCell').forEach(td => td.classList.remove('rowHover'));
+    this.querySelectorAll(".permissions-table td.checkboxCell").forEach(td => td.classList.remove("rowHover"));
   }
 
   _handlePermissionChange(e) {
-    e.target.closest('td').classList.toggle('active', e.target.checked);
+    e.target.closest("td").classList.toggle("active", e.target.checked);
   }
 
   _handleRoleHover(e, type) {
 
     const role = e.target.dataset.role.replace(".", "\\.");
     this.querySelectorAll(`td.${role.replace(" ", "_")}-checkbox-cell`).forEach(cell => {
-      cell.classList.toggle('rowHover', type === "mouseenter");
+      cell.classList.toggle("rowHover", type === "mouseenter");
     });
   }
 
@@ -137,9 +138,9 @@ export class SuiPermissions extends SuiElement {
 
     e.preventDefault();
 
-    const checked = this.querySelectorAll('.permissions-table input:checked');
+    const checked = this.querySelectorAll(".permissions-table input:checked");
 
-    this.querySelectorAll('.permissions-table input').forEach(input => {
+    this.querySelectorAll(".permissions-table input").forEach(input => {
       input.checked = checked.length === 0;
     });
   }
@@ -147,8 +148,8 @@ export class SuiPermissions extends SuiElement {
   firstUpdated() {
 
     // Save the default selected
-    this.querySelectorAll('.permissions-table :checked').forEach(el => {
-      el.closest('td').classList.add('defaultSelected');
+    this.querySelectorAll(".permissions-table :checked").forEach(el => {
+      el.closest("td").classList.add("defaultSelected");
     });
   }
 
@@ -164,11 +165,11 @@ export class SuiPermissions extends SuiElement {
         ${this.groups && this.groups.length > 0 ? html`
           <div>
             <label for="permissons-group-picker">${this.i18n["per.lis.selectgrp"]}</label>
-            <sakai-group-picker id="permissions-group-picker" groups="${JSON.stringify(this.groups)}" @group-selected=${this.groupSelected} />
+            <sakai-group-picker id="permissions-group-picker" groups="${JSON.stringify(this.groups)}" @group-selected=${this._groupSelected} />
           </div>
         ` : ""}
         <div class="mb-1 pt-3">
-          <button value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this.resetPermissions}></button>
+          <button value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this._resetPermissions}></button>
         </div>
         <table class="permissions-table table table-hover table-striped listHier checkGrid specialLink"
             cellspacing="0"
@@ -210,7 +211,7 @@ export class SuiPermissions extends SuiElement {
           `)}
         </table>
         <div class="act">
-          <input type="button" class="active" value="${this.i18n["gen.sav"]}" aria-label="${this.i18n["gen.sav"]}" @click="${this.savePermissions}"/>
+          <input type="button" class="active" value="${this.i18n["gen.sav"]}" aria-label="${this.i18n["gen.sav"]}" @click="${this._savePermissions}"/>
           <input type="button" value="${this.i18n["gen.can"]}" aria-label="${this.i18n["gen.can"]}" @click="${this._completePermissions}"/>
           <span id="${this.tool}-failure-message" class="permissions-save-message" style="display: none;">${this.i18n["per.error.save"]}</span>
         </div>
@@ -222,9 +223,9 @@ export class SuiPermissions extends SuiElement {
     return html`Waiting for permissions`;
   }
 
-  loadPermissions() {
+  _loadPermissions() {
 
-    fetch(`/direct/permissions/${portal.siteId}/getPerms/${this.tool}.json?ref=${this.groupReference}`, {cache: "no-cache", credentials: "same-origin"})
+    fetch(`/direct/permissions/${portal.siteId}/getPerms/${this.tool}.json?ref=${this.groupReference}`, { cache: "no-cache", credentials: "same-origin" })
       .then(res => {
 
         if (res.status === 403) {
@@ -247,21 +248,21 @@ export class SuiPermissions extends SuiElement {
       .catch(error => console.error(`Failed to load permissions for tool ${this.tool}`, error));
   }
 
-  savePermissions() {
+  _savePermissions() {
 
     document.body.style.cursor = "wait";
 
-    const boxes = this.querySelectorAll('.permissions-table input[type="checkbox"]');
-    const params = `ref=${this.groupReference}&${  Array.from(boxes).reduce((acc, b) => {
+    const boxes = this.querySelectorAll(".permissions-table input[type=\"checkbox\"]");
+    const params = `ref=${this.groupReference}&${ Array.from(boxes).reduce((acc, b) => {
 
       if (b.checked) {
-        return `${acc  }${encodeURIComponent(b.id)}=true&`;
+        return `${acc }${encodeURIComponent(b.id)}=true&`;
       }
-      return `${acc  }${encodeURIComponent(b.id)}=false&`;
+      return `${acc }${encodeURIComponent(b.id)}=false&`;
 
     }, "")}`;
 
-    fetch(`/direct/permissions/${portal.siteId}/setPerms`, {method: "POST", credentials: "same-origin", body: new URLSearchParams(params), timeout: 30000})
+    fetch(`/direct/permissions/${portal.siteId}/setPerms`, { method: "POST", credentials: "same-origin", body: new URLSearchParams(params), timeout: 30000 })
       .then(res => {
 
         if (res.ok) {
@@ -272,27 +273,24 @@ export class SuiPermissions extends SuiElement {
       })
       .catch(error => {
 
-        document.querySelector(`#${this.tool.replace('.', '\\.')}-failure-message`).style.display = "inline-block";
+        document.querySelector(`#${this.tool.replace(".", "\\.")}-failure-message`).style.display = "inline-block";
         console.error(`Failed to save permissions for tool ${this.tool}`, error);
       })
       .finally(() => document.body.style.cursor = "default");
   }
 
-  resetPermissions() {
+  _resetPermissions() {
 
     this.updateComplete.then(() => {
 
       const inputs = this.renderRoot.querySelectorAll("input[type='checkbox']");
       inputs.forEach(elem => {
 
-        const role = elem.getAttribute('data-role');
-        const perm = elem.getAttribute('data-perm');
+        const role = elem.getAttribute("data-role");
+        const perm = elem.getAttribute("data-perm");
         if (role && perm) {
           const elemChanged = (elem.checked != this.on[role].includes(perm));
           elem.checked = this.on[role].includes(perm);
-          console.log(`checked: ${perm}: ${elem.checked}`);
-          console.log(`changed: ${perm}: ${elemChanged}`);
-          console.log("");
           elemChanged && elem.dispatchEvent(new Event("change"));
         }
       });
@@ -310,9 +308,9 @@ export class SuiPermissions extends SuiElement {
     }
   }
 
-  groupSelected(e) {
+  _groupSelected(e) {
 
     this.groupReference = e.detail.value;
-    this.loadPermissions();
+    this._loadPermissions();
   }
 }

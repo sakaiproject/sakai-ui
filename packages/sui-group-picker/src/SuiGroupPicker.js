@@ -1,5 +1,5 @@
-import { SuiElement } from '@sakai-ui/sui-element';
-import { html } from 'lit-element';
+import { SuiElement } from "@sakai-ui/sui-element";
+import { html } from "lit-element";
 
 export class SuiGroupPicker extends SuiElement {
 
@@ -31,7 +31,7 @@ export class SuiGroupPicker extends SuiElement {
       .then(r => r.json())
       .then(groups => {
 
-        this.groups = groups.map(g => ({reference: g.reference, title: g.title}));
+        this.groups = groups.map(g => ({ reference: g.reference, title: g.title }));
         if (this.debug) {
           console.debug(this.groups);
         }
