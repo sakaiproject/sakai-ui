@@ -187,7 +187,7 @@ export class SuiPermissions extends SuiElement {
           </tr>
           ${this.available.map(perm => html`
           <tr>
-            <td class="text-start text-nowrap permissionDescription unclicked" scope="row">
+            <td class="text-start text-nowrap permissionDescription unclicked">
               <button class="btn btn-transparent" title="${this.i18n["per.lis.perm.title"]}" @click=${this._handleDescriptionClick}>
                 ${this.i18n[perm]}
               </button>

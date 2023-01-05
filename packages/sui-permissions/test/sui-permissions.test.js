@@ -5,11 +5,14 @@ import { html } from "lit-element";
 
 describe("sui-permissions tests", () => {
 
-  it ("render", async () => {
+  const siteId = "xyz";
+  let groups = [];
 
-    const siteId = "xyz";
+  beforeEach(() =>  {
 
-    const groups = [
+    window.top.portal = { locale: "en_GB", siteId: siteId };
+
+    groups = [
       { reference: `/site/${siteId}/groups/tennis`, title: "Tennis" },
       { reference: `/site/${siteId}/groups/football`, title: "Football" },
     ];
@@ -37,8 +40,6 @@ describe("sui-permissions tests", () => {
       roleNameMappings: { maintain: "Maintain", access: "Access" }
     };
 
-    window.top.portal = { locale: "en_GB", siteId: siteId };
-
     window.fetch = url => {
 
       if (url === groupPickerI18nUrl) {
@@ -53,7 +54,10 @@ describe("sui-permissions tests", () => {
         return Promise.resolve({ json: () => Promise.resolve(perms) });
       }
     };
+  });
 
+  it ("renders correctly", async () => {
+    
     const el = await fixture(`<sui-permissions tool="tool" site-id="${siteId}"></sui-permissions>`);
 
     await waitUntil(() => el.i18n);
@@ -74,5 +78,20 @@ describe("sui-permissions tests", () => {
     el.querySelector("button:first-child").click();
     await el.updateComplete;
     expect(el.querySelectorAll("table input:checked").length).to.equal(4);
+
+    expect(el.querySelectorAll(".access-checkbox-cell input:checked").length).to.equal(1);
+    el.querySelector("button[data-role='access']").click();
+    expect(el.querySelectorAll(".access-checkbox-cell input:checked").length).to.equal(0);
+    el.querySelector("button[data-role='access']").click();
+    expect(el.querySelectorAll(".access-checkbox-cell input:checked").length).to.equal(3);
+  });
+
+  it ("is accessible", async () => {
+
+    const el = await fixture(`<sui-permissions tool="tool" site-id="${siteId}"></sui-permissions>`);
+
+    await waitUntil(() => el.i18n);
+
+    await expect(el).to.be.accessible();
   });
 });
