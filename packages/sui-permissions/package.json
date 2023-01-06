@@ -1,11 +1,12 @@
 {
   "name": "@sakai-ui/sui-permissions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Sakai permissions component",
   "main": "index.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
-    "test": "web-test-runner --coverage"
+    "test": "web-test-runner --coverage",
+    "storybook": "start-storybook -p 6006"
   },
   "repository": {
     "type": "git",
@@ -26,7 +27,9 @@
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.15.0"
+    "@web/test-runner": "^0.15.0",
+    "fetch-mock": "^9.11.0",
+    "storybook": "^6.5.15"
   },
   "dependencies": {
     "@sakai-ui/sui-group-picker": "^1.0.0"

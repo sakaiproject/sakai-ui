@@ -137,7 +137,11 @@ export class SuiPermissions extends SuiElement {
           </div>
         ` : ""}
         <div class="mb-1 pt-3">
-          <button value="${this.i18n["per.lis.restoredef"]}" aria-label="${this.i18n.undo}" @click=${this._resetPermissions}></button>
+          <button class="btn btn-secondary"
+              aria-label="${this.i18n["per.lis.restoredef"]}"
+              @click=${this._resetPermissions}>
+            ${this.i18n["per.lis.restoredef"]}
+          </button>
         </div>
         <table class="permissions-table table table-hover table-striped listHier checkGrid specialLink"
             cellspacing="0"
