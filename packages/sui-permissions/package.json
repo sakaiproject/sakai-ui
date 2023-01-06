@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-permissions",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "The Sakai permissions component",
   "main": "index.js",
   "scripts": {
@@ -8,6 +8,10 @@
     "test": "web-test-runner --coverage",
     "storybook": "start-storybook -p 6006"
   },
+  "files": [
+      "*.js",
+      "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sakaiproject/sakai-ui.git"

@@ -10,6 +10,7 @@
     "url": "https://github.com/sakaiproject/sakai-ui",
     "directory": "packages/sui-i18n"
   },
+  "files": [ "src" ],
   "main": "index.js",
   "scripts": {
     "lint:fix": "eslint src --fix",

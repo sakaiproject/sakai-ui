@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/sakaiproject/sakai-ui.git"
   },
+  "files": [ "*.js", "src" ],
   "publishConfig": {
     "access": "public"
   },
