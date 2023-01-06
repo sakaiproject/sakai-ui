@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-permissions",
-  "version": "1.0.0",
+  "version": "24.0.0",
   "description": "The Sakai permissions component",
   "main": "index.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "storybook": "start-storybook -p 6006"
   },
   "files": [
-      "*.js",
-      "src"
+    "*.js",
+    "src"
   ],
   "repository": {
     "type": "git",
@@ -36,6 +36,6 @@
     "storybook": "^6.5.15"
   },
   "dependencies": {
-    "@sakai-ui/sui-group-picker": "^1.0.0"
+    "@sakai-ui/sui-group-picker": "^24.0.0"
   }
 }
