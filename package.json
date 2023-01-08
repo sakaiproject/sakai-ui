@@ -1,0 +1,16 @@
+{
+  "name": "sakai-ui",
+  "private": true,
+  "scripts": {
+    "lint:fix": "lerna run lint:fix",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.2",
+    "lerna": "^5.1.2",
+    "lint-staged": "^13.1.0"
+  },
+  "lint-staged": {
+    "**/src/*.js": "eslint --fix"
+  }
+}

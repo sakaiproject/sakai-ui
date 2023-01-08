@@ -1,0 +1,36 @@
+{
+  "name": "@sakai-ui/sui-i18n",
+  "version": "24.0.0",
+  "description": "A collection of functions to allow code to get Sakai translations",
+  "license": "ECL-2.0",
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "homepage": "https://github.com/sakaiproject/sakai-ui/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sakaiproject/sakai-ui",
+    "directory": "packages/sui-i18n"
+  },
+  "files": [
+    "src"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "lint:fix": "eslint src --fix",
+    "test": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch"
+  },
+  "keywords": [
+    "Sakai"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0",
+    "sinon": "^15.0.1"
+  }
+}

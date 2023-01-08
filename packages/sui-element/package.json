@@ -1,0 +1,39 @@
+{
+  "name": "@sakai-ui/sui-element",
+  "version": "24.0.0",
+  "description": "A base class for Sakai UI web components",
+  "license": "ECL-2.0",
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "homepage": "https://github.com/sakaiproject/sakai-ui/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sakaiproject/sakai-ui",
+    "directory": "packages/sui-element"
+  },
+  "main": "index.js",
+  "module": "index.js",
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint:fix": "eslint src --fix",
+    "test": "web-test-runner --coverage"
+  },
+  "keywords": [
+    "Sakai"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "dependencies": {
+    "@sakai-ui/sui-i18n": "^24.0.0",
+    "lit-element": "2.5.1"
+  },
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0"
+  }
+}
