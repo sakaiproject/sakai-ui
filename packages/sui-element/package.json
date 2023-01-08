@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-element",
-  "version": "1.0.1",
+  "version": "24.0.0-SNAPSHOT",
   "description": "A base class for Sakai UI web components",
   "license": "ECL-2.0",
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",
@@ -12,7 +12,9 @@
   },
   "main": "index.js",
   "module": "index.js",
-  "files": [ "src" ],
+  "files": [
+    "src"
+  ],
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"
@@ -27,7 +29,7 @@
     ".": "./index.js"
   },
   "dependencies": {
-    "@sakai-ui/sui-i18n": "1.0.2",
+    "@sakai-ui/sui-i18n": "^24.0.0-SNAPSHOT",
     "lit-element": "2.5.1"
   },
   "devDependencies": {

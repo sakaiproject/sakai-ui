@@ -7,8 +7,10 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [ "src" ],
-  "version": "1.0.0",
+  "files": [
+    "src"
+  ],
+  "version": "24.0.0-SNAPSHOT",
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage",

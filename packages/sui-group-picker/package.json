@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-group-picker",
-  "version": "1.0.0",
+  "version": "24.0.0-SNAPSHOT",
   "description": "Sakai group picker component",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/sakaiproject/sakai-ui.git"
   },
-  "files": [ "*.js", "src" ],
+  "files": [
+    "*.js",
+    "src"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -27,7 +30,7 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@sakai-ui/sui-element": "^1.0.1"
+    "@sakai-ui/sui-element": "^24.0.0-SNAPSHOT"
   },
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
