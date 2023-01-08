@@ -12,11 +12,7 @@
   },
   "main": "index.js",
   "module": "index.js",
-  "files": [
-    "*.js",
-    "src",
-    "test"
-  ],
+  "files": [ "src" ],
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"

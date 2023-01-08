@@ -9,7 +9,7 @@
  *                    namespace: "roster",
  *                    cache: true}
  *
- * For a real world example of how to use this, see sakai-permissions.js.
+ * For a real world example of how to use this, see sui-permissions.js.
  */
 function loadProperties(suppliedOptions) {
 
@@ -123,6 +123,11 @@ function tr(namespace, key, options) {
   if (!namespace || !key) {
     console.error("You must supply a namespace and a key. Doing nothing.");
     return;
+  }
+
+  if (!(namespace in window.sakai.translations)) {
+    console.warn(`No namespace for ${namespace}. Returning key ...`);
+    return key;
   }
 
   let ret = window.sakai.translations[namespace][key];
