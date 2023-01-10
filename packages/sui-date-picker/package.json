@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-date-picker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Sakai date picker",
   "main": "index.js",
   "scripts": {
@@ -33,7 +33,9 @@
     "@web/test-runner": "^0.15.0"
   },
   "dependencies": {
+    "@js-temporal/polyfill": "^0.4.3",
     "@sakai-ui/sui-element": "^3.0.0",
-    "@sakai-ui/sui-portal-utils": "^3.0.0"
+    "@sakai-ui/sui-portal-utils": "^3.0.0",
+    "lit-element": "^2.5.1"
   }
 }
