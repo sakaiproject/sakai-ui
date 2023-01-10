@@ -14,11 +14,11 @@
   ],
   "scripts": {
     "lint:fix": "eslint src --fix",
-    "test": "web-test-runner --coverage",
-    "test:watch": "web-test-runner --watch"
+    "test": "web-test-runner --coverage"
   },
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
-    "@web/test-runner": "^0.15.0"
+    "@web/test-runner": "^0.15.0",
+    "eslint": "^8.31.0"
   }
 }

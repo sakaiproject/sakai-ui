@@ -1,7 +1,7 @@
 {
-  "name": "@sakai-ui/sui-date-picker",
-  "version": "1.0.1",
-  "description": "The Sakai date picker",
+  "name": "@sakai-ui/sui-dialog-content",
+  "version": "1.0.0",
+  "description": "The Sakai dialog content component",
   "main": "index.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
@@ -34,9 +34,9 @@
     "eslint": "^8.31.0"
   },
   "dependencies": {
-    "@js-temporal/polyfill": "^0.4.3",
-    "@sakai-ui/sui-element": "^3.0.0",
-    "@sakai-ui/sui-portal-utils": "^3.0.0",
+    "@sakai-ui/sui-button": "^1.0.0",
+    "@sakai-ui/sui-i18n": "^3.0.0",
+    "@sakai-ui/sui-icon": "^1.0.0",
     "lit-element": "^2.5.1"
   }
 }

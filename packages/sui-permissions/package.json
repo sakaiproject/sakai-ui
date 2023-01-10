@@ -37,6 +37,8 @@
     "storybook": "^6.5.15"
   },
   "dependencies": {
-    "@sakai-ui/sui-group-picker": "^3.0.0"
+    "@sakai-ui/sui-element": "^3.0.0",
+    "@sakai-ui/sui-group-picker": "^3.0.0",
+    "lit-element": "^2.5.1"
   }
 }

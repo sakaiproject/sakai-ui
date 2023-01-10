@@ -25,5 +25,11 @@
   "bugs": {
     "url": "https://github.com/sakaiproject/sakai-ui/issues"
   },
-  "homepage": "https://github.com/sakaiproject/sakai-ui#readme"
+  "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
+  "devDependencies": {
+    "eslint": "^8.31.0"
+  },
+  "dependencies": {
+    "lit-element": "^2.5.1"
+  }
 }

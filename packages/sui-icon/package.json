@@ -1,7 +1,7 @@
 {
-  "name": "@sakai-ui/sui-date-picker",
-  "version": "1.0.1",
-  "description": "The Sakai date picker",
+  "name": "@sakai-ui/sui-icon",
+  "version": "1.0.0",
+  "description": "The Sakai icon component",
   "main": "index.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
@@ -17,7 +17,7 @@
   },
   "keywords": [
     "sakai",
-    "datepicker"
+    "icon"
   ],
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",
   "license": "ECL-2.0",
@@ -34,9 +34,8 @@
     "eslint": "^8.31.0"
   },
   "dependencies": {
-    "@js-temporal/polyfill": "^0.4.3",
-    "@sakai-ui/sui-element": "^3.0.0",
-    "@sakai-ui/sui-portal-utils": "^3.0.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "lit-element": "^2.5.1"
   }
 }
