@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/fa-icon",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A FontAwesome custom element",
   "main": "index.js",
   "publishConfig": {
@@ -9,6 +9,10 @@
   "scripts": {
     "lint:fix": "eslint src --fix"
   },
+  "files": [
+    "*.js",
+    "src"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sakaiproject/sakai-ui.git"

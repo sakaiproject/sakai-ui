@@ -1,1 +1,1 @@
-export * from './src/fa-icon.js';
+export * from './src/FaIcon.js';
