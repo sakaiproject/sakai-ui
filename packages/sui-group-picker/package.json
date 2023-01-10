@@ -1,8 +1,9 @@
 {
   "name": "@sakai-ui/sui-group-picker",
-  "version": "24.0.0",
+  "version": "3.0.0",
   "description": "Sakai group picker component",
   "main": "index.js",
+  "module": "sui-group-picker.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"
@@ -29,11 +30,11 @@
     "url": "https://github.com/sakaiproject/sakai-ui/issues"
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
-  "dependencies": {
-    "@sakai-ui/sui-element": "^24.0.0"
-  },
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
     "@web/test-runner": "^0.15.0"
+  },
+  "dependencies": {
+    "@sakai-ui/sui-element": "^3.0.0"
   }
 }

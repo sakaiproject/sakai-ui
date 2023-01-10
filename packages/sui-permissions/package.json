@@ -1,8 +1,9 @@
 {
   "name": "@sakai-ui/sui-permissions",
-  "version": "24.0.0",
+  "version": "3.0.1",
   "description": "The Sakai permissions component",
   "main": "index.js",
+  "module": "sui-permissions.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage",
@@ -36,6 +37,6 @@
     "storybook": "^6.5.15"
   },
   "dependencies": {
-    "@sakai-ui/sui-group-picker": "^24.0.0"
+    "@sakai-ui/sui-group-picker": "^3.0.0"
   }
 }
