@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
-class FaIcon extends LitElement {
+export class FaIcon extends LitElement {
 
   static get properties() {
 
@@ -76,6 +76,3 @@ class FaIcon extends LitElement {
     `;
   }
 }
-
-const tagName = "fa-icon";
-!customElements.get(tagName) && customElements.define(tagName, FaIcon);
