@@ -1,5 +1,5 @@
 import { SuiElement } from "@sakai-ui/sui-element";
-import { html } from "lit-element";
+import { html } from "lit";
 import "@sakai-ui/sui-group-picker";
 
 export class SuiPermissions extends SuiElement {

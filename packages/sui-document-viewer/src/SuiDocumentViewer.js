@@ -1,5 +1,5 @@
 import { SuiElement } from "@sakai-ui/sui-element";
-import { html } from "lit-element";
+import { html } from "lit";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 
 /**

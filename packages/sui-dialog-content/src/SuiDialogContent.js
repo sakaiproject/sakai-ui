@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import "@sakai-ui/sui-icon";
 import "@sakai-ui/sui-button";
 import { loadProperties as lp } from "@sakai-ui/sui-i18n";

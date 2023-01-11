@@ -1,6 +1,6 @@
 import "../sui-button.js";
 import { expect, fixture, waitUntil } from "@open-wc/testing";
-import { html } from "lit-element";
+import { html } from "lit";
 
 describe("sui-button tests", () => {
 

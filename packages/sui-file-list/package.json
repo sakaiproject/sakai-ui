@@ -1,0 +1,46 @@
+{
+  "name": "@sakai-ui/sui-file-list",
+  "version": "3.0.0",
+  "description": "The Sakai file list component",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "lint:fix": "eslint src --fix",
+    "test": "web-test-runner --coverage"
+  },
+  "files": [
+    "*.js",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakaiproject/sakai-ui.git",
+    "directory": "packages/sui-file-list"
+  },
+  "keywords": [
+    "sakai",
+    "permissions"
+  ],
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "license": "ECL-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/sakaiproject/sakai-ui/issues"
+  },
+  "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
+  "dependencies": {
+    "@open-wc/testing": "^3.1.7",
+    "@sakai-ui/sui-i18n": "^3.0.0",
+    "@sakai-ui/sui-icon": "^1.0.0",
+    "@web/test-runner": "^0.15.0",
+    "lit": "^2.6.0"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0"
+  }
+}

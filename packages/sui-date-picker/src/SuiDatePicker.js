@@ -1,5 +1,5 @@
 import { SuiElement } from "@sakai-ui/sui-element";
-import { html } from "lit-element";
+import { html } from "lit";
 import { getOffsetFromServerMillis, getTimezone } from "@sakai-ui/sui-portal-utils";
 import { toTemporalInstant } from "@js-temporal/polyfill";
 

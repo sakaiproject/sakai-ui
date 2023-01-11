@@ -1,6 +1,6 @@
 import "../sui-icon.js";
 import { expect, fixture } from "@open-wc/testing";
-import { html } from "lit-element";
+import { html } from "lit";
 
 describe("sui-icon tests", () => {
 

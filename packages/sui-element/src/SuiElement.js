@@ -1,4 +1,4 @@
-import { LitElement } from "lit-element";
+import { LitElement } from "lit";
 import { loadProperties, tr } from "@sakai-ui/sui-i18n";
 
 export class SuiElement extends LitElement {

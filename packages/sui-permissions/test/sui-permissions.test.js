@@ -1,6 +1,6 @@
 import "../sui-permissions.js";
 import { expect, fixture, waitUntil } from "@open-wc/testing";
-import { html } from "lit-element";
+import { html } from "lit";
 import * as data from "./data.js";
 
 describe("sui-permissions tests", () => {
