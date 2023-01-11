@@ -13,7 +13,7 @@ describe("sui-button tests", () => {
 
   it ("is accessible", async () => {
 
-    const el = await fixture(`<sui-button>Eggs</sui-button>`);
+    const el = await fixture(html`<sui-button>Eggs</sui-button>`);
 
     await expect(el).to.be.accessible();
   });

@@ -29,7 +29,7 @@ describe("sui-permissions tests", () => {
 
   it ("renders correctly", async () => {
  
-    const el = await fixture(`<sui-permissions tool="tool" site-id="${data.siteId}"></sui-permissions>`);
+    const el = await fixture(html`<sui-permissions tool="tool" site-id="${data.siteId}"></sui-permissions>`);
 
     await waitUntil(() => el.i18n);
 
@@ -59,14 +59,12 @@ describe("sui-permissions tests", () => {
     expect(el.querySelectorAll(".access-checkbox-cell input:checked").length).to.equal(3);
   });
 
-  /*
   it ("is accessible", async () => {
 
-    const el = await fixture(`<sui-permissions tool="tool" site-id="${data.siteId}"></sui-permissions>`);
+    const el = await fixture(html`<sui-permissions tool="tool" site-id="${data.siteId}"></sui-permissions>`);
 
     await waitUntil(() => el.i18n);
 
     await expect(el).to.be.accessible();
   });
-  */
 });

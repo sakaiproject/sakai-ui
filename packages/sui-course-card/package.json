@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-course-card",
-  "version": "3.0.6",
+  "version": "3.0.7",
   "description": "The Sakai course card component",
   "main": "index.js",
   "module": "index.js",
@@ -33,6 +33,7 @@
   "dependencies": {
     "@sakai-ui/sui-i18n": "^3.0.6",
     "@sakai-ui/sui-icon": "^3.0.6",
+    "@sakai-ui/sui-options-menu": "^3.0.7",
     "lit": "^2.6.0"
   },
   "exports": {

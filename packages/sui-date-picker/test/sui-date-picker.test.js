@@ -64,7 +64,7 @@ describe("sui-date-picker tests", () => {
 
   it ("is accessible", async () => {
 
-    const el = await fixture(html`<sui-date-picker iso-date="2019-09-07T15:50" add-hidden-fields hidden-prefix="test-"></sui-date-picker>`);
+    const el = await fixture(html`<sui-date-picker iso-date="2019-09-07T15:50" label="eggs" add-hidden-fields hidden-prefix="test-"></sui-date-picker>`);
 
     await expect(el).to.be.accessible();
   });
