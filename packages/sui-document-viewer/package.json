@@ -1,0 +1,42 @@
+{
+  "name": "@sakai-ui/sui-document-viewer",
+  "version": "3.0.0",
+  "description": "The Sakai document viewing component",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "lint:fix": "eslint src --fix",
+    "test": "web-test-runner --coverage"
+  },
+  "files": [
+    "*.js",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sakaiproject/sakai-ui.git"
+  },
+  "keywords": [
+    "sakai",
+    "document",
+    "viewer"
+  ],
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "license": "ECL-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/sakaiproject/sakai-ui/issues"
+  },
+  "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
+  "devDependencies": {
+    "@open-wc/testing": "^2.5.33",
+    "@web/test-runner": "^0.15.0"
+  },
+  "dependencies": {
+    "@sakai-ui/sui-element": "^3.0.0",
+    "lit-element": "^2.5.1",
+    "lit-html": "^1.1.1"
+  }
+}
