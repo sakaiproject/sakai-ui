@@ -1,8 +1,9 @@
 {
-  "name": "@sakai-ui/sui-icon",
-  "version": "1.0.0",
-  "description": "The Sakai icon component",
+  "name": "@sakai-ui/sui-course-list",
+  "version": "3.0.0",
+  "description": "The Sakai course list component",
   "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "lint:fix": "eslint src --fix",
     "test": "web-test-runner --coverage"
@@ -13,11 +14,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sakaiproject/sakai-ui.git"
+    "url": "git+https://github.com/sakaiproject/sakai-ui.git",
+    "directory": "packages/sui-course-list"
   },
   "keywords": [
     "sakai",
-    "icon"
+    "course"
   ],
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",
   "license": "ECL-2.0",
@@ -29,9 +31,12 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.36",
-    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@sakai-ui/sui-i18n": "^3.0.0",
+    "@sakai-ui/sui-icon": "^1.0.0",
     "lit": "^2.6.0"
+  },
+  "exports": {
+    ".": "./index.js"
   },
   "devDependencies": {
     "@open-wc/testing": "^3.1.7",

@@ -30,10 +30,8 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@open-wc/testing": "^3.1.7",
     "@sakai-ui/sui-element": "^3.0.0",
     "@sakai-ui/sui-group-picker": "^3.0.0",
-    "@web/test-runner": "^0.15.0",
     "lit": "^2.6.0"
   },
   "exports": {
@@ -41,6 +39,8 @@
     "./define": "./index.js"
   },
   "devDependencies": {
+    "@open-wc/testing": "^3.1.7",
+    "@web/test-runner": "^0.15.0",
     "eslint": "^8.31.0"
   }
 }

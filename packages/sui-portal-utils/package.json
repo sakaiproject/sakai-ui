@@ -17,11 +17,11 @@
     "test": "web-test-runner --coverage"
   },
   "dependencies": {
-    "@open-wc/testing": "^3.1.7",
-    "@web/test-runner": "^0.15.0",
     "lit": "^2.6.0"
   },
   "devDependencies": {
+    "@open-wc/testing": "^3.1.7",
+    "@web/test-runner": "^0.15.0",
     "eslint": "^8.31.0"
   }
 }
