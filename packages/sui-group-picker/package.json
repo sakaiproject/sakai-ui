@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-group-picker",
-  "version": "3.0.0",
+  "version": "3.0.6",
   "description": "Sakai group picker component",
   "main": "index.js",
   "module": "sui-group-picker.js",
@@ -31,7 +31,7 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@sakai-ui/sui-element": "^3.0.0",
+    "@sakai-ui/sui-element": "^3.0.6",
     "lit": "^2.6.0"
   },
   "devDependencies": {

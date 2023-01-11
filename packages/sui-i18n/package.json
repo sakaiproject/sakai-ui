@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-i18n",
-  "version": "3.0.0",
+  "version": "3.0.6",
   "description": "A collection of functions to allow code to get Sakai translations",
   "license": "ECL-2.0",
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",

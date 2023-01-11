@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-portal-utils",
-  "version": "3.0.0",
+  "version": "3.0.6",
   "description": "Functions for accessing Sakai portal variables",
   "license": "ECL-2.0",
   "author": "The Sakai Project <sakai.user.interface@gmail.com>",

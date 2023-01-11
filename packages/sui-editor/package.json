@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-editor",
-  "version": "3.0.0",
+  "version": "3.0.6",
   "description": "The Sakai editor component",
   "main": "index.js",
   "module": "sui-editor.js",
@@ -30,8 +30,8 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@sakai-ui/sui-element": "^3.0.0",
-    "@sakai-ui/sui-group-picker": "^3.0.0",
+    "@sakai-ui/sui-element": "^3.0.6",
+    "@sakai-ui/sui-group-picker": "^3.0.6",
     "lit": "^2.6.0"
   },
   "exports": {

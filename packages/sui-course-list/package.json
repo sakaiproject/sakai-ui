@@ -1,6 +1,6 @@
 {
   "name": "@sakai-ui/sui-course-list",
-  "version": "3.0.0",
+  "version": "3.0.6",
   "description": "The Sakai course list component",
   "main": "index.js",
   "module": "index.js",
@@ -31,8 +31,8 @@
   },
   "homepage": "https://github.com/sakaiproject/sakai-ui#readme",
   "dependencies": {
-    "@sakai-ui/sui-i18n": "^3.0.0",
-    "@sakai-ui/sui-icon": "^1.0.0",
+    "@sakai-ui/sui-i18n": "^3.0.6",
+    "@sakai-ui/sui-icon": "^3.0.6",
     "lit": "^2.6.0"
   },
   "exports": {
