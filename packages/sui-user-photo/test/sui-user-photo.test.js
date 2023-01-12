@@ -9,12 +9,21 @@ describe("sui-user-photo tests", () => {
 
   it ("renders correctly", async () => {
  
-    let el = await fixture(html`<sui-user-photo user-id="${data.userId}" classes="small" profile-popup="on"></sui-user-photo>`);
+    let el = await fixture(html`
+      <sui-user-photo user-id="${data.userId}"
+          classes="small"
+          label="eggs"
+          profile-popup="on">
+      </sui-user-photo>
+    `);
 
     const div = document.getElementById(el.generatedId);
     expect(div).to.exist;
     expect(div.classList.contains("small")).to.be.true;
     expect(div.style.cursor).to.equal("pointer");
+    expect(div.getAttribute("aria-label")).to.equal("eggs");
+    expect(div.getAttribute("title")).to.equal("eggs");
+    expect(div.dataset.userId).to.equal(data.userId);
   });
 
   it ("renders for print correctly", async () => {
