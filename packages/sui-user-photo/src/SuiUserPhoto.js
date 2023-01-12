@@ -54,7 +54,7 @@ export class SuiUserPhoto extends SuiElement {
 
     if (this.profilePopup == SuiUserPhoto.ON && this.generatedId) {
       this.updateComplete.then(() => {
-        profile.attachPopups($(`#${this.generatedId}`));
+        profile.attachPopups(document.getElementById(this.generatedId));
       });
     }
   }
