@@ -10,6 +10,7 @@ export class SuiLTIIframe extends SuiElement {
     const randomId = Math.floor(Math.random() * 1000000);
     this.randomId = randomId;
     this.newWindowText = null;
+
     this.loadTranslations("lti").then(t => {
 
       this.i18n = t;
@@ -71,8 +72,8 @@ export class SuiLTIIframe extends SuiElement {
         let allowResize = false;
         Array.from(document.getElementsByTagName("iframe")).forEach(element => {
           if ( element.contentWindow === event.source ) {
-            frameId = element.getAttributeNode("id").nodeValue;
-            allowResize = element.getAttributeNode("data-allow-resize").nodeValue;
+            frameId = element.id;
+            allowResize = element.dataset.allowResize;
           }
         });
         if ( frameId != idval ) return; // The message is from our frame
