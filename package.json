@@ -12,5 +12,8 @@
   },
   "lint-staged": {
     "**/src/*.js": "eslint --fix"
+  },
+  "dependencies": {
+    "@lion/pagination": "^0.9.1"
   }
 }
