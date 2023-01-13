@@ -1,0 +1,33 @@
+{
+  "name": "@sakai-ui/sui-view-preferences",
+  "version": "3.0.6",
+  "description": "",
+  "license": "ECL-2.0",
+  "author": "The Sakai Project <sakai.user.interface@gmail.com>",
+  "homepage": "https://github.com/sakaiproject/sakai-ui/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sakaiproject/sakai-ui",
+    "directory": "packages/sui-view-preferences"
+  },
+  "main": "sui-view-preferences.js",
+  "module": "sui-view-preferences.js",
+  "files": [
+    "*.js"
+  ],
+  "scripts": {
+    "lint:fix": "eslint src --fix"
+  },
+  "keywords": [
+    "Sakai"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": "./index.js"
+  },
+  "devDependencies": {
+    "eslint": "^8.31.0"
+  }
+}
