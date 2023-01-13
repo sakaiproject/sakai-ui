@@ -13,7 +13,7 @@ module.exports = {
     "jQuery": "readonly",
     "MathJax": "readonly",
   },
-  "extends": "eslint:recommended",
+  "extends": [ "eslint:recommended", "plugin:lit/recommended" ],
   "parserOptions": { "ecmaVersion": 2020, "sourceType": "module" },
   "plugins": ["html"],
   "rules": {

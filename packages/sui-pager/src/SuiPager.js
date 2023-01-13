@@ -2,6 +2,9 @@ import { css } from "lit";
 import { loadProperties } from "@sakai-ui/sui-i18n";
 import { LionPagination } from "@lion/pagination";
 
+/**
+ * @customElement sui-pager
+**/
 export class SuiPager extends LionPagination {
 
   constructor() {
