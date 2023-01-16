@@ -15,7 +15,7 @@
     "*.js"
   ],
   "scripts": {
-    "lint:fix": "eslint src --fix",
+    "lint:fix": "eslint sui-jump-to-top.js --fix",
     "test": "web-test-runner --coverage"
   },
   "keywords": [

@@ -24,7 +24,7 @@ export class SuiImageEditor extends SuiDialogContent {
 
   updated() {
 
-    const image = this.shadowRoot.getElementById('image');
+    const image = this.shadowRoot.getElementById("image");
     this.cropper = new Cropper(image, {
       //aspectRatio: 1,
       aspectRatio: 509 / 293,
@@ -33,7 +33,7 @@ export class SuiImageEditor extends SuiDialogContent {
       minContainerHeight: 300,
       autoCropArea: 1,
       viewMode: 1,
-      dragMode: 'move',
+      dragMode: "move",
     });
   }
 
@@ -130,13 +130,13 @@ export class SuiImageEditor extends SuiDialogContent {
 
   static get styles() {
 
-    return [super.styles, cropperStyles, css`
+    return [ super.styles, cropperStyles, css`
       #controls {
         margin-top: 10px;
       }
       #controls sakai-button {
         margin: 0;
       }
-    `];
+    ` ];
   }
 }

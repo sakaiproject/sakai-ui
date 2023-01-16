@@ -43,4 +43,4 @@ function updateViewPreferences(tool, value, options = { debug: false }) {
                     `Failed to update view preferences for tool '${tool}'. Take a look at the server logs?`));
 }
 
-export {getViewPreferences, updateViewPreferences};
+export { getViewPreferences, updateViewPreferences };

@@ -1,5 +1,6 @@
 import { SuiElement } from "@sakai-ui/sui-element";
-import {html} from "lit";
+import { html } from "lit";
+import { ifDefined } from "lit-html/directives/if-defined.js";
 import "@sakai-ui/sui-group-picker";
 import "@spectrum-web-components/progress-bar";
 
@@ -155,7 +156,7 @@ export class SuiSubmissionMessager extends SuiElement {
 
     const formData = this.getFormData();
 
-    fetch(`/direct/gbng/listMessageRecipients.json`, {method: "POST", cache: "no-cache", credentials: "same-origin", body: formData})
+    fetch("/direct/gbng/listMessageRecipients.json", { method: "POST", cache: "no-cache", credentials: "same-origin", body: formData })
       .then(r => r.json())
       .then(data => {
 
@@ -174,7 +175,7 @@ export class SuiSubmissionMessager extends SuiElement {
 
     this.sending = true;
 
-    fetch(`/direct/gbng/messageStudents.json`, {method: "POST", cache: "no-cache", credentials: "same-origin", body: formData})
+    fetch("/direct/gbng/messageStudents.json", { method: "POST", cache: "no-cache", credentials: "same-origin", body: formData })
       .then(r => {
 
         if (r.ok) {

@@ -3,11 +3,11 @@ import { loadProperties } from "@sakai-ui/sui-i18n";
 const SCROLL_THRESHOLD = 500; // px
 
 // DOM Elements
-const portalMainContainer = document.querySelector('.portal-main-container');
+const portalMainContainer = document.querySelector(".portal-main-container");
 console.log(portalMainContainer);
-const jumpToTopButton = document.createElement('button');
-jumpToTopButton.classList.add('jump-to-top');
-jumpToTopButton.insertAdjacentHTML('beforeend', '<i class="si si-arrow-up-circle-fill"></i>');
+const jumpToTopButton = document.createElement("button");
+jumpToTopButton.classList.add("jump-to-top");
+jumpToTopButton.insertAdjacentHTML("beforeend", "<i class=\"si si-arrow-up-circle-fill\"></i>");
 portalMainContainer.appendChild(jumpToTopButton);
 
 // i18n variable
@@ -15,8 +15,8 @@ let jumptotopLabel;
 
 // load i18n properties and initialize the component when ready
 async function init() {
-  const i18n = await loadProperties('jumptotop');
-  jumptotopLabel = i18n['jumptotop_title'];
+  const i18n = await loadProperties("jumptotop");
+  jumptotopLabel = i18n.jumptotop_title;
   jumpToTopButton.title = jumptotopLabel;
   jumpToTopButton.ariaLabel = jumptotopLabel;
 }
@@ -24,9 +24,9 @@ async function init() {
 // show/hide jump to top button based on scroll position
 function handleScroll() {
   if (portalMainContainer.scrollTop > SCROLL_THRESHOLD) {
-    jumpToTopButton.classList.add('show');
+    jumpToTopButton.classList.add("show");
   } else {
-    jumpToTopButton.classList.remove('show');
+    jumpToTopButton.classList.remove("show");
   }
 }
 
@@ -34,7 +34,7 @@ function handleScroll() {
 function handleJumpToTopClick() {
   const scrollOptions = {
     top: 0,
-    behavior: 'smooth'
+    behavior: "smooth"
   };
   portalMainContainer.scrollTo(scrollOptions);
 }
@@ -42,5 +42,5 @@ function handleJumpToTopClick() {
 // initialize component
 init();
 
-portalMainContainer.addEventListener('scroll', handleScroll);
-jumpToTopButton.addEventListener('click', handleJumpToTopClick);
+portalMainContainer.addEventListener("scroll", handleScroll);
+jumpToTopButton.addEventListener("click", handleJumpToTopClick);

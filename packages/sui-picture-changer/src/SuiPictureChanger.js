@@ -44,7 +44,7 @@ export class SuiPictureChanger extends SuiElement {
         minContainerHeight: 300,
         autoCropArea: 1,
         viewMode: 1,
-        dragMode: 'move',
+        dragMode: "move",
         cropend: () => this.needsSave = true,
       });
     }
@@ -146,7 +146,7 @@ export class SuiPictureChanger extends SuiElement {
 
   _save() {
 
-    const base64 = this.cropper.getCroppedCanvas().toDataURL().replace(/^data:image\/(png|jpg);base64,/, '');
+    const base64 = this.cropper.getCroppedCanvas().toDataURL().replace(/^data:image\/(png|jpg);base64,/, "");
     const postBody = new URLSearchParams();
     postBody.append("base64", base64);
 
@@ -186,7 +186,7 @@ export class SuiPictureChanger extends SuiElement {
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       method: "POST",
-      body: JSON.stringify({ sakai_csrf_token: this.csrfToken }),
+      body: JSON.stringify({ "sakai_csrf_token": this.csrfToken }),
     })
     .then(r => {
 

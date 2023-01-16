@@ -222,7 +222,7 @@ export class SuiNotifications extends SuiElement {
           ${this.notifications?.filter(a => !a.viewed).length > 0 ? html`
           <button class="mark-viewed-button btn btn-secondary text-end" @click=${this.markAllNotificationsViewed}>${this.i18n.mark_all_viewed}</button>
           ` : ""}
-          <button class="clear-all-button" btn btn-secondary text-end" @click=${this.clearAllNotifications}>${this.i18n.clear_all}</button>
+          <button class="clear-all-button btn btn-secondary text-end" @click=${this.clearAllNotifications}>${this.i18n.clear_all}</button>
         </div>
       ` : html`
       <div class="d-flex justify-content-around">

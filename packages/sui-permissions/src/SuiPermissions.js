@@ -133,7 +133,7 @@ export class SuiPermissions extends SuiElement {
         ${this.groups && this.groups.length > 0 ? html`
           <div>
             <label for="permissons-group-picker">${this.i18n["per.lis.selectgrp"]}</label>
-            <sui-group-picker id="permissions-group-picker" groups="${JSON.stringify(this.groups)}" @group-selected=${this._groupSelected} />
+            <sui-group-picker id="permissions-group-picker" groups="${JSON.stringify(this.groups)}" @group-selected=${this._groupSelected}></sui-group-picker>
           </div>
         ` : ""}
         <div class="mb-1 pt-3">
