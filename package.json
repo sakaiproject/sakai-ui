@@ -12,8 +12,7 @@
     "lint-staged": "^13.1.0"
   },
   "lint-staged": {
-    "**/src/*.js": "eslint --fix",
-    "**/src/*.js": "lit-analyzer"
+      "**/src/*.js": ["eslint --fix", "lit-analyzer"]
   },
   "dependencies": {
     "@lion/pagination": "^0.9.1"

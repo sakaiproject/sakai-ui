@@ -1,6 +1,7 @@
 import { LitElement, css, html } from "lit";
 import "@sakai-ui/sui-pager";
 import { loadProperties } from "@sakai-ui/sui-i18n";
+import { ifDefined } from "lit-html/directives/if-defined.js";
 
 export class SuiPageableElement extends LitElement {
 
@@ -96,7 +97,7 @@ export class SuiPageableElement extends LitElement {
         </div>
         ${this.showPager ? html`
         <div id="pager">
-          <sakai-pager count="${this.count}" current="1" @page-selected=${this.pageClicked}></sakai-pager>
+          <sui-pager count="${ifDefined(this.count)}" current="1" @page-selected=${this.pageClicked}></sui-pager>
         </div>
         ` : ""}
       </div>
