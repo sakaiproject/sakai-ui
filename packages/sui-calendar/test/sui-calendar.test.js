@@ -13,8 +13,8 @@ describe("sui-calendar tests", () => {
 
       if (url === data.i18nUrl) {
         return Promise.resolve({ text: () => Promise.resolve(data.i18n) });
-      } else if (url === data.eventsUrl) {
-        return Promise.resolve({ ok: true, json: () => Promise.resolve(data.events) });
+      } else if (url === data.userCalendarUrl) {
+        return Promise.resolve({ ok: true, json: () => Promise.resolve(data.userCalendarEvents) });
       } else {
         console.error(`Miss on ${url}`);
         return Promise.reject();
@@ -28,6 +28,18 @@ describe("sui-calendar tests", () => {
     let el = await fixture(html`
       <sui-calendar user-id="${data.userId}"></sui-calendar>
     `);
+
+    expect(el.shadowRoot.getElementById("container")).to.exist;
+
+    waitUntil(() => el.events);
+
+    el.dispatchEvent(new CustomEvent("user-selected-date-changed", { detail: { selectedDate: data.selectedDate } }));
+
+    await el.updateComplete;
+
+    expect(el.shadowRoot.querySelector("#days-events a")).to.exist;
+    expect(el.shadowRoot.querySelectorAll("#days-events a span").item(0).innerHTML).to.contain(data.userCalendarEvents.events[0].title);
+    expect(el.shadowRoot.querySelectorAll("#days-events a span").item(1).innerHTML).to.contain(data.userCalendarEvents.events[0].siteTitle);
   });
 
   it ("is accessible", async () => {

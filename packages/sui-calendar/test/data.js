@@ -1,17 +1,9 @@
-export const i18nUrl = "/sakai-ws/rest/i18n/getI18nProperties?locale=en_GB&resourceclass=org.sakaiproject.i18n.InternationalizedMessages&resourcebundle=announcements";
+export const i18nUrl = "/sakai-ws/rest/i18n/getI18nProperties?locale=en_GB&resourceclass=org.sakaiproject.i18n.InternationalizedMessages&resourcebundle=calendar";
 
 export const i18n = `
-viewing=(viewing announcements from the last 10 days)
-site=Site
-search=Search
-title=Title
-site=Site
-site_tooltip=Filter by site
-view=View
-sort_by_title_tooltip=Sort by title
-sort_by_site_tooltip=Sort by title
-widget_title=Announcements
-url_tooltip=Click to be taken to the announcement
+today=Today
+days_message=Showing events for the next {} days
+events_for=Events for
 `;
 
 export const userId = "adrian";
@@ -21,16 +13,17 @@ export const siteTitle = "XYZ Site";
 export const vavavoom = "Vavavoom";
 export const vavavoomSite = "Vavavoom Site";
 
-export const announcementsUrl= `/api/users/${userId}/announcements`;
-export const siteAnnouncementsUrl= `/api/sites/${siteId}/announcements`;
+export const selectedDate = new Date(1677269640000);
 
-export const announcements = [
-  { subject: "Ears", url: "/annc/ears", siteTitle, siteId },
-  { subject: "Chips", url: "/annc/chips", siteTitle, siteId },
-  { subject: vavavoom, url: "/annc/vavavoom", siteTitle: vavavoomSite, siteId: vavavoom },
-];
+export const userCalendarUrl= "/api/users/current/calendar";
 
-export const siteAnnouncements = [
+export const userCalendarEvents = {
+  events: [
+    { tool: "Assignments", title: "Assignment One Due", url: "/assn/1", start: 1677269640500, siteTitle },
+  ]
+};
+
+export const siteCalendarEvents = [
   { subject: "Ears", url: "/annc/ears", siteTitle, siteId },
   { subject: "Chips", url: "/annc/chips", siteTitle, siteId },
 ];

@@ -135,7 +135,7 @@ export class SuiCalendar extends LionCalendar {
           ${this.daysEvents.map(e => html`
             <div>
               <a href="${e.url}">
-                <sakai-icon type="${e.tool}" size="small"></sakai-icon>
+                <sui-icon type="${e.tool}" size="small"></sui-icon>
                 <span>${e.title}</span><span> (${e.siteTitle})</span>
               </a>
             </div>
