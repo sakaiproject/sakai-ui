@@ -1,5 +1,5 @@
-import { html, LitElement } from "lit";
-import { loadProperties } from "@sakai-ui/sui-i18n";
+import { html } from "lit";
+import { SuiElement } from "@sakai-ui/sui-element";
 import "@sakai-ui/sui-button";
 import "@sakai-ui/sui-widgets";
 import "@lion/dialog";
@@ -7,7 +7,14 @@ import "../sui-course-dashboard-template-picker.js";
 import "../sui-course-header.js";
 import "../sui-course-overview.js";
 
-export class SuiCourseDashboard extends LitElement {
+export class SuiCourseDashboard extends SuiElement {
+
+  constructor() {
+
+    super();
+
+    this.loadTranslations("dashboard").then(r => this.i18n = r);
+  }
 
   static get properties() {
 
@@ -19,19 +26,6 @@ export class SuiCourseDashboard extends LitElement {
       siteId: { attribute: "site-id", type: String },
       editing: { type: Boolean },
     };
-  }
-
-  constructor() {
-
-    super();
-
-    loadProperties("dashboard").then((r) => this.i18n = r);
-  }
-
-  createRenderRoot() {
-    // Need to make this light dom as we have to use ckeditor, and ckeditor don't like
-    // the shadows.
-    return this;
   }
 
   set siteId(value) {

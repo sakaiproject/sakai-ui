@@ -33,10 +33,13 @@
     "@lion/dialog": "^0.16.1",
     "@sakai-ui/sui-button": "^3.0.6",
     "@sakai-ui/sui-dialog-content": "^3.0.6",
+    "@sakai-ui/sui-editor": "file:../sui-editor",
+    "@sakai-ui/sui-element": "^3.0.6",
     "@sakai-ui/sui-i18n": "^3.0.6",
     "@sakai-ui/sui-icon": "^3.0.6",
     "@sakai-ui/sui-image-editor": "file:../sui-image-editor",
     "@sakai-ui/sui-pageable-element": "file:../sui-pageable-element",
+    "@sakai-ui/sui-widgets": "file:../sui-widgets",
     "lit": "^2.6.0"
   },
   "devDependencies": {
