@@ -1,6 +1,6 @@
 import { html } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
-import "@sui-ui/sui-announcements";
+import "@sakai-ui/sui-announcements";
 import { SuiDashboardWidget } from "./SuiDashboardWidget.js";
 
 export class SuiAnnouncementsWidget extends SuiDashboardWidget {

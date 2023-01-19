@@ -36,10 +36,12 @@
     "@sakai-ui/sui-calendar": "file:../sui-calendar",
     "@sakai-ui/sui-dialog-content": "^3.0.6",
     "@sakai-ui/sui-forums": "file:../sui-forums",
+    "@sakai-ui/sui-grades": "file:../sui-grades",
     "@sakai-ui/sui-i18n": "^3.0.6",
     "@sakai-ui/sui-icon": "^3.0.6",
     "@sakai-ui/sui-pageable-element": "file:../sui-pageable-element",
     "@sakai-ui/sui-pager": "file:../sui-pager",
+    "@sakai-ui/sui-tasks": "file:../sui-tasks",
     "lit": "^2.6.0"
   },
   "devDependencies": {

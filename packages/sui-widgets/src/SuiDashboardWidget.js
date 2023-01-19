@@ -1,7 +1,7 @@
 import { css, html, LitElement } from "lit";
-import "@sui-ui/sui-icon";
-import { loadProperties } from "@sui-ui/sui-i18n";
-import "@sui-ui/sui-pager";
+import "@sakai-ui/sui-icon";
+import { loadProperties } from "@sakai-ui/sui-i18n";
+import "@sakai-ui/sui-pager";
 
 export class SuiDashboardWidget extends LitElement {
 

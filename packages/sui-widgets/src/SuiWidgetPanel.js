@@ -1,7 +1,6 @@
 import { html, css, LitElement } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
 import { repeat } from "lit-html/directives/repeat.js";
-import "../sui-dashboard-widget.js";
 import "../sui-calendar-widget.js";
 import "../sui-tasks-widget.js";
 import "../sui-grades-widget.js";
@@ -189,7 +188,7 @@ export class SuiWidgetPanel extends LitElement {
       case "tasks":
         return html`
           <div class="${this.state === "add" ? "faded" : ""}">
-            <sakai-tasks-widget
+            <sui-tasks-widget
               id="${r}"
               site-id="${ifDefined(this.siteId ? this.siteId : "")}"
               user-id="${ifDefined(this.userId ? this.userId : "")}"
@@ -198,13 +197,13 @@ export class SuiWidgetPanel extends LitElement {
               @remove=${this.removeWidget}
               @move=${this.moveWidget}
               ?editing=${this.editing}>
-            </sakai-tasks-widget>
+            </sui-tasks-widget>
           </div>
         `;
       case "grades":
         return html`
           <div class="${this.state === "add" ? "faded" : ""}">
-            <sakai-grades-widget
+            <sui-grades-widget
               id="${r}"
               site-id="${ifDefined(this.siteId ? this.siteId : undefined)}"
               user-id="${ifDefined(this.userId ? this.userId : undefined)}"
@@ -213,13 +212,13 @@ export class SuiWidgetPanel extends LitElement {
               @remove=${this.removeWidget}
               @move=${this.moveWidget}
               ?editing=${this.editing}>
-            </sakai-grades-widget>
+            </sui-grades-widget>
           </div>
         `;
       case "announcements":
         return html`
           <div class="${this.state === "add" ? "faded" : ""}">
-            <sakai-announcements-widget
+            <sui-announcements-widget
               id="${r}"
               site-id="${ifDefined(this.siteId ? this.siteId : undefined)}"
               user-id="${ifDefined(this.userId ? this.userId : undefined)}"
@@ -228,13 +227,13 @@ export class SuiWidgetPanel extends LitElement {
               @remove=${this.removeWidget}
               @move=${this.moveWidget}
               ?editing=${this.editing}>
-            </sakai-announcements-widget>
+            </sui-announcements-widget>
           </div>
         `;
       case "calendar":
         return html`
           <div class="${this.state === "add" ? "faded" : ""}">
-            <sakai-calendar-widget
+            <sui-calendar-widget
               id="${r}"
               site-id="${ifDefined(this.siteId ? this.siteId : undefined)}"
               user-id="${ifDefined(this.userId ? this.userId : undefined)}"
@@ -243,13 +242,13 @@ export class SuiWidgetPanel extends LitElement {
               @remove=${this.removeWidget}
               @move=${this.moveWidget}
               ?editing=${this.editing}>
-            </sakai-calendar-widget>
+            </sui-calendar-widget>
           </div>
         `;
       case "forums":
         return html`
           <div class="${this.state === "add" ? "faded" : ""}">
-            <sakai-forums-widget
+            <sui-forums-widget
               id="${r}"
               site-id="${ifDefined(this.siteId ? this.siteId : undefined)}"
               user-id="${ifDefined(this.userId ? this.userId : undefined)}"
@@ -258,11 +257,11 @@ export class SuiWidgetPanel extends LitElement {
               @remove=${this.removeWidget}
               @move=${this.moveWidget}
               ?editing=${this.editing}>
-            </sakai-forums-widget>
+            </sui-forums-widget>
           </div>
         `;
       case "picker":
-        return this.editing ? html`<div><sakai-widget-picker @remove=${this.removeWidget} id="picker" state="remove"></div>` : "";
+        return this.editing ? html`<div><sui-widget-picker @remove=${this.removeWidget} id="picker" state="remove"></sui-widget-picker></div>` : "";
       default:
         return "";
     }
@@ -278,7 +277,7 @@ export class SuiWidgetPanel extends LitElement {
                 @click=${this.showWidgetPicker}
                 title="${this.i18n.add_a_widget}"
                 aria-label="${this.i18n.add_a_widget}">
-              <sakai-icon type="add" size="small"></sakai-icon>
+              <sui-icon type="add" size="small"></sui-icon>
               <div id="add-text">${this.i18n.add_a_widget}</div>
             </a>
           </div>

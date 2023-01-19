@@ -1,7 +1,7 @@
 import { html } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
 import { SuiDashboardWidget } from "./SuiDashboardWidget.js";
-import "@sui-ui/sui-grades";
+import "@sakai-ui/sui-grades";
 
 export class SuiGradesWidget extends SuiDashboardWidget {
 

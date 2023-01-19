@@ -1,7 +1,7 @@
 import { css, html } from "lit";
 import { SuiDashboardWidget } from "./SuiDashboardWidget.js";
 import { suiWidgets } from "./SuiWidgets.js";
-import { loadProperties } from "@sui-ui/sui-i18n";
+import { loadProperties } from "@sakai-ui/sui-i18n";
 
 export class SuiWidgetPicker extends SuiDashboardWidget {
 
