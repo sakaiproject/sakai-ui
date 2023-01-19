@@ -11,7 +11,7 @@ describe("sui-date-picker tests", () => {
 
   it ("renders correctly", async () => {
  
-    const el = await fixture(html`<sui-date-picker></sui-date-picker>`);
+    const el = await fixture(html`<sui-date-picker epoch-millis="1674026961000"></sui-date-picker>`);
 
     expect(el.querySelector("input[type='datetime-local']")).to.exist;
   });

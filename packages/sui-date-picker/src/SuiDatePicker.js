@@ -29,6 +29,8 @@ export class SuiDatePicker extends SuiElement {
 
     super();
 
+    console.log("HERE");
+
     this.hiddenPrefix = "";
 
     this.instanceSalt = Math.floor(Math.random() * Date.now());
@@ -131,7 +133,7 @@ export class SuiDatePicker extends SuiElement {
           id="date-picker-input-${this.instanceSalt}"
           @change=${this._dateSelected}
           value="${this.isoDate}"
-          .disabled=${this.disabled}
+          ?disabled=${this.disabled}
           aria-label="${this.label}"
           title="${this.label}">
       ${this.addHiddenFields && this.isoDate ? html`
