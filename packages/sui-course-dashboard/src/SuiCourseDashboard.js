@@ -125,7 +125,7 @@ export class SuiCourseDashboard extends SuiElement {
       layout: this.data.layout,
       overview: this.data.overview,
       programme: this.data.programme,
-      template: this.data.template,
+      template: this.data.template.id,
     };
 
     const url = `/api/sites/${this.siteId}/dashboard`;
@@ -157,13 +157,13 @@ export class SuiCourseDashboard extends SuiElement {
 
     this.data.template = e.detail.template;
 
-    if (this.data.template == 1) {
+    if (this.data.template.id == 1) {
       this.data.layout = this.data.defaultWidgetLayouts["1"];
     }
-    if (this.data.template == 2) {
+    if (this.data.template.id == 2) {
       this.data.layout = this.data.defaultWidgetLayouts["2"];
     }
-    if (this.data.template == 3) {
+    if (this.data.template.id == 3) {
       this.data.layout = this.data.defaultWidgetLayouts["3"];
     }
 
@@ -284,13 +284,13 @@ export class SuiCourseDashboard extends SuiElement {
 
     return html`
       <lion-dialog id="templates">
-        <sui-course-dashboard-template-picker template=${this.data.template} slot="content" @template-selected=${this.templateSelected}>
+        <sui-course-dashboard-template-picker .template=${this.data.template} slot="content" @template-selected=${this.templateSelected}>
         <div slot="invoker" style="display: none;"></div>
       </lion-dialog>
       <div class="course-dashboard-container">
-        ${this.data.template == 1 ? this.template1() : ""}
-        ${this.data.template == 2 ? this.template2() : ""}
-        ${this.data.template == 3 ? this.template3() : ""}
+        ${this.data.template.id == 1 ? this.template1() : ""}
+        ${this.data.template.id == 2 ? this.template2() : ""}
+        ${this.data.template.id == 3 ? this.template3() : ""}
       </div>
     `;
   }

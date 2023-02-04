@@ -9,7 +9,7 @@ export class SuiCourseDashboardTemplatePicker extends SuiDialogContent {
 
     return {
       i18n: Object,
-      template: { type: Number },
+      template: { type: Object },
     };
   }
 
@@ -39,6 +39,8 @@ export class SuiCourseDashboardTemplatePicker extends SuiDialogContent {
 
   content() {
 
+    console.log(this.template);
+
     return html`
 
       <div id="instruction">
@@ -46,21 +48,21 @@ export class SuiCourseDashboardTemplatePicker extends SuiDialogContent {
       </div>
 
       <div id="template-block">
-        <div id="template1-block" class=${this.template == 1 ? "selected" : ""}>
+        <div id="template1-block" class=${this.template.id == 1 ? "selected" : ""}>
           <a href="javascript:;" @click=${this.templateSelected} data-template="1">
-            <img  data-template="1" src="/webcomponents/images/layout1.png" class="thumbnail" />
+            <img  data-template="1" src="${this.template.thumbnailUrl}" class="thumbnail" />
           </a>
           <h2>${this.i18n.option1}</h2>
         </div>
-        <div id="template2-block" class=${this.template == 2 ? "selected" : ""}>
+        <div id="template2-block" class=${this.template.id == 2 ? "selected" : ""}>
           <a href="javascript:;" @click=${this.templateSelected} data-template="2">
-            <img data-template="2" src="/webcomponents/images/layout2.png" class="thumbnail" />
+            <img data-template="2" src="${this.template.thumbnailUrl}" class="thumbnail" />
           </a>
           <h2>${this.i18n.option2}</h2>
         </div>
-        <div id="template3-block" class=${this.template == 3 ? "selected" : ""}>
+        <div id="template3-block" class=${this.template.id == 3 ? "selected" : ""}>
           <a href="javascript:;" @click=${this.templateSelected} data-template="3">
-            <img data-template="3" src="/webcomponents/images/layout3.png" class="thumbnail" />
+            <img data-template="3" src="${this.template.thumbnailUrl}" class="thumbnail" />
           </a>
           <h2>${this.i18n.option3}</h2>
         </div>

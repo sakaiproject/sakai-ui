@@ -24,7 +24,7 @@ describe("sui-course-dashboard tests", () => {
 
     await waitUntil(() => el.data);
 
-    expect(el.shadowRoot.getElementById("course-dashboard-title-and-edit-block")).to.exist;
+    expect(el.querySelector("#course-dashboard-title-and-edit-block")).to.exist;
   });
 
   it ("is accessible", async () => {

@@ -14,8 +14,7 @@
   "module": "index.js",
   "files": [
     "*.js",
-    "src",
-    "test/images/orville.jpeg"
+    "src"
   ],
   "scripts": {
     "lint:fix": "eslint src --fix",

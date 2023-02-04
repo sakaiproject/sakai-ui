@@ -35,7 +35,7 @@ export const programme = "Emotional and Sexual Health";
 export const dashboardUrl = `/api/sites/${siteId}/dashboard`;
 export const dashboardData = {
   layout: [ "announcements", "forums", "grades", "tasks" ],
-  template: 1,
+  template: { id: 1, thumbnailUrl: "/test/images/layout1.png" },
   programme,
   overview,
 };
