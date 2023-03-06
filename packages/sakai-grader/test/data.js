@@ -1,3 +1,9 @@
+import { GRADE_CHECKED,
+          LETTER_GRADE_TYPE,
+          SCORE_GRADE_TYPE,
+          PASS_FAIL_GRADE_TYPE,
+          CHECK_GRADE_TYPE } from "../src/sakai-grader-constants.js";
+
 export const i18nUrl = /getI18nProperties.*grader$/;
 
 export const i18n = `
@@ -61,3 +67,34 @@ override_grade_with=Override with:
 ungraded=Ungraded
 filter_settings_warning=You've applied some settings. Click on the cogs icon below to view them.
 `;
+
+export const gradableId = "assignment1";
+export const siteId = "site1";
+export const siteTitle = "Site 1";
+export const submittedText = "My submission";
+export const textAttachmentUrl = "http://text.com";
+export const textSubmission = {
+  id: "submission1",
+  dateSubmitted: "7 Feb 1971",
+  assignmentCloseTime: { epochSecond: 1677672390 },
+  properties: {
+    allow_resubmit_number: 0,
+  },
+  resubmitsAllowed: -1,
+  submitters: [
+    {
+      sortName: "Fish, Adrian",
+      displayId: "fisha",
+    },
+  ],
+  //submittedAttachments: [ textAttachment ],
+  submittedText,
+};
+export const gradableData = {
+  gradable: { title: "Assignment One", gradeScale:  SCORE_GRADE_TYPE, maxGradePoint: "100" },
+  submissions: [ textSubmission ],
+};
+export const gradesData = {
+  students: [],
+  grades: [],
+};

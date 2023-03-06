@@ -54,6 +54,9 @@ class Submission {
       if (init.submitters) {
         this.firstSubmitterName = `${init.submitters[0].sortName}${init.submitters[0].displayId !== null ? ` (${init.submitters[0].displayId})` : ""}`;
         this.firstSubmitterId = init.submitters[0].id;
+      } else {
+        console.error("No submitters");
+        this.firstSubmitterName = "none";
       }
       this.late = init.late;
       this.returned = init.returned;
@@ -70,11 +73,11 @@ class Submission {
 
       this.resubmitsAllowed = parseInt(init.properties.allow_resubmit_number || 0);
       if (this.resubmitsAllowed === -1 || this.resubmitsAllowed > 0) {
-        this.resubmitDate = moment(parseInt(init.properties.allow_resubmit_closeTime, 10)).valueOf();
+        this.resubmitDate = parseInt(init.properties.allow_resubmit_closeTime, 10);
       }
       this.extensionAllowed = init.properties.allow_extension_closeTime != null;
       if (this.extensionAllowed) {
-        this.extensionDate = moment(parseInt(init.properties.allow_extension_closeTime, 10)).valueOf();
+        this.extensionDate = parseInt(init.properties.allow_extension_closeTime, 10);
       }
       this.originalityServiceName = init.properties.originalityServiceName;
       this.originalitySupplies = [];
@@ -110,14 +113,14 @@ class Submission {
     if (old === 0 && (value === -1 || value > 0)) {
       // This is the first time resubmits have been allowed, so set the date to the
       // assignment's close date, by default.
-      this.resubmitDate = moment(this.assignmentCloseTime).valueOf();
+      this.resubmitDate = this.assignmentCloseTime;
     }
   }
 
   set extensionAllowed(value) {
 
     this._extensionAllowed = value;
-    this.extensionDate = moment(this.assignmentCloseTime).valueOf();
+    this.extensionDate = this.assignmentCloseTime;
   }
 
   get resubmitsAllowed() { return this._resubmitsAllowed; }

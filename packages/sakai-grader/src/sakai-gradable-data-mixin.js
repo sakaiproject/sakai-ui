@@ -2,7 +2,7 @@ import { Submission } from "./submission.js";
 
 const gradableDataMixin = Base => class extends Base {
 
-  loadGradableData(gradableId, courseId, submissionId) {
+  loadGradableData(gradableId, courseId) {
 
     // Grab all of the initial data we need, submissions and students. This will come from the grading service in future.
     return new Promise(resolve => {
@@ -59,12 +59,6 @@ const gradableDataMixin = Base => class extends Base {
               });
 
               this.originalSubmissions.forEach(s => s.grade = gradesData.grades[s.id] );
-
-              if (submissionId) {
-                this.submission = this.submissions.find(s => s.id === submissionId);
-              } else {
-                this.submission = this.submissions[0];
-              }
 
               resolve(gradableData);
             })

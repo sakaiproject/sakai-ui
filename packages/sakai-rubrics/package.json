@@ -27,7 +27,9 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-rubric-grading.js": "./sakai-rubric-grading.js",
+    "./sakai-rubric-grading-button.js": "./sakai-rubric-grading-button.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-editor": "file:../sakai-editor",

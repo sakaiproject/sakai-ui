@@ -11,7 +11,7 @@ import "@sakai-ui/sakai-lti-iframe";
 import "@sakai-ui/sakai-user-photo";
 import { gradableDataMixin } from "./sakai-gradable-data-mixin.js";
 import { Submission } from "./submission.js";
-import "@sakai-ui/sakai-rubrics/rubric-association-requirements.js";
+import "@sakai-ui/sakai-rubrics/sakai-rubric-grading.js";
 import "@sakai-ui/sakai-rubrics/sakai-rubric-grading-button.js";
 
 import { GRADE_CHECKED,
@@ -399,7 +399,7 @@ export class SakaiGrader extends gradableDataMixin(SakaiElement) {
               `)}` : ""}
           </div>
           <div class="timeSpent-block">
-            ${this.submission.submitters[0].timeSpent ? html`
+            ${this.submission?.submitters?.length > 0 && this.submission.submitters[0].timeSpent ? html`
               <span>${this.assignmentsI18n["gen.assign.spent"]}</span>
               <span> ${this.submission.submitters[0].timeSpent}</span>
             ` : ""}
@@ -536,11 +536,11 @@ export class SakaiGrader extends gradableDataMixin(SakaiElement) {
               evaluated-item-owner-id="${this.submission.firstSubmitterId}">
             </sakai-rubric-grading-button>
 
-            <div id="grader-rubric-modal" class="modal" tabindex="-1">
+            <div id="grader-rubric-modal" class="modal" tabindex="-1" aria-labelledby="grader-rubric-modal-label">
               <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title">${this.i18n.rubric}</h5>
+                    <h5 id="grader-rubric-modal-label" class="modal-title">${this.i18n.rubric}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -590,11 +590,11 @@ export class SakaiGrader extends gradableDataMixin(SakaiElement) {
           ${this.submission.feedbackComment ? html`<div class="active-indicator ${this.savedFeedbackComment ? "" : "unsaved"}" aria-label="${this.feedbackCommentPresentMsg()}" title="${this.feedbackCommentPresentMsg()}"></div>` : ""}
         </div>
 
-        <div id="feedback-modal" class="modal" tabindex="-1">
+        <div id="feedback-modal" class="modal" tabindex="-1" aria-labelledby="grader-feedback-modal-label" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">${this.assignmentsI18n.feedbackcomment}</h5>
+                <h5 id="grader-feedback-modal-label" class="modal-title">${this.assignmentsI18n.feedbackcomment}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
@@ -796,11 +796,11 @@ export class SakaiGrader extends gradableDataMixin(SakaiElement) {
       </div>
       <div class="grader-container">
         ${this.graderOnLeft ? html`
-        ${this.renderGrader()}
-        ${this.renderGradable()}
+          ${this.renderGrader()}
+          ${this.renderGradable()}
         ` : html`
-        ${this.renderGradable()}
-        ${this.renderGrader()}
+          ${this.renderGradable()}
+          ${this.renderGrader()}
         `}
       </div>
     `;
@@ -999,15 +999,19 @@ export class SakaiGrader extends gradableDataMixin(SakaiElement) {
         this.letterGradeOptions = data.letterGradeOptions.split(",");
       }
 
-      if (this.submissionId) {
-        this.submission = this.submissions.find(s => s.id === this.submissionId);
+      if (this.submissions.length > 0) {
+        if (this.submissionId) {
+          this.submission = this.submissions.find(s => s.id === this.submissionId);
+        } else {
+          this.submission = this.submissions[0];
+        }
+      } else {
+        console.error("No submissions");
       }
-
-      this.requestUpdate();
     };
 
     if (!this.gradableDataLoader) {
-      this.gradableDataLoader = this.loadGradableData(gradableId, portal.siteId, this.submissionId);
+      this.gradableDataLoader = this.loadGradableData(gradableId, portal.siteId);
     }
     this.gradableDataLoader.then(data => doIt(data));
   }
