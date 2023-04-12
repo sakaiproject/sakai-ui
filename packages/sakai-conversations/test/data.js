@@ -245,7 +245,10 @@ export const siteId = "site1";
 export const siteTitle = "Site 1";
 
 export const data = {
-  tags: [ { id: "1", label: "eggs" } ],
+  tags: [
+    { id: "1", label: "eggs" },
+    { id: "2", label: "sports" },
+  ],
   blankTopic: {
     tags: [],
   },

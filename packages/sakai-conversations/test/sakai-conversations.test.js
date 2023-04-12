@@ -31,7 +31,7 @@ describe("sakai-conversations tests", () => {
     expect(el.querySelector(".conv-add-topic")).to.not.exist;
   });
 
-  it ("renders add topic screen correctly", async () => {
+  it ("renders add new topic screen correctly", async () => {
 
     data.data.canCreateTopic = true;
  
@@ -52,6 +52,14 @@ describe("sakai-conversations tests", () => {
     expect(sakaiAddTopic).to.exist;
 
     expect(sakaiAddTopic.querySelector(`div[data-type='${constants.DISCUSSION}']`)).to.exist;
+    expect(sakaiAddTopic.querySelector(`div[data-type='${constants.QUESTION}']`)).to.exist;
+    expect(sakaiAddTopic.querySelector("#tag-post-block select")).to.exist;
+    expect(sakaiAddTopic.querySelectorAll("#tag-post-block select > option").length).to.equal(2);
+
+    expect(sakaiAddTopic.querySelector("#conv-edit-tags-link-wrapper")).to.not.exist;
+    sakaiAddTopic.canEditTags = true;
+    await el.updateComplete;
+    expect(sakaiAddTopic.querySelector("#conv-edit-tags-link-wrapper")).to.exist;
   });
 
   it ("is accessible", async () => {

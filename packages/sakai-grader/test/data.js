@@ -98,3 +98,15 @@ export const gradesData = {
   students: [],
   grades: [],
 };
+
+/*
+this._submission.originalityShowing = true;
+this._submission.originalityServiceName = "Turnitin";
+const supplies = [
+  {
+    "1": "http://www.balls.com",
+    "4": "balls",
+  }
+];
+this._submission.originalitySupplies = supplies;
+*/
