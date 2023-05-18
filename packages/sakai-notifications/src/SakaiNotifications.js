@@ -11,7 +11,7 @@ export class SakaiNotifications extends SakaiElement {
     this.filteredNotifications = new Map();
 
     this.i18nLoaded = this.loadTranslations("sakai-notifications");
-    this.i18nLoaded.then(i18n => { this.i18n = i18n; this.requestUpdate(); });
+    this.i18nLoaded.then(i18n => this.i18n = i18n);
   }
 
   static get properties() {
@@ -47,7 +47,7 @@ export class SakaiNotifications extends SakaiElement {
     })
     .then(data => {
 
-      this.notifications = data || [];
+      this.notifications = data.notifications || [];
       this.filterIntoToolNotifications();
       this.registerForNotifications();
       this.fireLoadedEvent();
@@ -58,7 +58,7 @@ export class SakaiNotifications extends SakaiElement {
 
     portal.notifications.setup.then(() => {
 
-      portal.notifications.registerForMessages("notifications", message => {
+      portal.notifications.registerPushCallback("all", message => {
 
         this.notifications.push(message);
         this.fireLoadedEvent();
@@ -67,19 +67,24 @@ export class SakaiNotifications extends SakaiElement {
     });
   }
 
-  async filterIntoToolNotifications() {
-
-    await this.i18nLoaded;
+  filterIntoToolNotifications() {
 
     this.filteredNotifications.clear();
 
     this.notifications.forEach(noti => {
+
 
       // Grab the first section of the event. This is the tool event prefix.
       const toolEventPrefix = noti.event.substring(0, noti.event.indexOf("."));
 
       if (toolEventPrefix === "profile") {
         this._decorateProfileNotification(noti);
+      } else if (toolEventPrefix === "asn") {
+        this._decorateAssignmentNotification(noti);
+      } else if (toolEventPrefix === "annc") {
+        this._decorateAnnouncementNotification(noti);
+      } else if (toolEventPrefix === "commons") {
+        this._decorateCommonsNotification(noti);
       }
 
       if (!this.filteredNotifications.has(toolEventPrefix)) {
@@ -94,19 +99,44 @@ export class SakaiNotifications extends SakaiElement {
 
   _decorateProfileNotification(noti) {
 
-    switch (noti.event) {
+    this.i18nLoaded.then(() => {
 
-      case "profile.friend.request":
-        noti.title = this.i18n.connection_request_received.replace("{0}", noti.fromDisplayName);
-        break;
-      case "profile.friend.confirm":
-        noti.title = this.i18n.connection_request_accepted.replace("{0}", noti.fromDisplayName);
-        break;
-      case "profile.message.sent":
-        noti.title = this.i18n.message_received.replace("{0}", noti.fromDisplayName);
-        break;
-      default:
+      switch (noti.event) {
+
+        case "profile.friend.request":
+          noti.title = this.i18n.connection_request_received.replace("{0}", noti.fromDisplayName);
+          break;
+        case "profile.friend.confirm":
+          noti.title = this.i18n.connection_request_accepted.replace("{0}", noti.fromDisplayName);
+          break;
+        case "profile.message.sent":
+          noti.title = this.i18n.message_received.replace("{0}", noti.fromDisplayName);
+          break;
+        default:
+      }
+    });
+  }
+
+  _decorateAssignmentNotification(noti) {
+
+    if (noti.event === "asn.new.assignment" || noti.event === "asn.revise.access") {
+      noti.title = this.i18n.assignment_created.replace("{0}", noti.title).replace("{1}", noti.siteTitle);
+    } else if (noti.event === "asn.grade.submission") {
+      noti.title = this.i18n.assignment_submission_graded.replace("{0}", noti.title).replace("{1}", noti.siteTitle);
     }
+  }
+
+  _decorateAnnouncementNotification(noti) {
+
+    if (noti.event === "annc.new") {
+      this.i18nLoaded.then(() => {
+        noti.title = this.i18n.announcement.replace("{0}", noti.title).replace("{1}", noti.siteTitle);
+      });
+    }
+  }
+
+  _decorateCommonsNotification(noti) {
+    noti.title = this.i18n.academic_comment_graded.replace("{0}", noti.siteTitle);
   }
 
   fireLoadedEvent() {
@@ -121,7 +151,6 @@ export class SakaiNotifications extends SakaiElement {
       .then(r => {
 
         if (r.ok) {
-
           const index = this.notifications.findIndex(a => a.id == notificationId);
           this.notifications.splice(index, 1);
           this.fireLoadedEvent();
@@ -161,6 +190,7 @@ export class SakaiNotifications extends SakaiElement {
         }
       });
   }
+
 
   renderAccordion(prefix, notifications) {
 
@@ -219,9 +249,13 @@ export class SakaiNotifications extends SakaiElement {
       ${this.notifications?.length > 0 ? html`
         <div class="text-end my-2">
           ${this.notifications?.filter(a => !a.viewed).length > 0 ? html`
-          <button class="mark-viewed-button btn btn-secondary text-end" @click=${this.markAllNotificationsViewed}>${this.i18n.mark_all_viewed}</button>
+          <button class="btn btn-secondary text-end" @click=${this.markAllNotificationsViewed}>${this.i18n.mark_all_viewed}</button>
           ` : ""}
-          <button class="clear-all-button btn btn-secondary text-end" @click=${this.clearAllNotifications}>${this.i18n.clear_all}</button>
+          <button id="sakai-notifications-clear-all-button"
+              class="btn btn-secondary text-end"
+              @click=${this.clearAllNotifications}>
+            ${this.i18n.clear_all}
+          </button>
         </div>
       ` : html`
       <div class="d-flex justify-content-around">

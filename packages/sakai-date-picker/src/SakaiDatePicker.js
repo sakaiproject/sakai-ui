@@ -29,8 +29,6 @@ export class SakaiDatePicker extends SakaiElement {
 
     super();
 
-    console.log("HERE");
-
     this.hiddenPrefix = "";
 
     this.instanceSalt = Math.floor(Math.random() * Date.now());

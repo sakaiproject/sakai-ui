@@ -4,18 +4,8 @@ import { SakaiElement } from "@sakai-ui/sakai-element";
 import Cropper from "cropperjs";
 import { loadProperties } from "@sakai-ui/sakai-i18n";
 import { getUserId } from "@sakai-ui/sakai-portal-utils";
-import "@sakai-ui/sakai-button";
-import "@sakai-ui/sakai-icon";
 
 export class SakaiPictureChanger extends SakaiElement {
-
-  constructor() {
-
-    super();
-
-    loadProperties("sakai-picture-changer").then(r => this.i18n = r);
-    this._loadExisting();
-  }
 
   static get properties() {
 
@@ -28,6 +18,14 @@ export class SakaiPictureChanger extends SakaiElement {
     };
   }
 
+  constructor() {
+
+    super();
+
+    loadProperties("sakai-picture-changer").then(r => this.i18n = r);
+    this._loadExisting();
+  }
+
   _attachCropper() {
 
     if (this.cropper) {
@@ -35,7 +33,6 @@ export class SakaiPictureChanger extends SakaiElement {
     } else {
 
       const image = this.querySelector("#image");
-
       this.cropper = new Cropper(image, {
         autoCrop: true,
         aspectRatio: 1 / 1,
@@ -129,9 +126,7 @@ export class SakaiPictureChanger extends SakaiElement {
   _loadExisting() {
 
     const url = `/direct/profile-image/details?_=${Date.now()}`;
-    fetch(url, { credentials: "include" })
-    .then(r => r.json())
-    .then(json => {
+    fetch(url, { credentials: "include" }).then(r => r.json()).then(json => {
 
       if (json.status == "SUCCESS") {
         if (!json.isDefault) {
@@ -187,7 +182,7 @@ export class SakaiPictureChanger extends SakaiElement {
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       method: "POST",
-      body: JSON.stringify({ "sakai_csrf_token": this.csrfToken }),
+      body: JSON.stringify({ sakaiCsrfToken: this.csrfToken }),
     })
     .then(r => {
 
@@ -211,59 +206,61 @@ export class SakaiPictureChanger extends SakaiElement {
   render() {
 
     return html`
-      <div class="modal fade" id="profile-image-upload" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5>${this.dialogTitle}</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
 
-                <div id="remove-error" class="sak-banner-error" style="display: ${this.removeError ? "block" : "none"}">${this.i18n.remove_error}</div>
-                <div id="upload-error" class="sak-banner-error" style="display: ${this.uploadError ? "block" : "none"}">${this.i18n.upload_error}</div>
+    <div class="modal fade" id="profile-image-upload" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>${this.dialogTitle}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 
-                <div id="image-editor-crop-wrapper">
-                  <div id="cropme">
-                    <input type="file" accept="image/*" value="Choose an image" @change=${this._filePicked} />
-                    <img id="image" src="${ifDefined(this.imageUrl)}"/>
+        </div>
+        <div class="modal-body">
 
-                    <div id="image-editor-controls-wrapper">
-                      <div id="controls">
-                        <sakai-button @click=${this._zoomIn} type="small" title="${this.i18n.zoom_in}" arial-label="${this.i18n.zoom_in}">
-                          <sakai-icon type="add"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._zoomOut} type="small" title="${this.i18n.zoom_out}" arial-label="${this.i18n.zoom_out}">
-                          <sakai-icon type="minus"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._up} type="small" title="${this.i18n.pan_up}" arial-label="${this.i18n.pan_up}">
-                          <sakai-icon type="up"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._down} type="small" title="${this.i18n.pan_down}" arial-label="${this.i18n.pan_down}">
-                          <sakai-icon type="down"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._left} type="small" title="${this.i18n.pan_left}" arial-label="${this.i18n.pan_left}">
-                          <sakai-icon type="left"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._right} type="small" title="${this.i18n.pan_right}" arial-label="${this.i18n.pan_right}">
-                          <sakai-icon type="right"></sakai-icon>
-                        </sakai-button>
-                        <sakai-button @click=${this._rotate} type="small" title="${this.i18n.rotate}" arial-label="${this.i18n.rotate}">
-                          <sakai-icon type="refresh"></sakai-icon>
-                        </sakai-button>
-                      </div>
-                    </div>
+            <div id="remove-error" class="sak-banner-error" style="display: ${this.removeError ? "block" : "none"}">${this.i18n.remove_error}</div>
+            <div id="upload-error" class="sak-banner-error" style="display: ${this.uploadError ? "block" : "none"}">${this.i18n.upload_error}</div>
+
+            <div id="image-editor-crop-wrapper">
+              <div id="cropme">
+                <input type="file" accept="image/*" value="Choose an image" @change=${this._filePicked} />
+                <img id="image" src="${ifDefined(this.imageUrl)}"/>
+
+                <div id="image-editor-controls-wrapper">
+                  <div id="controls">
+                    <sakai-button @click=${this._zoomIn} type="small" title="${this.i18n.zoom_in}" arial-label="${this.i18n.zoom_in}">
+                      <sakai-icon type="add"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._zoomOut} type="small" title="${this.i18n.zoom_out}" arial-label="${this.i18n.zoom_out}">
+                      <sakai-icon type="minus"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._up} type="small" title="${this.i18n.pan_up}" arial-label="${this.i18n.pan_up}">
+                      <sakai-icon type="up"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._down} type="small" title="${this.i18n.pan_down}" arial-label="${this.i18n.pan_down}">
+                      <sakai-icon type="down"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._left} type="small" title="${this.i18n.pan_left}" arial-label="${this.i18n.pan_left}">
+                      <sakai-icon type="left"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._right} type="small" title="${this.i18n.pan_right}" arial-label="${this.i18n.pan_right}">
+                      <sakai-icon type="right"></sakai-icon>
+                    </sakai-button>
+                    <sakai-button @click=${this._rotate} type="small" title="${this.i18n.rotate}" arial-label="${this.i18n.rotate}">
+                      <sakai-icon type="refresh"></sakai-icon>
+                    </sakai-button>
                   </div>
                 </div>
+              </div>
             </div>
-            <div class="modal-footer">
-              <button class="btn pull-left" @click=${this._save} ?disabled=${!this.needsSave}>${this.i18n.save}</button>
-              <button class="btn pull-right" @click="${this._remove}">${this.i18n.remove}</button>
-              <button class="btn pull-left" data-bs-dismiss="modal">${this.i18n.done}</button>
-            </div>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn float-start" data-bs-dismiss="modal" @click=${this._save} ?disabled=${!this.needsSave}>${this.i18n.save}</button>
+          <button class="btn float-end" @click="${this._remove}">${this.i18n.remove}</button>
+          <button class="btn float-start" data-bs-dismiss="modal">${this.i18n.cancel}</button>
         </div>
       </div>
+    </div>
+  </div>
     `;
   }
 }

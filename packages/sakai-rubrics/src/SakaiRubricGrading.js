@@ -4,6 +4,7 @@ import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import "../sakai-rubric-grading-comment.js";
 import "../sakai-rubric-pdf.js";
 import "../sakai-rubric-summary.js";
+import { SakaiRubricsLanguage, tr } from "./SakaiRubricsLanguage.js";
 import { getUserId } from "@sakai-ui/sakai-portal-utils";
 import { rubricsApiMixin } from "./SakaiRubricsApiMixin.js";
 
@@ -18,6 +19,8 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
     this.totalPoints = 0;
 
     this.instanceSalt = Math.floor(Math.random() * Date.now());
+
+    SakaiRubricsLanguage.loadTranslations().then(r => this.i18n = r);
   }
 
   static get properties() {
@@ -64,6 +67,22 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
 
   get toolId() { return this._toolId; }
 
+  _viewSelected(e) {
+
+    switch (e.target.value) {
+      case "grading-rubric":
+        this.openGradePreviewTab();
+        break;
+      case "student-summary":
+        this.makeStudentSummary();
+        break;
+      case "criteria-summary":
+        this.makeCriteriaSummary();
+        break;
+      default:
+    }
+  }
+
   shouldUpdate() {
     return this.i18n;
   }
@@ -86,30 +105,19 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
             </sakai-rubric-pdf>
           ` : ""}
         </h3>
-        <div class="rubrics-tab-row">
-          <a href="javascript:void(0);"
-              class="rubrics-tab-button rubrics-tab-selected"
-              @keypress=${this.openGradePreviewTab}
-              @click=${this.openGradePreviewTab}>
-            <sr-lang key="grading_rubric">gradingrubric</sr-lang>
-          </a>
-          <a href="javascript:void(0);"
-              class="rubrics-tab-button"
-              @keypress=${this.makeStudentSummary}
-              @click=${this.makeStudentSummary}>
-            <sr-lang key="student_summary">studentsummary</sr-lang>
-          </a>
-          <a href="javascript:void(0);"
-              class="rubrics-tab-button"
-              @keypress=${this.makeCriteriaSummary}
-              @click=${this.makeCriteriaSummary}>
-            <sr-lang key="criteria_summary">criteriasummary</sr-lang>
-          </a>
-        </div>
-        <div id="rubric-grading-or-preview-${this.instanceSalt}" class="rubric-tab-content rubrics-visible">
+
+        <select @change=${this._viewSelected}
+            aria-label="${this.i18n.rubric_view_selection_title}"
+            title="${this.i18n.rubric_view_selection_title}">
+          <option value="grading-rubric">${this.i18n.grading_rubric}</option>
+          <option value="student-summary">${this.i18n.student_summary}</option>
+          <option value="criteria-summary">${this.i18n.criteria_summary}</option>
+        </select>
+
+        <div id="rubric-grading-or-preview-${this.instanceSalt}" class="rubric-tab-content rubrics-visible mt-2">
           ${this.evaluation && this.evaluation.status === "DRAFT" ? html`
           <div class="sak-banner-warn">
-            ${this.i18n.draft_evaluation.replace("{}", this.i18n[`draft_evaluation_${this.toolId}`])}
+            ${tr("draft_evaluation", [ tr(`draft_evaluation_${this.toolId}`) ])}
           </div>
         ` : "" }
           <div class="criterion grading style-scope sakai-rubric-criteria-grading">
@@ -180,7 +188,7 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
                   </div>
                   ${this.association.parameters.fineTunePoints ? html`
                     <input
-                        title="${this.i18n.point_override_details}"
+                        title="${tr("point_override_details")}"
                         data-criterion-id="${c.id}"
                         name="rbcs-${this.evaluatedItemId}-${this.entityId}-criterion-override-${c.id}"
                         class="fine-tune-points form-control hide-input-arrows"
@@ -188,7 +196,7 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
                         .value="${c.pointoverride.toLocaleString(this.locale)}"
                     />
                   ` : "" }
-                  <input aria-labelledby="${this.i18n.points}" type="hidden" id="rbcs-${this.evaluatedItemId}-${this.entityId}-criterion-${c.id}" name="rbcs-${this.evaluatedItemId}-${this.entityId}-criterion-${c.id}" .value="${c.selectedvalue}">
+                  <input aria-labelledby="${tr("points")}" type="hidden" id="rbcs-${this.evaluatedItemId}-${this.entityId}-criterion-${c.id}" name="rbcs-${this.evaluatedItemId}-${this.entityId}-criterion-${c.id}" .value="${c.selectedvalue}">
                   <input type="hidden" name="rbcs-${this.evaluatedItemId}-${this.entityId}-criterionrating-${c.id}" .value="${c.selectedRatingId}">
                 </div>
               </div>
@@ -197,7 +205,7 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
           `)}
           </div>
           <div class="rubric-totals">
-            <input type="hidden" aria-labelledby="${this.i18n.total}" id="rbcs-${this.evaluatedItemId}-${this.entityId}-totalpoints" name="rbcs-${this.evaluatedItemId}-${this.entityId}-totalpoints" .value="${this.totalPoints.toString()}">
+            <input type="hidden" aria-labelledby="${tr("total")}" id="rbcs-${this.evaluatedItemId}-${this.entityId}-totalpoints" name="rbcs-${this.evaluatedItemId}-${this.entityId}-totalpoints" .value="${this.totalPoints.toString()}">
             <div class="total-points">
               <sr-lang key="total">Total</sr-lang>: <strong id="sakai-rubrics-total-points">${this.totalPoints.toLocaleString(this.locale, { maximumFractionDigits: 2 })}</strong>
             </div>
@@ -209,21 +217,15 @@ export class SakaiRubricGrading extends rubricsApiMixin(RubricsElement) {
     `;
   }
 
-  openGradePreviewTab(e) {
-
-    e.stopPropagation();
+  openGradePreviewTab() {
     this.openRubricsTab(`rubric-grading-or-preview-${this.instanceSalt}`);
   }
 
-  makeStudentSummary(e) {
-
-    e.stopPropagation();
+  makeStudentSummary() {
     this.makeASummary("student", this.siteId);
   }
 
-  makeCriteriaSummary(e) {
-
-    e.stopPropagation();
+  makeCriteriaSummary() {
     this.makeASummary("criteria", this.siteId);
   }
 

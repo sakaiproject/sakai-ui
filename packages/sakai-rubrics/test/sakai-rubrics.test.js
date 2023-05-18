@@ -10,6 +10,10 @@ describe("sakai-rubrics tests", () => {
 
     window.top.portal = { locale: "en_GB" };
 
+    window.bootstrap = {
+      Popover: function() {},
+    };
+
     fetchMock
       .get(data.i18nUrl, data.i18n, {overwriteRoutes: true})
       .get(data.sharedRubricsUrl, data.sharedRubrics, {overwriteRoutes: true})

@@ -1,5 +1,6 @@
 import { RubricsElement } from "./RubricsElement.js";
 import { html } from "lit";
+import { SakaiRubricsLanguage, tr } from "./SakaiRubricsLanguage.js";
 import { SakaiRubricsHelpers } from "./SakaiRubricsHelpers.js";
 
 export class SakaiRubricStudentPreviewButton extends RubricsElement {
@@ -9,6 +10,7 @@ export class SakaiRubricStudentPreviewButton extends RubricsElement {
     super();
 
     this.display = "button";
+    this.i18nPromise = SakaiRubricsLanguage.loadTranslations();
   }
 
   static get properties() {
@@ -25,7 +27,7 @@ export class SakaiRubricStudentPreviewButton extends RubricsElement {
   set siteId(value) {
 
     this._siteId = value;
-    this.i18nLoaded.then(r => this.initLightbox(r, value));
+    this.i18nPromise.then(r => this.initLightbox(r, value));
   }
 
   get siteId() { return this._siteId; }
@@ -48,8 +50,8 @@ export class SakaiRubricStudentPreviewButton extends RubricsElement {
     return html`
       ${this.display === "button" ?
       html`<h3><sr-lang key="grading_rubric"></sr-lang></h3>
-      <button aria-haspopup="dialog" @click="${this.showRubric}"><sr-lang key="preview_rubric"></sr-lang></button>`
-      : html`<span class="si si-sakai-rubrics" style="cursor: pointer;" title="${this.i18n.preview_rubric}" @click="${this.showRubric}"></span>`
+      <button class="btn btn-link" aria-haspopup="dialog" @click="${this.showRubric}"><sr-lang key="preview_rubric"></sr-lang></button>`
+      : html`<span class="si si-sakai-rubrics" style="cursor: pointer;" title="${tr("preview_rubric")}" @click="${this.showRubric}"></span>`
       }
     `;
   }

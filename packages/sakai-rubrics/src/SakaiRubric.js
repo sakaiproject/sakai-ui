@@ -6,6 +6,7 @@ import "../sakai-rubric-criteria-readonly.js";
 import "../sakai-rubric-edit.js";
 import "../sakai-item-delete.js";
 import "../sakai-rubric-pdf.js";
+import { tr } from "./SakaiRubricsLanguage.js";
 import { SharingChangeEvent } from "./SharingChangeEvent.js";
 
 export class SakaiRubric extends RubricsElement {
@@ -27,7 +28,6 @@ export class SakaiRubric extends RubricsElement {
   static get properties() {
 
     return {
-      ...RubricsElement.properties,
       rubric: { type: Object },
       siteId: { attribute: "site-id", type: String },
       shareIcon: { attribute: false, type: String },
@@ -37,6 +37,7 @@ export class SakaiRubric extends RubricsElement {
       validWeight: { attribute: false, type: Boolean },
       maxPoints: { attribute: false, type: String },
       minPoints: { attribute: false, type: String },
+      rubricExpanded: { attribute: false, type: String },
     };
   }
 
@@ -67,7 +68,7 @@ export class SakaiRubric extends RubricsElement {
   }
 
   shouldUpdate() {
-    return this.rubric && super.shouldUpdate();
+    return this.rubric;
   }
 
   render() {
@@ -78,9 +79,9 @@ export class SakaiRubric extends RubricsElement {
           <a href="#"
             class="rubric-name"
             id="rubric_toggle_${this.rubric.id}"
-            aria-expanded="${this.rubricExpanded ? "true" : "false"}"
+            aria-expanded="${ifDefined(this.rubricExpanded)}"
             role="tab"
-            title="${this.i18n.toggle_details} ${this.rubric.title}"
+            title="${tr("toggle_details")} ${this.rubric.title}"
           >
             <span class="fa fa-chevron-right"></span>
             ${this.rubric.title}
@@ -90,8 +91,8 @@ export class SakaiRubric extends RubricsElement {
               <span
                 tabindex="0"
                 role="tooltip"
-                title="${this.i18n.weighted_status}"
-                aria-label="${this.i18n.weighted_status}"
+                title="${tr("weighted_status")}"
+                aria-label="${tr("weighted_status")}"
                 class="fa fa-percent icon-spacer">
               </span>`
               : ""
@@ -99,13 +100,14 @@ export class SakaiRubric extends RubricsElement {
             <span
               tabindex="0"
               role="tooltip"
-              title="${this.rubric.title} ${this.i18n.is_locked}"
-              aria-label="${this.rubric.title} ${this.i18n.is_locked}"
+              title="${this.rubric.title} ${tr("is_locked")}"
+              aria-label="${this.rubric.title} ${tr("is_locked")}"
               class="locked fa fa-lock icon-spacer">
             </span>`
             : ""
           }
           <sakai-rubric-edit
+            id="rubric-edit-${this.rubric.id}"
             @show-tooltip="${this.showToolTip}"
             @update-rubric-title="${this.updateRubricTitle}"
             rubric="${JSON.stringify(this.rubric)}"
@@ -115,11 +117,11 @@ export class SakaiRubric extends RubricsElement {
             <span
               tabindex="0"
               role="tooltip"
-              title="${this.i18n.draft_info}"
-              aria-label="${this.i18n.draft_info}"
+              title="${tr("draft_info")}"
+              aria-label="${tr("draft_info")}"
               class="highlight bold icon-spacer"
             >
-              ${this.i18n.draft_label}
+              ${tr("draft_label")}
             </span>`
             : ""
           }
@@ -158,8 +160,8 @@ export class SakaiRubric extends RubricsElement {
           <div class="action-container">
             <button
               class="btn-transparent link-color share"
-              title="${this.i18n[this.shareTitleKey].replace("{}", this.rubric.title)}"
-              aria-label="${this.i18n[this.shareTitleKey].replace("{}", this.rubric.title)}"
+              title="${tr(this.shareTitleKey, [ this.rubric.title ])}"
+              aria-label="${tr(this.shareTitleKey, [ this.rubric.title ])}"
               @keyup="${this.openEditWithKeyboard}"
               @click="${this.sharingChange}"
             >
@@ -169,8 +171,8 @@ export class SakaiRubric extends RubricsElement {
           <div class="action-container">
             <button
               class="btn-transparent link-color clone"
-              title="${this.i18n.copy} ${this.rubric.title}"
-              aria-label="${this.i18n.copy} ${this.rubric.title}"
+              title="${tr("copy")} ${this.rubric.title}"
+              aria-label="${tr("copy")} ${this.rubric.title}"
               @keyup="${this.openEditWithKeyboard}"
               @click="${this.cloneRubric}"
             >
@@ -192,7 +194,8 @@ export class SakaiRubric extends RubricsElement {
               <sakai-rubric-pdf
                 site-id="${this.siteId}"
                 rubric-title="${this.rubric.title}"
-                rubric-id="${this.rubric.id}">
+                rubric-id="${this.rubric.id}"
+              >
               </sakai-rubric-pdf>
             </div>`
             : ""
@@ -276,7 +279,7 @@ export class SakaiRubric extends RubricsElement {
   handleSaveWeights() {
 
     const saveWeightsBtn = document.querySelector(`[rubric-id='${this.rubric.id}'] .save-weights`);
-    const saveSuccessLbl = document.querySelector(`[rubric-id='${this.rubric.id}'] .save-success`);
+    const saveSuccessLbl = document.querySelector(`[rubric-id='${this.rubric.id}'] .sak-banner-success`);
 
     if (saveWeightsBtn) saveWeightsBtn.setAttribute("disabled", true);
 
@@ -291,19 +294,14 @@ export class SakaiRubric extends RubricsElement {
 
           if (saveSuccessLbl) {
             saveSuccessLbl.classList.remove("d-none");
-            saveSuccessLbl.classList.add("in");
+            setTimeout(() => {
+              saveSuccessLbl.classList.add("d-none");
+            }, 5000);
           }
 
           setTimeout(() => {
             if (saveWeightsBtn) saveWeightsBtn.removeAttribute("disabled");
           }, 1000);
-
-          setTimeout(() => {
-            if (saveSuccessLbl) {
-              saveSuccessLbl.classList.remove("in");
-              saveSuccessLbl.classList.add("d-none");
-            }
-          }, 5000);
 
           this.requestUpdate();
           this.dispatchEvent(new SharingChangeEvent());
@@ -427,24 +425,23 @@ export class SakaiRubric extends RubricsElement {
   }
 
   handleDraftBtn() {
-
     if (this.rubric.draft) {
       this.draftIcon = "fa-eye-slash highlight";
       if (this.rubric.weighted) {
         if (!this.validWeight) {
-          this.draftLabel = this.i18n.draft_invalid_weight_publish + this.i18n.total_weight_wrong;
+          this.draftLabel = tr("draft_invalid_weight_publish") + tr("total_weight_wrong");
         } else {
-          this.draftLabel = this.i18n.draft_turn_off + this.i18n.draft_save_weights;
+          this.draftLabel = tr("draft_turn_off") + tr("draft_save_weights");
         }
       } else {
-        this.draftLabel = this.i18n.draft_turn_off;
+        this.draftLabel = tr("draft_turn_off");
       }
     } else {
       this.draftIcon = "fa-eye";
       if (this.rubric.weighted) {
-        this.i18nLoaded.then(() => this.draftLabel = this.i18n.draft_turn_on + this.i18n.draft_save_weights);
+        this.draftLabel = tr("draft_turn_on") + tr("draft_save_weights");
       } else {
-        this.i18nLoaded.then(() => this.draftLabel = this.i18n.draft_turn_on);
+        this.draftLabel = tr("draft_turn_on");
       }
     }
   }
@@ -453,10 +450,10 @@ export class SakaiRubric extends RubricsElement {
 
     if (this.rubric.weighted) {
       this.weightedIcon = "fa-percent";
-      this.i18nLoaded.then(() => this.weightLabel = this.i18n.weighted_label);
+      this.weightLabel = tr("weighted_label");
     } else {
       this.weightedIcon = "fa-hashtag";
-      this.i18nLoaded.then(() => this.weightLabel = this.i18n.standard_label);
+      this.weightLabel = tr("standard_label");
     }
 
     this.dispatchEvent(new SharingChangeEvent());

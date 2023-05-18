@@ -13,12 +13,12 @@ export class SakaiRubricGradingButton extends RubricsElement {
   static get properties() {
 
     return {
-      ...RubricsElement.properties,
       entityId: { attribute: "entity-id", type: String },
       siteId: { attribute: "site-id", type: String },
       toolId: { attribute: "tool-id", type: String },
       evaluatedItemId: { attribute: "evaluated-item-id", type: String },
       hasEvaluation: { attribute: false, type: Boolean },
+      onlyShowIfEvaluated: { attribute: "only-show-if-evaluated", type: Boolean },
     };
   }
 
@@ -33,10 +33,14 @@ export class SakaiRubricGradingButton extends RubricsElement {
 
   render() {
 
+    if (this.onlyShowIfEvaluated && !this.hasEvaluation) {
+      return;
+    }
+
     return html`
-      <a href="javascript:;">
-        <span class="si si-sakai-rubrics ${this.hasEvaluation ? "rubric-active" : ""}"></span>
-      </a>
+      <button class="btn btn-transparent">
+        <span class="si si-sakai-rubrics"></span>
+      </button>
     `;
   }
 

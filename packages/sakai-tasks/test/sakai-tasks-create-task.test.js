@@ -1,6 +1,7 @@
 import "../sakai-tasks-create-task.js";
 import { html } from "lit";
 import * as data from "./data.js";
+import * as dialogContentData from "../../sakai-dialog-content/test/data.js";
 import { expect, fixture, waitUntil, aTimeout } from "@open-wc/testing";
 import fetchMock from "fetch-mock/esm/client";
 
@@ -10,9 +11,9 @@ describe("sakai-tasks-create-task tests", () => {
   window.moment = { duration: () => { return { humanize: () => "3 days ago" } } };
 
   fetchMock
-    .get(data.i18nUrl, data.i18n, {overwriteRoutes: true})
-    .get(data.dialogcontentI18nUrl, data.dialogcontentI18n, {overwriteRoutes: true})
-    .get(data.tasksUrl, data.tasks, {overwriteRoutes: true})
+    .get(data.i18nUrl, data.i18n, { overwriteRoutes: true })
+    .get(data.dialogcontentI18nUrl, dialogContentData.i18n, { overwriteRoutes: true })
+    .get(data.tasksUrl, data.tasks, { overwriteRoutes: true })
     .post(data.tasksUrl, (url, opts) => {
 
       return Object.assign({

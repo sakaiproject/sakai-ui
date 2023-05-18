@@ -42,6 +42,8 @@ export class SakaiDialogContent extends LitElement {
 
   render() {
 
+    console.log("render");
+
     return html`
       <div id="container">
         <div id="titlebar">

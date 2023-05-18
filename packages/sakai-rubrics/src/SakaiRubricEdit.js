@@ -1,5 +1,6 @@
 import { RubricsElement } from "./RubricsElement.js";
 import { html } from "lit";
+import { tr } from "./SakaiRubricsLanguage.js";
 
 export class SakaiRubricEdit extends RubricsElement {
 
@@ -7,16 +8,7 @@ export class SakaiRubricEdit extends RubricsElement {
 
     super();
 
-    this.popoverOpen = false;
     this.rubricClone = {};
-  }
-
-  static get properties() {
-
-    return {
-      ...RubricsElement.properties,
-      rubric: { type: Object }
-    };
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -31,40 +23,45 @@ export class SakaiRubricEdit extends RubricsElement {
     }
   }
 
+  static get properties() {
+
+    return {
+      rubric: { type: Object }
+    };
+  }
+
   render() {
 
     return html`
-      <a class="linkStyle edit fa fa-edit"
-          role="button"
+      <button class="btn btn-icon edit"
+          id="edit-rubric-trigger-${this.rubric.id}"
+          type="button"
+          data-bs-toggle="popup"
           aria-haspopup="true"
-          aria-expanded="${this.popoverOpen ? "true" : "false"}"
-          aria-controls="edit_rubric_${this.rubric.id}"
-          tabindex="0"
-          @keyup="${this.openEditWithKeyboard}"
-          @click="${this.editRubric}"
-          title="${this.i18n.edit_rubric} ${this.rubric.title}"
-          aria-label="${this.i18n.edit_rubric} ${this.rubric.title}"
-          href="#">
-      </a>
+          aria-expanded="false"
+          aria-controls="edit-rubric-${this.rubric.id}"
+          title="${tr("edit_rubric")}"
+          aria-label="${tr("edit_rubric")} ${this.rubric.title}">
+        <i class="si si-edit"></i>
+      </button>
 
-      <div id="edit_rubric_${this.rubric.id}" @click="${this.eatEvent}" class="popover rubric-edit-popover bottom rubrics-popover">
-        <div class="arrow-1"></div>
-        <div class="popover-title">
-          <div class="buttons act">
-            <button class="active save" @click="${this.saveEdit}">
-              <sr-lang key="save">Save</sr-lang>
-            </button>
-            <button class="btn btn-link btn-xs cancel" @click="${this.cancelEdit}">
-              <sr-lang key="cancel">Cancel</sr-lang>
-            </button>
-          </div>
-        </div>
-        <div class="popover-content form">
-          <div class="form-group">
+      <div id="edit-rubric-${this.rubric.id}" class="rubric-edit-popover d-none">
+        <div>
+          <div>
             <label class="label-rubrics" for="rubric_title_edit">
               <sr-lang key="rubric_title">Rubric Title</sr-lang>
             </label>
-            <input title="${this.i18n.rubric_title}" id="rubric_title_edit" type="text" class="form-control" value="${this.rubricClone.title}" maxlength="255">
+            <input title="${tr("rubric_title")}" id="rubric-title-edit-${this.rubric.id}" type="text" value="${this.rubricClone.title}" maxlength="255">
+          </div>
+        </div>
+        <div class="mt-2">
+          <div>
+            <button class="btn btn-primary" type="button" data-rubric-id="${this.rubric.id}">
+              <sr-lang key="save">Save</sr-lang>
+            </button>
+            <button class="btn btn-secondary" type="button" data-rubric-id="${this.rubric.id}">
+              <sr-lang key="cancel">Cancel</sr-lang>
+            </button>
           </div>
         </div>
       </div>
@@ -73,98 +70,39 @@ export class SakaiRubricEdit extends RubricsElement {
 
   firstUpdated() {
 
-    this.querySelector(".popover.rubric-edit-popover input").addEventListener("keydown", event => {
-
-      if (event.keyCode == 9) {
-        event.preventDefault();
-        event.target.closest(".popover.rubric-edit-popover").querySelector(".save").focus();
-      }
+    new bootstrap.Popover(this.querySelector("button"), {
+      content: () => this.querySelector(`#edit-rubric-${this.rubric.id}`).innerHTML,
+      html: true,
+      placement: "bottom",
+      sanitize: false,
     });
 
-    this.querySelector(".popover.rubric-edit-popover .save").addEventListener("keydown", event => {
+    this.querySelector("button").addEventListener("shown.bs.popover", () => {
 
-      if (event.keyCode == 9) {
-        event.preventDefault();
-        event.target.closest(".popover.rubric-edit-popover").querySelector(".cancel").focus();
-      }
+      const save = document.querySelector(".popover.show .btn-primary");
+      save.addEventListener("click", this.saveEdit);
+      save.closest(".popover-body").querySelector("input").focus();
+
+      document.querySelector(".popover.show .btn-secondary")
+        .addEventListener("click", this.cancelEdit);
     });
-
-    this.querySelector(".popover.rubric-edit-popover .cancel").addEventListener("keydown", event => {
-
-      if (event.keyCode == 9) {
-        event.preventDefault();
-        event.target.closest(".popover.rubric-edit-popover").querySelector("input").focus();
-      }
-    });
-  }
-
-  eatEvent(e) {
-    e.stopPropagation();
-  }
-
-  openEditWithKeyboard(e) {
-
-    if (e.keyCode == 32 || e.keyCode == 32 ) {
-      this.editRubric(e);
-    }
-  }
-
-  editRubric(e) {
-
-    e.preventDefault();
-    e.stopPropagation();
-    this.dispatchEvent(new CustomEvent("show-tooltip", { detail: this.rubric }));
-
-    if (!this.classList.contains("show-tooltip")) {
-      this.closeOpen();
-      this.popoverOpen = true;
-      const target = this.querySelector(".fa-edit");
-
-      this.classList.add("show-tooltip");
-
-      const popover = this.querySelector(`#edit_rubric_${this.rubric.id}`);
-
-      popover.style.top = `${target.offsetTop + 20 }px`;
-      popover.style.left = `${target.offsetLeft - 125 }px`;
-
-      popover.style.display = "block";
-      const input = popover.querySelector("input[type='text']");
-      input.setSelectionRange(0, input.value.length);
-      input.focus();
-
-    } else {
-      this.popoverOpen = false;
-      this.hideToolTip();
-      this.querySelector(`#edit_rubric_${this.rubric.id}`).style.display = "none";
-    }
-  }
-
-  closeOpen() {
-    this.querySelector(".show-tooltip .cancel").click();
-  }
-
-  hideToolTip() {
-
-    this.classList.remove("show-tooltip");
-    this.dispatchEvent(new CustomEvent("hide-tooltip", { detail: this.rubric }));
   }
 
   cancelEdit(e) {
 
     e.stopPropagation();
-    this.rubricClone.title = this.rubric.title;
-    this.hideToolTip();
-    const popover = this.querySelector(`#edit_rubric_${this.rubric.id}`);
-    popover.querySelecto("input[type='text']").value = this.rubric.title;
-    popover.style.display = "none";
+    const trigger = document.getElementById(`edit-rubric-trigger-${this.dataset.rubricId}`);
+    bootstrap.Popover.getInstance(trigger).hide();
+    trigger.focus();
   }
 
   saveEdit(e) {
 
     e.stopPropagation();
-    const title = this.querySelector("#rubric_title_edit").value;
-    this.dispatchEvent(new CustomEvent("update-rubric-title", { detail: title }));
-    this.querySelector(`#edit_rubric_${this.rubric.id}`).style.display = "none";
-    this.hideToolTip();
+    const title = e.target.closest(".popover-body").querySelector("input").value;
+    document.getElementById(`rubric-edit-${this.dataset.rubricId}`).dispatchEvent(new CustomEvent("update-rubric-title", { detail: title }));
+    const trigger = document.getElementById(`edit-rubric-trigger-${this.dataset.rubricId}`);
+    bootstrap.Popover.getInstance(trigger).hide();
+    trigger.focus();
   }
 }

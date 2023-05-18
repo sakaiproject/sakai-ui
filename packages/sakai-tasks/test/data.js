@@ -69,11 +69,6 @@ groups=Groups
 
 export const dialogcontentI18nUrl = /getI18nProperties.*dialog-content$/;
 
-export const dialogcontentI18n = `
-cancel=Cancel
-close=Close
-`;
-
 export const userId = "adrian";
 export const siteId = "xyz";
 export const siteTitle = "XYZ Site";

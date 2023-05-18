@@ -1,15 +1,21 @@
-import { RubricsElement } from "./RubricElement.js";
+import { RubricsElement } from "./RubricsElement.js";
 import { html } from "lit";
-import { ifDefined } from "lit-html/directives/if-defined.js";
+import { SakaiRubricsLanguage } from "./SakaiRubricsLanguage.js";
 
 export class SakaiRubricStudentComment extends RubricsElement {
 
   static get properties() {
 
     return {
-      ...RubricsElement.properties,
       criterion: { type: Object },
     };
+  }
+
+  constructor() {
+
+    super();
+
+    SakaiRubricsLanguage.loadTranslations().then(i18n => { console.log(i18n); this.i18n = i18n; this.requestUpdate(); });
   }
 
   set criterion(value) {
@@ -18,16 +24,13 @@ export class SakaiRubricStudentComment extends RubricsElement {
     this._criterion = value;
     this._criterion.comments = value.comments && value.comments.indexOf("null") === 0 ? "" : value.comments;
     this.triggerId = `criterion-comment-${value.id}-trigger`;
-    $(`#${this.triggerId}`).popover("hide");
+
     this.requestUpdate("criterion", oldValue);
     this.updateComplete.then(() => {
 
-      $(`#${this.triggerId}`).popover({
-        content: () => this.criterion.comments,
-        html: true,
-        title: () => this.criterion.title,
-        placement: "auto",
-      });
+      const triggerEl = this.querySelector("button");
+      bootstrap.Popover.getInstance(triggerEl)?.hide();
+      new bootstrap.Popover(triggerEl);
     });
   }
 
@@ -36,22 +39,27 @@ export class SakaiRubricStudentComment extends RubricsElement {
   }
 
   handleClose() {
-
-    $(`#${this.triggerId}`).popover("hide");
+    bootstrap.Popover.getInstance(document.getElementById(this.triggerId))?.hide();
   }
 
   shouldUpdate() {
-    return this.triggerId;
+    return this.i18n;
   }
 
   render() {
 
     return html`
-      <div id="${ifDefined(this.triggerId)}"
+      <button id="${this.triggerId}"
+          type="button"
           tabindex="0"
-          style="${this.criterion.comments ? "cursor: pointer;" : ""}"
-          class="comment-icon fa fa-2x fa-comments ${this.criterion.comments ? "active" : ""}">
-      </div>
+          data-bs-toggle="popover"
+          data-bs-html="true"
+          data-bs-content="${this.criterion.comments}"
+          data-bs-title="${this.criterion.title}"
+          aria-label="${this.i18n.criterion_comment_student}"
+          class="btn btn-transparent">
+        <i class="bi bi-chat${this.criterion.comments ? "-fill" : ""} ${this.criterion.comments ? "active" : ""}"></i>
+      </button>
     `;
   }
 }

@@ -29,11 +29,13 @@
   "exports": {
     ".": "./index.js",
     "./sakai-rubric-grading.js": "./sakai-rubric-grading.js",
-    "./sakai-rubric-grading-button.js": "./sakai-rubric-grading-button.js"
+    "./sakai-rubric-grading-button.js": "./sakai-rubric-grading-button.js",
+    "./sakai-rubric-evaluation-remover.js": "./sakai-rubric-evaluation-remover.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-editor": "file:../sakai-editor",
     "@sakai-ui/sakai-element": "file:../sakai-element",
+    "@sakai-ui/sakai-i18n": "file:../sakai-i18n",
     "@sakai-ui/sakai-portal-utils": "file:../sakai-portal-utils",
     "lit": "^2.6.0"
   },

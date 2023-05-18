@@ -30,6 +30,9 @@
     ".": "./index.js"
   },
   "dependencies": {
+    "@sakai-ui/sakai-i18n": "file:../sakai-i18n",
+    "@sakai-ui/sakai-icon": "file:../sakai-icon",
+    "@sakai-ui/sakai-pronunciation-player": "file:../sakai-pronunciation-player",
     "lit": "^2.6.0"
   },
   "devDependencies": {

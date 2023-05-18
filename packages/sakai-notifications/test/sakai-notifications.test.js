@@ -10,13 +10,13 @@ describe("sakai-notifications tests", () => {
 
     window.top.portal = { locale: "en_GB", siteId: data.siteId };
     window.top.portal.notifications = {
-      registerForMessages: (type, callback) => {},
+      registerPushCallback: (type, callback) => {},
       setup: Promise.resolve(),
     };
 
     fetchMock
       .get(data.i18nUrl, data.i18n, { overwriteRoutes: true })
-      .get(data.notificationsUrl, data.notifications, { overwriteRoutes: true })
+      .get(data.notificationsUrl, { notifications: data.notifications }, { overwriteRoutes: true })
       .get("/direct/portal/clearNotification?id=noti2", 200, { overwriteRoutes: true })
       .get("/direct/portal/clearAllNotifications", 200, { overwriteRoutes: true })
       .get("*", 500, { overwriteRoutes: true });
@@ -54,7 +54,7 @@ describe("sakai-notifications tests", () => {
     expect(profileAccordion).to.exist;
     expect(profileAccordion.querySelectorAll("li.toast").length).to.equal(3);
 
-    const clearAllButton = el.querySelector("button.clear-all-button");
+    const clearAllButton = document.getElementById("sakai-notifications-clear-all-button");
     expect(clearAllButton).to.exist;
 
     clearAllButton.click();
@@ -65,14 +65,12 @@ describe("sakai-notifications tests", () => {
     expect(el.querySelectorAll(".accordion-item").length).to.equal(0);
   });
 
-  /*
   it ("is accessible", async () => {
 
     let el = await fixture(html`
-      <sakai-notifications></sakai-notifications>
+      <sakai-notifications url="${data.notificationsUrl}"></sakai-notifications>
     `);
 
     expect(el).to.be.accessible();
   });
-  */
 });
