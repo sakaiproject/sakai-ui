@@ -5,6 +5,10 @@ class Submission {
     if (init) {
       this.id = init.id;
 
+      init.properties || (init.properties = {});
+      init.feedbackComment || (init.feedbackComment = "");
+      init.privateNotes || (init.privateNotes = "");
+
       if (init.properties) {
         // Build a history object for this submission
         this.history = {
@@ -54,9 +58,6 @@ class Submission {
       if (init.submitters) {
         this.firstSubmitterName = `${init.submitters[0].sortName}${init.submitters[0].displayId !== null ? ` (${init.submitters[0].displayId})` : ""}`;
         this.firstSubmitterId = init.submitters[0].id;
-      } else {
-        console.error("No submitters");
-        this.firstSubmitterName = "none";
       }
       this.late = init.late;
       this.returned = init.returned;
@@ -64,7 +65,7 @@ class Submission {
       // This would be grader stuff, not the submission tool
       this.feedbackAttachments = init.feedbackAttachments;
       this.privateNotes = init.privateNotes || "";
-      this.grade = init.grade;
+      this.grade = (typeof init.grade === "undefined") ? "" : init.grade;
       this.feedbackText = init.feedbackText;
       if (!this.feedbackText || this.feedbackText === "<p>null</p>") {
         this.feedbackText = this.submittedText || "";
@@ -73,11 +74,11 @@ class Submission {
 
       this.resubmitsAllowed = parseInt(init.properties.allow_resubmit_number || 0);
       if (this.resubmitsAllowed === -1 || this.resubmitsAllowed > 0) {
-        this.resubmitDate = parseInt(init.properties.allow_resubmit_closeTime, 10);
+        this.resubmitDate = moment(parseInt(init.properties.allow_resubmit_closeTime, 10)).valueOf();
       }
       this.extensionAllowed = init.properties.allow_extension_closeTime != null;
       if (this.extensionAllowed) {
-        this.extensionDate = parseInt(init.properties.allow_extension_closeTime, 10);
+        this.extensionDate = moment(parseInt(init.properties.allow_extension_closeTime, 10)).valueOf();
       }
       this.originalityServiceName = init.properties.originalityServiceName;
       this.originalitySupplies = [];
@@ -101,6 +102,8 @@ class Submission {
 
       // We need this for setting the default resubmission date
       this.assignmentCloseTime = init.assignmentCloseTime.epochSecond * 1000;
+      this.hydrated = init.hydrated;
+      this.submitted = init.submitted;
     } else {
       this.id = "dummy";
     }
@@ -113,14 +116,14 @@ class Submission {
     if (old === 0 && (value === -1 || value > 0)) {
       // This is the first time resubmits have been allowed, so set the date to the
       // assignment's close date, by default.
-      this.resubmitDate = this.assignmentCloseTime;
+      this.resubmitDate = moment(this.assignmentCloseTime).valueOf();
     }
   }
 
   set extensionAllowed(value) {
 
     this._extensionAllowed = value;
-    this.extensionDate = this.assignmentCloseTime;
+    this.extensionDate = moment(this.assignmentCloseTime).valueOf();
   }
 
   get resubmitsAllowed() { return this._resubmitsAllowed; }
