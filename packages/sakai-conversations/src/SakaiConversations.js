@@ -1,6 +1,7 @@
 import { html } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
 import { SakaiElement } from "@sakai-ui/sakai-element";
+import { setupSearch } from "@sakai-ui/sakai-portal-utils";
 import "../sakai-topic-list.js";
 import "../sakai-add-topic.js";
 import "../sakai-conversations-tag-manager.js";
@@ -11,7 +12,7 @@ import "../conversations-statistics.js";
 import "@sakai-ui/sakai-icon";
 import "@sakai-ui/sakai-permissions";
 import "@sakai-ui/sakai-search";
-import "../conversations-options-menu.js";
+import "@sakai-ui/sakai-options-menu";
 import { STATE_PERMISSIONS,
   STATE_DISPLAYING_TOPIC,
   STATE_STATISTICS,
@@ -35,6 +36,7 @@ export class SakaiConversations extends SakaiElement {
       topicBeingEdited: { type: Object },
       showingSettings: Boolean,
       state: { type: String },
+      loadingData: { attribute: false, type: Boolean },
     };
   }
 
@@ -43,7 +45,7 @@ export class SakaiConversations extends SakaiElement {
     super();
 
     this.state = STATE_NOTHING_SELECTED;
-    this.addEventListener("click", () => this.querySelectorAll("options-menu").forEach(o => o.showing = false));
+    this.addEventListener("click", () => this.querySelectorAll("sakai-options-menu").forEach(o => o.showing = false));
 
     /*
     window.onpopstate = (e) => {
@@ -63,6 +65,8 @@ export class SakaiConversations extends SakaiElement {
 
     this._siteId = value;
 
+    this.loadingData = true;
+
     const url = `/api/sites/${value}/conversations`;
     this.dataPromise = fetch(url)
       .then(r => {
@@ -70,7 +74,7 @@ export class SakaiConversations extends SakaiElement {
         if (r.ok) {
           return r.json();
         }
-        throw new Error(`Network error while getting conversations data from ${url}`);
+        throw new Error(`Network error while loading data from ${url}`);
       })
       .then(data => {
 
@@ -85,7 +89,8 @@ export class SakaiConversations extends SakaiElement {
         const wipTopicJson = sessionStorage.getItem(this.wipTopicKey);
         wipTopicJson && (this.wipTopic = JSON.parse(wipTopicJson));
       })
-      .catch (error => console.error(error));
+      .catch (error => console.error(error))
+      .finally (() => this.loadingData = false);
   }
 
   get siteId() { return this._siteId; }
@@ -279,7 +284,7 @@ export class SakaiConversations extends SakaiElement {
     this.data.tags.splice(index, 1, e.detail.tag);
     this.data.topics.forEach(topic => {
 
-      const index1 = topic.tags.find(t => t.id == e.detail.tag.id);
+      const index1 = topic.tags.findIndex(t => t.id == e.detail.tag.id);
       topic.tags.splice(index1, 1, e.detail.tag);
     });
 
@@ -305,6 +310,8 @@ export class SakaiConversations extends SakaiElement {
     } else {
       this.state = STATE_NOTHING_SELECTED;
     }
+
+    location.reload();
   }
 
   resetState() {
@@ -390,7 +397,11 @@ export class SakaiConversations extends SakaiElement {
   _setStateNothingSelected() { this.state = STATE_NOTHING_SELECTED; }
 
   shouldUpdate() {
-    return this.i18n && this.data;
+    return this.i18n;
+  }
+
+  _handleSearch() {
+    setupSearch({ site: this.siteId, tool: "sakai.conversations" });
   }
 
   renderNoTopicsBlock() {
@@ -436,7 +447,7 @@ export class SakaiConversations extends SakaiElement {
   renderTopbar(renderBackButton, mobile) {
 
     return html`
-      <div class="conv-topbar">
+      <div class="conv-topbar d-flex align-items-center">
 
         ${renderBackButton ? html`
         <div id="conv-back-button-block">
@@ -447,36 +458,38 @@ export class SakaiConversations extends SakaiElement {
           </div>
         </div>
         ` : ""}
-        <sakai-search id="conv-search"
-            style="width: 400px;"
-            @showing-search-results="${this._dimBackground}"
-            @hiding-search-results="${this._undimBackground}"
-            site-id="${this.siteId}"
-            tool="sakai.conversations">
-        </sakai-search>
-              
-        <div class="conv-settings-and-create">
-          ${this.data.canUpdatePermissions ? html`
-          ${mobile ? html`
 
-            <options-menu icon="menu" placement="bottom-left">
+        <div class="conv-settings-and-create d-flex align-items-center">
+          ${this.data.canUpdatePermissions ? html`
+          <div>
+            <button type="button"
+                @click=${this._handleSearch}
+                class="btn btn-link icon-button"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#sakai-search-panel"
+                aria-controls="sakai-search-panel">
+              <i class="si si-sakai-search"></i>
+              <span>Search</span>
+            </button>
+          </div>
+          ${mobile ? html`
+            <sakai-options-menu icon="menu" placement="bottom-left">
               <div slot="trigger">
-                <a href="javascript:;">
-                  <sakai-icon type="cog" size="small"></sakai-icon>
-                </a>
+                <button type="button" class="btn icon-button">
+                  <i class="si si-settings"></i>
+                  <span>${this.i18n.settings}</span>
+                </button>
               </div>
               <div slot="content" id="settings-menu" class="options-menu" role="dialog">
                 ${this.renderSettingsMenu()}
               </div>
-            </options-menu>
+            </sakai-options-menu>
           ` : html`
           <div class="conv-settings-link">
-            <a href="javascript:;" @click="${this._setStateSettings}">
-              <div id="conv-settings-label-wrapper">
-                <div><sakai-icon type="cog" size="small"></sakai-icon></div>
-                <div id="conv-settings-label">${this.i18n.settings}</div>
-              </div>
-            </a>
+            <button type="button" class="btn icon-button text-nowrap" @click="${this._setStateSettings}">
+              <i class="si si-settings"></i>
+              <span>${this.i18n.settings}</span>
+            </button>
           </div>
           `}
           ` : ""}
@@ -559,6 +572,8 @@ export class SakaiConversations extends SakaiElement {
         @topic-add-cancelled=${this.cancelAddTopic}
         @topic-dirty=${this.topicDirty}
         @edit-tags=${this.editTags}
+        ?can-create-discussion=${this.data.canCreateDiscussion}
+        ?can-create-question=${this.data.canCreateQuestion}
         ?can-pin=${this.data.canPin}
         ?can-edit-tags=${this.data.canEditTags}
         ?can-anon=${this.data.settings.allowAnonPosting}
@@ -596,6 +611,15 @@ export class SakaiConversations extends SakaiElement {
   }
 
   render() {
+
+    if (this.loadingData) {
+      return html`
+        <div class="sak-banner-info">
+          <div class="mb-3 fs-5 fw-bold">${this.i18n.loading_1}</div>
+          <div>${this.i18n.loading_2}</div>
+        </div>
+      `;
+    }
 
     return html`
 
