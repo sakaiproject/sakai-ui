@@ -2,19 +2,19 @@ import { RubricsElement } from "./RubricsElement.js";
 import { html } from "lit";
 import { repeat } from "lit-html/directives/repeat.js";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
-import "./SakaiRubricEdit.js";
-import "./SakaiItemDelete.js";
-import "./SakaiRubricCriterionEdit.js";
-import "./SakaiRubricCriterionRatingEdit.js";
+import "../sakai-rubric-edit.js";
+import "../sakai-item-delete.js";
+import "../sakai-rubric-criterion-edit.js";
+import "../sakai-rubric-criterion-rating-edit.js";
 import { SharingChangeEvent } from "./SharingChangeEvent.js";
 import { Sortable } from "sortablejs";
+import { tr } from "./SakaiRubricsLanguage.js";
 
 export class SakaiRubricCriteria extends RubricsElement {
 
   static get properties() {
 
     return {
-      ...RubricsElement.properties,
       rubricId: { attribute: "rubric-id", type: String },
       siteId: { attribute: "site-id", type: String },
       criteria: { type: Array },
@@ -28,23 +28,70 @@ export class SakaiRubricCriteria extends RubricsElement {
     };
   }
 
+  _setupSortable(li, sortable, isRating) {
+
+    li.addEventListener("keyup", e => {
+
+      e.stopPropagation();
+
+      if ([ "e", "d" ].includes(e.key.toLowerCase())) {
+        const order = sortable.toArray();
+        const sortableId = li.dataset.sortableId;
+        const index = order.indexOf(sortableId);
+
+        let changed = false;
+
+        if (e.key.toLowerCase() === "e") {
+          if (li.previousElementSibling) {
+            order.splice(index, 1);
+            order.splice(index - 1, 0, sortableId);
+            changed = true;
+          }
+        } else if (e.key.toLowerCase() === "d") {
+          if (li.nextElementSibling) {
+            order.splice(index, 1);
+            order.splice(index + 1, 0, sortableId);
+            changed = true;
+          }
+        }
+
+        if (changed) {
+          sortable.sort(order, true);
+          if (isRating) {
+            this._handleSortedRatings(e);
+            this.querySelector(`.rating-item[data-rating-id='${sortableId}'] .reorder-icon`).focus();
+          } else {
+            this._handleSortedCriteria(e);
+            this.querySelector(`.criterion-row[data-criterion-id='${sortableId}'] .reorder-icon`).focus();
+          }
+        }
+      }
+    });
+  }
+
   updated(changedProperties) {
 
     super.updated(changedProperties);
 
     const sortableOptions = {
+      dataIdAttr: "data-sortable-id",
       handle: ".reorder-icon",
-      onUpdate: (e) => this.handleSortedCriterionRatings(e),
+      onUpdate: (e) => this._handleSortedRatings(e),
       draggable: ".rating-item",
       animation: "200",
     };
 
-    this.querySelectorAll(".cr-table").forEach(cr => new Sortable(cr, sortableOptions));
+    this.querySelectorAll(".cr-table").forEach(cr => {
 
-    sortableOptions.onUpdate = (e) => this.handleSortedCriteria(e);
+      const sortable = new Sortable(cr, sortableOptions);
+      cr.querySelectorAll(".rating-item").forEach(li => this._setupSortable(li, sortable, true));
+    });
+
+    sortableOptions.onUpdate = (e) => this._handleSortedCriteria(e);
     sortableOptions.draggable = ".criterion-row";
 
-    this.querySelectorAll(".criterion").forEach(c => new Sortable(c, sortableOptions));
+    const sortable = new Sortable(this.querySelector(".criterion"), sortableOptions);
+    this.querySelectorAll(".criterion-row").forEach(li => this._setupSortable(li, sortable));
 
     if (changedProperties.has("criteria")) {
       this.criteriaMap = new Map(this.criteria.map(c => [ c.id, c ]));
@@ -55,8 +102,8 @@ export class SakaiRubricCriteria extends RubricsElement {
 
     return html`
       <button data-criterion-id="${c.id}"
-          aria-label="${this.i18n.add_rating} ${c.title}"
-          title="${this.i18n.add_rating} ${c.title}"
+          aria-label="${tr("add_rating")} ${c.title}"
+          title="${tr("add_rating")} ${c.title}"
           @click=${this.addRating}
           data-rating-pos="${pos}">
         <span class="fa fa-plus"></span>
@@ -70,12 +117,21 @@ export class SakaiRubricCriteria extends RubricsElement {
       <div data-rubric-id="${this.rubricId}" class="criterion style-scope sakai-rubric-criterion">
       ${repeat(this.criteria, c => c.id, c => html`
         ${this.isCriterionGroup(c) ? html`
-          <div id="criterion_row_${c.id}" data-criterion-id="${c.id}" class="criterion-row criterion-group">
+          <div id="criterion_row_${c.id}" data-criterion-id="${c.id}" data-sortable-id="${c.id}" class="criterion-row criterion-group">
             <div class="criterion-detail criterion-title">
               <h4 class="criterion-title">
-                <span @focus="${this.onFocus}" @focusout="${this.focusOut}" tabindex="0" role="button" title="${this.i18n.drag_order}" aria-label="${this.i18n.drag_order}" class="reorder-icon fa fa-bars"></span>
+                <span tabindex="0"
+                    data-criterion-id="${c.id}"
+                    data-sortable-id="${c.id}"
+                    role="button"
+                    title="${tr("drag_order")}"
+                    aria-label="${tr("drag_order")}"
+                    aria-describedby="rubrics-reorder-info"
+                    class="reorder-icon si si-drag-handle fs-2">
+                </span>
                 ${c.title}
                 <sakai-rubric-criterion-edit
+                    id="criterion-edit-${this.criterion.id}"
                     @criterion-edited="${this.criterionEdited}"
                     site-id="${this.siteId}"
                     rubric-id="${this.rubricId}"
@@ -87,36 +143,49 @@ export class SakaiRubricCriteria extends RubricsElement {
             </div>
             <div class="criterion-actions">
               ${!this.isLocked ? html`
-                <a @focus="${this.onFocus}" @focusout="${this.focusOut}" tabindex="0" role="button" data-criterion-id="${c.id}" title="${this.i18n.copy} ${c.title}" aria-label="${this.i18n.copy} ${c.title}" class="linkStyle clone fa fa-copy" @click="${this.cloneCriterion}" href="#"></a>
+                <a tabindex="0" role="button" data-criterion-id="${c.id}" title="${tr("copy")} ${c.title}" aria-label="${tr("copy")} ${c.title}" class="linkStyle clone fa fa-copy" @click="${this.cloneCriterion}" href="#"></a>
                 <sakai-item-delete criterion-id="${c.id}" site-id="${this.siteId}" criterion="${JSON.stringify(c)}" rubric-id="${this.rubricId}" @delete-item="${this.deleteCriterion}" token="${this.token}"></sakai-item-delete>`
                 : ""
               }
             </div>
           </div>
         ` : html`
-          <div id="criterion_row_${c.id}" data-criterion-id="${c.id}" class="criterion-row">
+          <div id="criterion_row_${c.id}" data-criterion-id="${c.id}" data-sortable-id="${c.id}" class="criterion-row">
             <div class="criterion-detail">
-              <h4 class="criterion-title">
-                <span @focus="${this.onFocus}" @focusout="${this.focusOut}" tabindex="0" role="button" title="${this.i18n.drag_order}" aria-label="${this.i18n.drag_order}" class="reorder-icon fa fa-bars"></span>
-                ${c.title}
-                <sakai-rubric-criterion-edit
-                    @criterion-edited="${this.criterionEdited}"
-                    site-id="${this.siteId}"
-                    rubric-id="${this.rubricId}"
-                    criterion="${JSON.stringify(c)}">
-                </sakai-rubric-criterion-edit>
+              <h4 class="criterion-title d-flex align-items-center">
+                <div>
+                  <span tabindex="0"
+                      role="button"
+                      title="${tr("drag_order")}"
+                      data-criterion-id="${c.id}"
+                      data-sortable-id="${c.id}"
+                      aria-label="${tr("drag_order")}"
+                      aria-describedby="rubrics-reorder-info"
+                      class="reorder-icon si si-drag-handle fs-3">
+                  </span>
+                </div>
+                <div class="ms-1">${c.title}</div>
+                <div>
+                  <sakai-rubric-criterion-edit
+                      id="criterion-edit-${c.id}"
+                      @criterion-edited="${this.criterionEdited}"
+                      site-id="${this.siteId}"
+                      rubric-id="${this.rubricId}"
+                      criterion="${JSON.stringify(c)}">
+                  </sakai-rubric-criterion-edit>
+                </div>
               </h4>
               <p>
                 ${unsafeHTML(c.description)}
               </p>
               ${this.weighted ? html`
-                  <div class="form-inline weight-field">
+                  <div class="weight-field">
                     ${!this.isLocked ? html`
-                      <div class="field-item form-group input-group-sm ${this.validWeight ? "" : "has-error"}">
+                      <div class="field-item form-group input-group-sm ${this.validWeight ? "" : "weight-error"}">
                         <label
                           for="weight_input_${c.id}"
-                          class="control-label"
-                          title="${!this.validWeight ? this.i18n.total_weight_wrong : ""}"
+                          class="form-control-label"
+                          title="${!this.validWeight ? tr("total_weight_wrong") : ""}"
                         >
                           <sr-lang key="weight">Weight</sr-lang>
                         </label>
@@ -128,10 +197,10 @@ export class SakaiRubricCriteria extends RubricsElement {
                           placeholder="0.0"
                           @input="${this.debounce(this.emitWeightChanged, 500)}"
                           value="${c.weight.toLocaleString(this.locale)}"
-                          title="${!this.validWeight ? this.i18n.total_weight_wrong : ""}"
+                          title="${!this.validWeight ? tr("total_weight_wrong") : ""}"
                         >
-                        <span class="control-label"
-                          title="${!this.validWeight ? this.i18n.total_weight_wrong : ""}"
+                        <span class="form-control-label"
+                          title="${!this.validWeight ? tr("total_weight_wrong") : ""}"
                         >
                           <sr-lang key="percent_sign">%</sr-lang>
                         </span>
@@ -139,7 +208,7 @@ export class SakaiRubricCriteria extends RubricsElement {
                       : ""
                     }
                     <div class="field-item">
-                      <span>${this.i18n.min_max_points.replace("{}", this.getCriterionMinPoints(c.id)).replace("{}", this.getCriterionMaxPoints(c.id))}</span>
+                      <span>${tr("min_max_points", [ this.getCriterionMinPoints(c.id), this.getCriterionMaxPoints(c.id) ])}</span>
                     </div>
                   </div>`
                   : ""
@@ -154,7 +223,7 @@ export class SakaiRubricCriteria extends RubricsElement {
             <div class="criterion-ratings">
               <div id="cr-table-${c.id}" class="cr-table" data-criterion-id="${c.id}">
               ${repeat(c.ratings, (r) => r.id, (r, i) => html`
-                <div class="rating-item" data-rating-id="${r.id}" id="rating_item_${r.id}">
+                <div class="rating-item" data-rating-id="${r.id}" data-sortable-id="${r.id}" id="rating_item_${r.id}">
                   <h5 class="criterion-item-title">
                     ${r.title}
                     <sakai-rubric-criterion-rating-edit
@@ -186,7 +255,16 @@ export class SakaiRubricCriteria extends RubricsElement {
                     <div class="add-criterion-item">
                       ${this.renderAddRatingButton(c, i + 1)}
                     </div>
-                    <span @focus="${this.onFocus}" @focusout="${this.focusOut}" tabindex="0" role="button" title="${this.i18n.drag_order}" aria-label="${this.i18n.drag_order}" class="reorder-icon sideways fa fa-bars"></span>`
+                    <span tabindex="0"
+                        role="button"
+                        data-criterion-id="${c.id}"
+                        data-rating-id="${r.id}"
+                        data-sortable-id="${r.id}"
+                        title="${tr("drag_order")}"
+                        aria-label="${tr("drag_order")}"
+                        aria-describedby="rubrics-reorder-info"
+                        class="reorder-icon sideways si si-drag-handle">
+                    </span>`
                     : ""
                   }
                 </div>
@@ -195,7 +273,7 @@ export class SakaiRubricCriteria extends RubricsElement {
             </div>
             ${!this.isLocked ? html`
               <div class="criterion-actions">
-                <a @focus="${this.onFocus}" @focusout="${this.focusOut}" tabindex="0" role="button" data-criterion-id="${c.id}" title="${this.i18n.copy} ${c.title}" aria-label="${this.i18n.copy} ${c.title}" class="linkStyle clone fa fa-copy" @keyup="${this.openEditWithKeyboard}" @click="${this.cloneCriterion}" href="#"></a>
+                <a tabindex="0" role="button" data-criterion-id="${c.id}" title="${tr("copy")} ${c.title}" aria-label="${tr("copy")} ${c.title}" class="linkStyle clone fa fa-copy" @keyup="${this.openEditWithKeyboard}" @click="${this.cloneCriterion}" href="#"></a>
                 <sakai-item-delete criterion-id="${c.id}" site-id="${this.siteId}" criterion="${JSON.stringify(c)}" rubric-id="${this.rubricId}" @delete-item="${this.deleteCriterion}"></sakai-item-delete>
               </div>`
               : ""
@@ -207,19 +285,19 @@ export class SakaiRubricCriteria extends RubricsElement {
       ${this.weighted ? html`
         <div class="weighted-grade-info">
           <div class="total-data">
-            <div class="${this.validWeight ? "" : "has-error"}">
-              <span class="control-label">
-                <span class="bold-header">${this.i18n.total_weight}</span>
+            <div class="${this.validWeight ? "" : "weight-error"}">
+              <span class="form-control-label">
+                <span class="bold-header">${tr("total_weight")}</span>
                 <span>${this.totalWeight}<sr-lang key="percent_sign">%</sr-lang></span>
               </span>
             </div>
             <div>
-              <span class="bold-header">${this.i18n.total_grade}</span>
-              <span>${this.i18n.min_max_points.replace("{}", this.minPoints).replace("{}", this.maxPoints)}</span>
+              <span class="bold-header">${tr("total_grade")}</span>
+              <span>${tr("min_max_points", [ this.minPoints, this.maxPoints ])}</span>
             </div>
           </div>
           <div class="banner-container">
-            <div class="sak-banner-success d-none save-success has-success fade">
+            <div class="sak-banner-success d-none ">
               <sr-lang key="saved_successfully">%</sr-lang>
             </div>
             <div class="sak-banner-warn ${!this.validWeight && this.isDraft ? "" : "d-none"}">
@@ -235,7 +313,7 @@ export class SakaiRubricCriteria extends RubricsElement {
       ${!this.isLocked ? html`
         <div class="action-butons">
           ${this.weighted ? html`
-            <button class="save-weights" @click="${this.saveWeights}" ?disabled="${!this.validWeight && !this.isDraft}">
+            <button class="btn-link save-weights" @click="${this.saveWeights}" ?disabled="${!this.validWeight && !this.isDraft}">
               <span class="add fa fa-save"></span>
               <sr-lang key="save_weights">Save Weights</sr-lang>
             </button>`
@@ -265,17 +343,7 @@ export class SakaiRubricCriteria extends RubricsElement {
     `;
   }
 
-  onFocus(e) {
-
-    e.target.closest(".criterion-row").classList.add("focused");
-  }
-
-  focusOut(e) {
-
-    e.target.closest(".criterion-row").classList.remove("focused");
-  }
-
-  handleSortedCriteria() {
+  _handleSortedCriteria() {
 
     const sortedIds = Array.from(this.querySelectorAll(".criterion-row")).map(c => c.dataset.criterionId);
 
@@ -310,9 +378,9 @@ export class SakaiRubricCriteria extends RubricsElement {
     };
   }
 
-  handleSortedCriterionRatings(e) {
+  _handleSortedRatings(e) {
 
-    e.stopPropagation();
+    e && e.stopPropagation();
 
     const criterionId = e.target.dataset.criterionId;
     const criterion = this.criteria.find(c => c.id == criterionId);
@@ -331,10 +399,8 @@ export class SakaiRubricCriteria extends RubricsElement {
     })
     .then(r => {
 
-      if (r.ok) {
-        this.criteria = [ ...this.criteria ];
-      } else {
-        throw new Error("Network error while saving ratings sort");
+      if (!r.ok) {
+        throw new Error(`Network error while saving ratings sort at ${url}`);
       }
     })
     .catch (error => console.error(error));

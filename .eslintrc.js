@@ -37,7 +37,7 @@ module.exports = {
     "no-else-return": "error",
     "no-empty": ["error", { allowEmptyCatch: true }],
     "no-eval": "error",
-    "no-extend-native": "error",
+    "no-extend-native": ["error", { "exceptions": ["Date"] }],
     "no-extra-bind": "error",
     "no-implied-eval": "error",
     "no-iterator": "error",

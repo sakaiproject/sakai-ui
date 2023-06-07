@@ -3,20 +3,19 @@ import { html } from "lit";
 import { getOffsetFromServerMillis, getTimezone } from "@sakai-ui/sakai-portal-utils";
 import { toTemporalInstant } from "@js-temporal/polyfill";
 
-// eslint-disable-next-line no-extend-native
 Date.prototype.toTemporalInstant = toTemporalInstant;
 
 /**
  * Renders an input which, when clicked, launches a date picker.
  *
  * @example <caption>Usage:</caption>
- * <sakai-date-picker epoch-millis="345922925445"></sakai-date-picker>
+ * <sakai-date-picker epoch-millis="345922925445" @/>
  *
  * The tag fires the event 'datetime-selected'. You'd handle that with (vanillajs):
  *
- * suiDatePicker.addEventListener("datetime-selected", e => console.log(e.detail.epochMillis));
+ * sakaiDatePicker.addEventListener("datetime-selected", e => console.log(e.detail.epochMillis));
  *
- * @extends SakaiElement
+ * @extends LitElement
  * @property {number} [epochMillis] The milliseconds since the unix epoch to set this datetime to
  * @property {string} [isoDate] The ISO8601 string to set this datetime to
  * @property {boolean} [disabled] Disable the date controls
@@ -89,7 +88,7 @@ export class SakaiDatePicker extends SakaiElement {
     this.disabled = false;
   }
 
-  _dateSelected(e) {
+  dateSelected(e) {
 
     const d = new Date(e.target.value);
     const epochMillis = d.getTime() - parseInt(getOffsetFromServerMillis()) - (d.getTimezoneOffset() * 60000);
@@ -129,14 +128,14 @@ export class SakaiDatePicker extends SakaiElement {
     return html`
       <input type="datetime-local"
           id="date-picker-input-${this.instanceSalt}"
-          @change=${this._dateSelected}
+          @change=${this.dateSelected}
           value="${this.isoDate}"
-          ?disabled=${this.disabled}
+          .disabled=${this.disabled}
           aria-label="${this.label}"
           title="${this.label}">
       ${this.addHiddenFields && this.isoDate ? html`
         ${SakaiDatePicker.hiddenFieldNames.map(h => html`
-          <input type="hidden" name="${this.hiddenPrefix}${h}" value="${this._getHiddenFieldValue(h)}">
+          <input type="hidden" name="${this.hiddenPrefix}${h}" value="${this._getHiddenFieldValue( h)}">
         `)}
       ` : ""}
     `;

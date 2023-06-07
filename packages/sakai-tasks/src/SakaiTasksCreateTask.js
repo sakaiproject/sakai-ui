@@ -38,7 +38,7 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
     super();
 
     this.deliverTasks = false;
-    this.defaultTask = { taskId: "", description: "", priority: "3", notes: "", due: "", assignationType: "", selectedGroups: [], siteId: "", owner: "", taskAssignedTo: "", complete: null };
+    this.defaultTask = { taskId: "", description: "", priority: "3", notes: "", due: Date.now(), assignationType: "", selectedGroups: [], siteId: "", owner: "", taskAssignedTo: "", complete: null };
     this.task = { ...this.defaultTask };
     this.assignationType = "user";
     this.mode = "create";
@@ -120,8 +120,6 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
 
   set task(value) {
 
-    console.log(value);
-
     const old = this._task;
     this._task = value;
 
@@ -140,13 +138,10 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
         datePicker.disabled = false;
         datePicker.epochMillis = value.due;
       }
-
       const descriptionEl = this.shadowRoot.getElementById("description");
       descriptionEl.disabled = value.system;
       descriptionEl.value = value.description;
-
       this.shadowRoot.getElementById("priority").value = value.priority;
-
       const editor = this.getEditor();
       if (editor) {
         editor.setContent(value.notes);
@@ -156,12 +151,13 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
         descriptionEl.disabled = true;
         datePicker.disabled = true;
       }
-
       const completeEl = this.shadowRoot.getElementById("complete");
-      if (value.complete) {
-        completeEl.checked = true;
-      } else {
-        completeEl.checked = false;
+      if (completeEl) {
+        if (value.complete) {
+          completeEl.checked = true;
+        } else {
+          completeEl.checked = false;
+        }
       }
     });
   }

@@ -2,21 +2,11 @@ import { css, html } from "lit";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { SakaiPageableElement } from "@sakai-ui/sakai-pageable-element";
 import "@sakai-ui/sakai-icon";
+import moment from "moment";
 import "@lion/dialog";
-import "../sakai-tasks-create-task.js";
-import "@sakai-ui/sakai-date-picker";
+import "./sakai-tasks-create-task.js";
 
 export class SakaiTasks extends SakaiPageableElement {
-
-  constructor() {
-
-    super();
-
-    this.showPager = true;
-    this.currentFilter = "current";
-    this.i18nLoaded = this.loadTranslations("tasks");
-    this.i18nLoaded.then(r => this.i18n = r);
-  }
 
   static get properties() {
 
@@ -25,6 +15,15 @@ export class SakaiTasks extends SakaiPageableElement {
       currentFilter: { attribute: false, type: String },
       canAddTask: { attribute: false, type: Boolean },
     };
+  }
+
+  constructor() {
+
+    super();
+
+    this.showPager = true;
+    this.currentFilter = "current";
+    this.loadTranslations("tasks").then(r => this.i18n = r);
   }
 
   set data(value) {
@@ -48,7 +47,7 @@ export class SakaiTasks extends SakaiPageableElement {
     if (t.due) {
       t.dueHuman = moment.duration(t.due - Date.now(), "milliseconds").humanize(true);
     } else {
-      this.i18nLoaded.then(r => t.dueHuman = r.no_due_date); //"No due date"
+      t.dueHuman = "No due date";
     }
     return t;
   }
@@ -95,6 +94,11 @@ export class SakaiTasks extends SakaiPageableElement {
     this.repage();
   }
 
+  // Override the method to apply custom filtering, used within the repage() method of SakaiPageableElement
+  getFilteredDataBeforeRepaging() {
+    return this.data.filter(t => t.visible);
+  }
+
   filter(f) {
 
     this.currentFilter = f;
@@ -132,6 +136,9 @@ export class SakaiTasks extends SakaiPageableElement {
   }
 
   filterChanged(e) {
+    this.currentPage = 1;
+    const sakaiPager = this.shadowRoot.querySelector("#pager sakai-pager");
+    sakaiPager && (sakaiPager.current = this.currentPage);
     this.filter(e.target.value);
   }
 
