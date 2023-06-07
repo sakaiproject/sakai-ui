@@ -1,62 +1,43 @@
 import { loadProperties, tr } from '../src/sakai-i18n.js';
 import { expect } from '@open-wc/testing';
 import { stub } from "sinon";
+import * as data from "./data.js";
+import fetchMock from "fetch-mock/esm/client";
 
 describe("sakai-i18n tests", () => {
 
-  const value = "nog{0}";
-  const testUrl = "/sakai-ws/rest/i18n/getI18nProperties?locale=en_GB&resourceclass=org.sakaiproject.i18n.InternationalizedMessages&resourcebundle=test";
+  window.top.portal = { locale: 'en_GB' };
 
-  beforeEach(() => {
+  const value = "eggnog";
 
-    window.fetch = url => {
-
-      if (url === testUrl) {
-        return Promise.resolve({ text: () => Promise.resolve(`egg=${value}`)});
-      } else {
-        throw new Error("No bundle found");
-      }
-    };
-
-    window.top.portal = { locale: 'en_GB' };
-  });
+  fetchMock
+    .get(data.i18nUrl, data.i18n, { overwriteRoutes: true })
+    .get("*", 500, { overwriteRoutes: true });
 
   it ("loads properties successfully", async () => {
 
-    let i18n = await loadProperties('test');
-    expect(i18n.egg).to.equal(value);
-
-    i18n = await loadProperties('test');
-    expect(i18n.egg).to.equal(value);
+    let i18n = await loadProperties('test', { debug: true });
+    expect(i18n.drink).to.equal(value);
   });
 
   it ("translates", async () => {
 
     const i18n = await loadProperties('test');
-    expect(tr('test', 'egg')).to.equal(value);
+    expect(tr("test", "drink")).to.equal(value);
   });
 
   it ("translates with a replacements object", async () => {
 
     const i18n = await loadProperties('test');
-    expect(tr('test', 'egg', { "0": "gin" })).to.equal('noggin');
+    expect(tr('test', 'brain', { "0": "gin" })).to.equal('noggin');
   });
 
   it ("translates with an array", async () => {
 
     const prefix = "Ogg on";
 
-    window.fetch = url => {
-
-      if (url === testUrl) {
-        return Promise.resolve({ text: () => Promise.resolve(`egg=${prefix} {} {}`)});
-      } else {
-        throw new Error("No bundle found");
-      }
-    };
-
     const i18n = await loadProperties({ bundle: 'test', cache: false });
-    expect(tr('test', 'egg', ["the", "bog"])).to.equal(`${prefix} the bog`);
+    expect(tr('test', 'bog', ["the", "bog"])).to.equal(`${prefix} the bog`);
   });
 
   it ("logs an error when no bundle is supplied", async () => {
@@ -73,8 +54,7 @@ describe("sakai-i18n tests", () => {
     window.sakai = { translations: {} };
     const warnStub = stub(console, "warn");
     value = tr("fake", "thing");
-    expect(warnStub).to.have.been.calledWith("No namespace for fake. Returning key ...");
-    expect(value).to.be.equal("thing");
+    expect(errorStub).to.have.been.calledWith("Namespace 'fake' not loaded yet");
 
     window.sakai.translations.fake = {};
     value = tr("fake", "thing");
@@ -86,21 +66,14 @@ describe("sakai-i18n tests", () => {
 
     // This call should cache in sessionStorage
     let i18n = await loadProperties('test');
-    expect(i18n.egg).to.equal(value);
+    expect(i18n.drink).to.equal(value);
 
     // Now override fetch to return a different result.
-    window.fetch = url => {
-
-      if (url === testUrl) {
-        return Promise.resolve({ text: () => Promise.resolve('egg=bacon')});
-      } else {
-        throw new Error("No bundle found");
-      }
-    };
+    fetchMock.get(data.i18nUrl, `drink=bacon`, { overwriteRoutes: true });
 
     // This should return from sessionStorage, not fetching at all.
     i18n = await loadProperties('test');
-    expect(i18n.egg).to.equal(value);
+    expect(i18n.drink).to.equal(value);
 
     // Clear out sessionStorage and the existing promises object
     window.sessionStorage.removeItem("en_GBtest");
@@ -110,6 +83,6 @@ describe("sakai-i18n tests", () => {
 
     // This call should now fetch
     i18n = await loadProperties('test');
-    expect(i18n.egg).to.equal('bacon');
+    expect(i18n.drink).to.equal('bacon');
   });
 });

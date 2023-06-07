@@ -127,10 +127,15 @@ function tr(namespace, key, options) {
     return;
   }
 
+  if (!window.sakai.translations[namespace]) {
+    console.error(`Namespace '${namespace}' not loaded yet`);
+    return;
+  }
+
   let ret = window.sakai.translations[namespace][key];
 
   if (!ret) {
-    console.warn(`${namespace }#key ${ key } not found. Returning key ...`);
+    console.warn(`${namespace}#key ${key} not found. Returning key ...`);
     return key;
   }
 
@@ -138,7 +143,7 @@ function tr(namespace, key, options) {
     if (Array.isArray(options)) {
       options.forEach(o => ret = ret.replace("{}", o));
     } else if (typeof options === "object") {
-      Object.keys(options).forEach(k => ret = ret.replace(`{${ k }}`, options[k]));
+      Object.keys(options).forEach(k => ret = ret.replace(`{${k}}`, options[k]));
     }
   }
   return ret;
