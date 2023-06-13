@@ -1,3 +1,4 @@
-import { SakaiPermissions } from './src/SakaiPermissions.js';
+import { SakaiPermissions } from "./src/SakaiPermissions.js";
+export { SakaiPermissions };
 
-customElements.define('sakai-permissions', SakaiPermissions);
+customElements.define("sakai-permissions", SakaiPermissions);

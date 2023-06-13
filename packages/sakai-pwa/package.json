@@ -1,5 +1,5 @@
 {
-  "name": "@sakai-ui/sakai-notifications",
+  "name": "@sakai-ui/sakai-pwa",
   "version": "3.0.6",
   "description": "",
   "license": "ECL-2.0",
@@ -8,13 +8,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/sakaiproject/sakai-ui",
-    "directory": "packages/sakai-notifications"
+    "directory": "packages/sakai-pwa"
   },
   "main": "index.js",
   "module": "index.js",
   "files": [
     "*.js",
-    "sakai-notifications.js",
     "src"
   ],
   "scripts": {
@@ -28,17 +27,18 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js",
-    "./sakai-notifications.js": "./sakai-notifications.js"
+    ".": "./index.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-element": "file:../sakai-element",
-    "@sakai-ui/sakai-user-photo": "file:../sakai-user-photo",
+    "@sakai-ui/sakai-notifications": "file:../sakai-notifications",
+    "@sakai-ui/sakai-portal-utils": "file:../sakai-portal-utils",
     "lit": "^2.6.0"
   },
   "devDependencies": {
     "@open-wc/testing": "^3.1.7",
     "@web/test-runner": "^0.15.0",
-    "eslint": "^8.31.0"
+    "eslint": "^8.31.0",
+    "fetch-mock": "^9.11.0"
   }
 }

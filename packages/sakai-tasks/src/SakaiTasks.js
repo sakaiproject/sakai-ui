@@ -4,7 +4,7 @@ import { SakaiPageableElement } from "@sakai-ui/sakai-pageable-element";
 import "@sakai-ui/sakai-icon";
 import moment from "moment";
 import "@lion/dialog";
-import "./sakai-tasks-create-task.js";
+import "../sakai-tasks-create-task.js";
 
 export class SakaiTasks extends SakaiPageableElement {
 
