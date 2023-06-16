@@ -50,7 +50,6 @@ export class SakaiProfile extends LitElement {
   get userId() { return this._userId; }
 
   playPronunciation() {
-
     this.shadowRoot.getElementById("pronunciation-player").play();
   }
 

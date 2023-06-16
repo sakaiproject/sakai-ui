@@ -3,3 +3,4 @@ export const getUserLocale = () => (window.top?.portal?.locale || window.top?.sa
 export const getOffsetFromServerMillis = () => window.top?.portal?.user.offsetFromServerMillis || 0;
 export const getTimezone = () => window.top?.portal?.user.timezone || "";
 export const setupSearch = options => window.top?.portal?.search?.setup(options);
+export const callSubscribeIfPermitted = () => window.top?.portal?.notifications?.callSubscribeIfPermitted();

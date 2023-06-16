@@ -1,3 +1,3 @@
-import { SakaiPwa } from "./src/SakaiPwa.js";
+import { SakaiPWA } from "./src/SakaiPWA.js";
 
-customElements.define("sakai-pwa", SakaiPwa);
+customElements.define("sakai-pwa", SakaiPWA);

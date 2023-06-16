@@ -1,6 +1,7 @@
 import { SakaiElement } from "@sakai-ui/sakai-element";
 import { html } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
+import "@sakai-ui/sakai-profile";
 
 /**
  * A simple wrapper for Sakai's user profile picture.
@@ -54,7 +55,11 @@ export class SakaiUserPhoto extends SakaiElement {
 
     if (this.profilePopup == SakaiUserPhoto.ON && this.generatedId) {
       this.updateComplete.then(() => {
-        profile.attachPopups(document.getElementById(this.generatedId));
+
+        new bootstrap.Popover(document.getElementById(this.generatedId), {
+          content: this.querySelector("sakai-profile"),
+          html: true,
+        });
       });
     }
   }
@@ -75,12 +80,16 @@ export class SakaiUserPhoto extends SakaiElement {
       <div id="${ifDefined(this.generatedId)}"
           data-user-id="${this.userId}"
           class="sakai-user-photo ${this.classes}"
+          data-bs-toggle="popover"
           aria-label="${ifDefined(this.label ? this.label : undefined)}"
           title="${ifDefined(this.label ? this.label : undefined)}"
           style="background-image:url(${this.url}) ${this.profilePopup === SakaiUserPhoto.OFF ? "" : ";cursor: pointer;"}">
         ${this.online ? html`
         <span></span>
         ` : ""}
+      </div>
+      <div class="d-none">
+      <sakai-profile user-id="${this.userId}"></sakai-profile>
       </div>
     `;
   }

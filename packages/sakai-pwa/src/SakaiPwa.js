@@ -1,7 +1,7 @@
 import { SakaiElement } from "@sakai-ui/sakai-element";
 import { html } from "lit";
 import "@sakai-ui/sakai-notifications";
-import { setupPush } from "@sakai-ui/sakai-portal-utils";
+import { callSubscribeIfPermitted } from "@sakai-ui/sakai-portal-utils";
 
 export class SakaiPWA extends SakaiElement {
 
@@ -27,7 +27,7 @@ export class SakaiPWA extends SakaiElement {
 
   _requestNotificationPermission() {
 
-    setupPush().then(() => this.displayNotificationsButton = false, () => this.displayNotificationsButton = false);
+    callSubscribeIfPermitted().then(() => this.displayNotificationsButton = false, () => this.displayNotificationsButton = false);
   }
 
   shouldUpdate() {

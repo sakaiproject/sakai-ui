@@ -27,10 +27,12 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-user-photo.js": "./sakai-user-photo.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-element": "file:../sakai-element",
+    "@sakai-ui/sakai-profile": "file:../sakai-profile",
     "lit": "^2.6.0"
   },
   "devDependencies": {

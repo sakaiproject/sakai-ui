@@ -27,7 +27,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-profile.js": "./sakai-profile.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-i18n": "file:../sakai-i18n",

@@ -27,7 +27,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-pwa.js": "./sakai-pwa.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-element": "file:../sakai-element",
