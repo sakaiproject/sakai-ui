@@ -196,7 +196,7 @@ export class SakaiNotifications extends SakaiElement {
 
     return html`
       <div class="accordion-item rounded-1 mb-2">
-        <h2 class="accordion-header mt-0">
+        <h2 class="accordion-header mt-0 fs-2">
           <button class="accordion-button collapsed"
               type="button"
               data-bs-toggle="collapse"
