@@ -67,24 +67,25 @@ export class SakaiNotifications extends SakaiElement {
     });
   }
 
-  filterIntoToolNotifications() {
+  filterIntoToolNotifications(decorate = true) {
 
     this.filteredNotifications.clear();
 
     this.notifications.forEach(noti => {
 
-
       // Grab the first section of the event. This is the tool event prefix.
       const toolEventPrefix = noti.event.substring(0, noti.event.indexOf("."));
 
-      if (toolEventPrefix === "profile") {
-        this._decorateProfileNotification(noti);
-      } else if (toolEventPrefix === "asn") {
-        this._decorateAssignmentNotification(noti);
-      } else if (toolEventPrefix === "annc") {
-        this._decorateAnnouncementNotification(noti);
-      } else if (toolEventPrefix === "commons") {
-        this._decorateCommonsNotification(noti);
+      if (decorate) {
+        if (toolEventPrefix === "profile") {
+          this._decorateProfileNotification(noti);
+        } else if (toolEventPrefix === "asn") {
+          this._decorateAssignmentNotification(noti);
+        } else if (toolEventPrefix === "annc") {
+          this._decorateAnnouncementNotification(noti);
+        } else if (toolEventPrefix === "commons") {
+          this._decorateCommonsNotification(noti);
+        }
       }
 
       if (!this.filteredNotifications.has(toolEventPrefix)) {
@@ -154,7 +155,7 @@ export class SakaiNotifications extends SakaiElement {
           const index = this.notifications.findIndex(a => a.id == notificationId);
           this.notifications.splice(index, 1);
           this.fireLoadedEvent();
-          this.filterIntoToolNotifications();
+          this.filterIntoToolNotifications(false);
         } else {
           console.error(`Failed to clear notification with id ${notificationId}`);
         }
