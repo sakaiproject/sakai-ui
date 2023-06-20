@@ -80,6 +80,11 @@ export class SakaiPWA extends SakaiElement {
     .catch (error => console.error(error));
   }
 
+  _logout() {
+
+    navigator.serviceWorker.ready.then(reg => { console.log("balls"); reg.active.postMessage("CLEAR CACHE"); });
+  }
+
   shouldUpdate() {
     return this.i18n;
   }
@@ -179,7 +184,7 @@ export class SakaiPWA extends SakaiElement {
             </div>
           </div>
           <div class="text-center pt-3 mt-auto">
-            <a href="logout" title="Logout button" id="loginLink1" class="bi bi-box-arrow-right btn btn-primary w-100">
+            <a href="logout" title="Logout button" id="loginLink1" @click=${this._logout} class="bi bi-box-arrow-right btn btn-primary w-100">
               <span class="Mrphs-login-Message">Logout</span>
             </a>
           </div>
@@ -212,7 +217,7 @@ export class SakaiPWA extends SakaiElement {
       ${this.offline ? html`
         <div class="sak-banner-info">You are offline</div>
       ` : ""}
-      ${this.showingNotifications ? html`
+      ${this.showingNotifications && portal.user.id ? html`
         <h2 class="text-center">${this.i18n.notifications}</h2>
         <div class="p-2">
           <sakai-notifications url="/direct/portal/notifications.json" ?offline=${this.offline} push></sakai-notifications>
