@@ -55,9 +55,6 @@ export class SakaiPWA extends SakaiElement {
     const eid = this.querySelector("#pwa-login-eid").value;
     const pw = this.querySelector("#pwa-login-pw").value;
 
-    console.log(eid);
-    console.log(pw);
-
     const url = `/api/login?username=${eid}&password=${pw}`;
     fetch(url)
     .then(r => {
@@ -81,8 +78,7 @@ export class SakaiPWA extends SakaiElement {
   }
 
   _logout() {
-
-    navigator.serviceWorker.ready.then(reg => { console.log("balls"); reg.active.postMessage("CLEAR CACHE"); });
+    navigator.serviceWorker.ready.then(reg => reg.active.postMessage("LOGOUT"));
   }
 
   shouldUpdate() {
