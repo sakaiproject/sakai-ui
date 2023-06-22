@@ -86,7 +86,7 @@ export class SakaiPWA extends SakaiElement {
   }
 
   firstUpdated() {
-    this.displayNotificationsButton = Notification.permission === "default";
+    this.displayNotificationsButton = window.Notification && Notification.permission === "default";
   }
 
   render() {
