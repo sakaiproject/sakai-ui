@@ -1,5 +1,6 @@
 import { SakaiElement } from "@sakai-ui/sakai-element";
 import { html } from "lit";
+import { ifDefined } from "lit-html/directives/if-defined.js";
 import "@sakai-ui/sakai-notifications";
 import { callSubscribeIfPermitted } from "@sakai-ui/sakai-portal-utils";
 
@@ -8,6 +9,7 @@ export class SakaiPWA extends SakaiElement {
   static get properties() {
 
     return {
+      userId: { attribute: "user-id", type: String },
       displayNotificationsButton: { attribute: false, type: Boolean },
       offline: { attribute: false, type: Boolean },
       showingNotifications: { attribute: false, type: Boolean },
@@ -30,8 +32,7 @@ export class SakaiPWA extends SakaiElement {
   }
 
   _requestNotificationPermission() {
-
-    callSubscribeIfPermitted().then(() => this.displayNotificationsButton = false, () => this.displayNotificationsButton = false);
+    callSubscribeIfPermitted().then(() => this.displayNotificationsButton = false);
   }
 
   _showNotifications() {
@@ -69,7 +70,15 @@ export class SakaiPWA extends SakaiElement {
 
       if (sessionId) {
         console.debug(`Logged in. Session ID: ${sessionId}`);
-        window.location = "/pwa";
+        portal.user.id = eid;
+        portal.locale = "en_GB";
+        this.loadTranslations("sakai-pwa").then(i18n => { this.i18n = i18n; this.requestUpdate(); });
+        this.displayNotificationsButton = !window.Notification || Notification.permission === "default";
+        this.querySelector("#pwa-login-eid").value = "";
+        this.querySelector("#pwa-login-pw").value = "";
+        this.userId = eid;
+        bootstrap.Modal.getInstance(document.getElementById("pwa-login-modal")).hide();
+        portal.notifications.onLogin();
       } else {
         console.error("Failed to login.");
       }
@@ -77,8 +86,18 @@ export class SakaiPWA extends SakaiElement {
     .catch (error => console.error(error));
   }
 
-  _logout() {
-    navigator.serviceWorker.ready.then(reg => reg.active.postMessage("LOGOUT"));
+  _logout(e) {
+
+    e.preventDefault();
+    bootstrap.Offcanvas.getInstance(document.getElementById("pwa-profile")).hide();
+    portal.notifications.logout();
+    this.displayNotificationsButton = false;
+    fetch("/pwa/logout")
+    .then(() => {
+
+      this.userId = null;
+      portal.user.id = null;
+    });
   }
 
   shouldUpdate() {
@@ -86,7 +105,7 @@ export class SakaiPWA extends SakaiElement {
   }
 
   firstUpdated() {
-    this.displayNotificationsButton = window.Notification && Notification.permission === "default";
+    this.displayNotificationsButton = this.userId && Notification.permission === "default";
   }
 
   render() {
@@ -101,7 +120,7 @@ export class SakaiPWA extends SakaiElement {
             aria-label="${this.i18n.view_navigation}"
             aria-expanded="false"
             title="${this.i18n.view_navigation}"
-            ?disabled=${!portal.user.id && !this.offline}>
+            ?disabled=${!this.userId && !this.offline}>
           <span class="bi bi-list"></span>
         </button>
         <div id="pwa-header-logo" class="d-flex align-items-center justify-content-between bg-primary">
@@ -111,7 +130,7 @@ export class SakaiPWA extends SakaiElement {
             </button>
           </a>
         </div>
-        ${portal.user.id ? html`
+        ${this.userId ? html`
         <button class="btn icon-button sak-sysInd-account"
             type="button"
             data-bs-toggle="offcanvas"
@@ -119,11 +138,16 @@ export class SakaiPWA extends SakaiElement {
             aria-controls="pwa-profile"
             title="${this.i18n.mainnav_btn_account}">
           <img id="profile-image" class="rounded-circle"
-            src="/direct/profile/${portal.user.id}/image/thumb"
+            src="/direct/profile/${this.userId}/image/thumb"
             alt="${this.i18n.profile_image_alt}">
         </button>
         ` : html`
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pwa-login-modal" aria-controls="pwa-login-modal">Login</button>
+        <button class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#pwa-login-modal"
+            aria-controls="pwa-login-modal">
+          ${this.i18n.login}
+        </button>
         `}
       </header>
 
@@ -158,52 +182,54 @@ export class SakaiPWA extends SakaiElement {
       </div>
 
       <div class="text-center my-3 ${this.displayNotificationsButton ? "d-block" : "d-none"}">
-        <div id="pwa-permission-information" class="text-center me-2">${this.i18n.allow_notifications_instruction}</div>
+        <div id="pwa-permission-information" class="text-center me-2 mb-2">${this.i18n.allow_notifications_instruction}</div>
         <button @click=${this._requestNotificationPermission}
             class="btn btn-primary mt-2 mt-sm-0">
           ${this.i18n.allow_notifications}
         </button>
       </div>
 
-      <div id="pwa-profile" class="offcanvas offcanvas-end">
-        <div class="offcanvas-header">
-          <div id="pwa-profile-label" class="fw-bold fs-1">Profile</div>
-          <button type="button" class="btn-close fs-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body d-flex flex-column">
-          <div class="text-center mb-3 pb-2">
-            <div id="sakai-profile-image-block">
-              <button class="btn only-icon" data-bs-toggle="modal" data-bs-target="#profile-image-upload">
-                <img class="sakai-accountProfileImage rounded-circle" width="100" src="/direct/profile/${portal.user.id}/image/thumb" alt="Profile image">
-                <div id="sakai-profile-image-change">Change</div>
-              </button>
+      ${this.userId ? html`
+        <div id="pwa-profile" class="offcanvas offcanvas-end">
+          <div class="offcanvas-header">
+            <h5 id="pwa-profile-label" class="offcanvas-title">Profile</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body d-flex flex-column">
+            <div class="text-center mb-3 pb-2">
+              <div id="sakai-profile-image-block">
+                <button class="btn only-icon" data-bs-toggle="modal" data-bs-target="#profile-image-upload">
+                  <img class="sakai-accountProfileImage rounded-circle" width="100" src="/direct/profile/${this.userId}/image/thumb" alt="Profile image">
+                  <div id="sakai-profile-image-change">Change</div>
+                </button>
+              </div>
+            </div>
+            <div class="text-center pt-3 mt-auto">
+              <a href="javascript:;" title="Logout button" id="loginLink1" @click=${this._logout} class="bi bi-box-arrow-right btn btn-primary w-100">
+                <span class="Mrphs-login-Message">Logout</span>
+              </a>
             </div>
           </div>
-          <div class="text-center pt-3 mt-auto">
-            <a href="logout" title="Logout button" id="loginLink1" @click=${this._logout} class="bi bi-box-arrow-right btn btn-primary w-100">
-              <span class="Mrphs-login-Message">Logout</span>
-            </a>
-          </div>
         </div>
-      </div>
+      ` : ""}
 
       <div id="pwa-menu" class="offcanvas offcanvas-start">
         <div class="offcanvas-header">
-          <div id="pwa-menu-label" class="fw-bold fs-1">Menu</div>
-          <button type="button" class="btn-close fs-2" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h5 id="pwa-menu-label" class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
           <ul class="list-unstyled">
             <li>
               <button type="button" class="btn icon-button" @click=${this._showNotifications}>
-                <span class="si si-alerts fs-2"></span>
-                <span class="ms-2 fs-3">${this.i18n.notifications}</span>
+                <span class="si si-alerts fs-4"></span>
+                <span class="ms-2 fs-5">${this.i18n.notifications}</span>
               </button>
             </li>
             <li>
               <button type="button" class="btn icon-button" @click=${this._showTasks}>
-                <span class="si si-alerts fs-2"></span>
-                <span class="ms-2 fs-3">${this.i18n.tasks}</span>
+                <span class="si si-alerts fs-4"></span>
+                <span class="ms-2 fs-5">${this.i18n.tasks}</span>
               </button>
             </li>
           </ul>
@@ -213,10 +239,10 @@ export class SakaiPWA extends SakaiElement {
       ${this.offline ? html`
         <div class="sak-banner-info">You are offline</div>
       ` : ""}
-      ${this.showingNotifications && portal.user.id ? html`
+      ${this.showingNotifications && this.userId ? html`
         <h2 class="text-center">${this.i18n.notifications}</h2>
         <div class="p-2">
-          <sakai-notifications url="/direct/portal/notifications.json" ?offline=${this.offline} push></sakai-notifications>
+          <sakai-notifications url="/direct/portal/notifications.json" user-id="${ifDefined(this.userId)}" ?offline=${this.offline} push></sakai-notifications>
         </div>
       ` : ""}
       ${this.showingTasks ? html`

@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@sakai-ui/sakai-element": "file:../sakai-element",
+    "@sakai-ui/sakai-portal-utils": "file:../sakai-portal-utils",
     "@sakai-ui/sakai-user-photo": "file:../sakai-user-photo",
     "lit": "^2.6.0"
   },

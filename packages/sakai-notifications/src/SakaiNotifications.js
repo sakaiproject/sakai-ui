@@ -1,6 +1,7 @@
 import { SakaiElement } from "@sakai-ui/sakai-element";
 import { html } from "lit";
 import "@sakai-ui/sakai-user-photo";
+import { clearAppBadge, setAppBadge } from "@sakai-ui/sakai-portal-utils";
 
 export class SakaiNotifications extends SakaiElement {
 
@@ -18,6 +19,7 @@ export class SakaiNotifications extends SakaiElement {
 
     return {
       url: { type: String },
+      userId: { attribute: "user-id", type: String },
     };
   }
 
@@ -25,12 +27,13 @@ export class SakaiNotifications extends SakaiElement {
 
     super.attributeChangedCallback(name, oldValue, newValue);
 
-    if (this.url) {
+    if (name === "user-id" && (oldValue !== newValue)) {
+      this.i18nLoaded = this.loadTranslations("sakai-notifications");
       this.loadInitialNotifications();
     }
   }
 
-  loadInitialNotifications() {
+  loadInitialNotifications(register = true) {
 
     fetch(this.url, {
       credentials: "include",
@@ -49,7 +52,9 @@ export class SakaiNotifications extends SakaiElement {
 
       this.notifications = data.notifications || [];
       this.filterIntoToolNotifications();
-      this.registerForNotifications();
+      if (register) {
+        this.registerForNotifications();
+      }
       this.fireLoadedEvent();
     });
   }
@@ -70,6 +75,10 @@ export class SakaiNotifications extends SakaiElement {
   filterIntoToolNotifications(decorate = true) {
 
     this.filteredNotifications.clear();
+
+    const unviewed = this.notifications.filter(n => !n.viewed).length;
+    if (unviewed === 0) clearAppBadge();
+    else setAppBadge(unviewed);
 
     this.notifications.forEach(noti => {
 
@@ -184,6 +193,7 @@ export class SakaiNotifications extends SakaiElement {
 
         if (r.ok) {
           this.notifications?.forEach(a => a.viewed = true);
+          clearAppBadge();
           this.requestUpdate();
           this.fireLoadedEvent();
         } else {
