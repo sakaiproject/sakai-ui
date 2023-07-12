@@ -32,7 +32,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-grades.js": "./sakai-grades.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-icon": "file:../sakai-icon",

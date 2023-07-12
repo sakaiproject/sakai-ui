@@ -32,7 +32,7 @@ export class SakaiPWA extends SakaiElement {
   }
 
   _requestNotificationPermission() {
-    callSubscribeIfPermitted().then(() => this.displayNotificationsButton = false);
+    callSubscribeIfPermitted().then(() => { console.log("HERE1"); this.displayNotificationsButton = false; });
   }
 
   _showNotifications() {

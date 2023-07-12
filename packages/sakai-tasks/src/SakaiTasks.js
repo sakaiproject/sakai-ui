@@ -1,8 +1,8 @@
 import { css, html } from "lit";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
 import { SakaiPageableElement } from "@sakai-ui/sakai-pageable-element";
-import "@sakai-ui/sakai-icon";
-import moment from "moment";
+import "@sakai-ui/sakai-icon/sakai-icon.js";
+import moment from "moment/src/moment";
 import "@lion/dialog";
 import "../sakai-tasks-create-task.js";
 

@@ -1,5 +1,5 @@
 import { LitElement, css, html } from "lit";
-import "@sakai-ui/sakai-pager";
+import "@sakai-ui/sakai-pager/sakai-pager.js";
 import { loadProperties } from "@sakai-ui/sakai-i18n";
 
 export class SakaiPageableElement extends LitElement {
@@ -42,6 +42,7 @@ export class SakaiPageableElement extends LitElement {
 
     if (this.allDataAtOnce) {
       this.loadAllData().then(() => {
+
         this.count = Math.ceil(this.data.length / this.pageSize);
         this._loadDataPage(1);
       });
@@ -88,6 +89,7 @@ export class SakaiPageableElement extends LitElement {
   }
 
   connectedCallback() {
+
     super.connectedCallback();
     this._loadData();
   }
@@ -96,10 +98,12 @@ export class SakaiPageableElement extends LitElement {
 
     return html`
       <div id="wrapper">
-      <div id="content">${this.content()}</div>
-      ${this.showPager ? html`
-      <div id="pager"><sakai-pager count="${this.count}" current="1" @page-selected=${this.pageClicked}></sakai-pager></div>
-      ` : ""}
+        <div id="content">${this.content()}</div>
+        ${this.showPager ? html`
+        <div id="pager">
+          <sakai-pager count="${this.count}" current="1" @page-selected=${this.pageClicked}></sakai-pager>
+        </div>
+        ` : ""}
       </div>
     `;
   }

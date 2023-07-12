@@ -37,8 +37,9 @@ export const dashboardData = {
   givenName: "Adrian Fish",
   motd: "Check your privilege",
   widgets: [ "announcements", "forums", "grades", "calendar", "tasks" ],
-  layout: [ "announcements", "forums", "grades" ],
+  layout: [ "announcements", "forums", "grades", "calendar", "tasks" ],
   template: { id: 1, thumbnailUrl: "/test/images/layout1.png" },
+  worksiteSetupUrl: "balls",
   programme,
   overview,
 };

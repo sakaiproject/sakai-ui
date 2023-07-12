@@ -37,11 +37,14 @@ export class SakaiEditor extends SakaiElement {
   }
 
   setContent(text) {
+
     this.content = text;
+
     if (this.textarea) {
-      return this.querySelector(`#${this.elementId}`).value = this.content;
+      this.querySelector(`#${this.elementId}`).value = this.content;
+    } else {
+      this.editor.setData(this.content);
     }
-    return this.editor.setData(this.content);
   }
 
   clear() {
@@ -113,7 +116,7 @@ export class SakaiEditor extends SakaiElement {
 
     if (this.textarea) {
       return html `
-        <textarea style="width: 100%" id="${this.elementId}" aria-label="Sakai editor textarea" tabindex="0">${unsafeHTML(this.content)}</textarea>
+        <textarea style="width: 100%" id="${this.elementId}" aria-label="Sakai editor textarea" tabindex="0" .value=${this.content}></textarea>
       `;
     }
 

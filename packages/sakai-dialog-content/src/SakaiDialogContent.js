@@ -1,6 +1,6 @@
 import { LitElement, html, css } from "lit";
-import "@sakai-ui/sakai-icon";
-import "@sakai-ui/sakai-button";
+import "@sakai-ui/sakai-icon/sakai-icon.js";
+import "@sakai-ui/sakai-button/sakai-button.js";
 import { loadProperties as lp } from "@sakai-ui/sakai-i18n";
 
 export class SakaiDialogContent extends LitElement {
@@ -41,8 +41,6 @@ export class SakaiDialogContent extends LitElement {
   }
 
   render() {
-
-    console.log("render");
 
     return html`
       <div id="container">

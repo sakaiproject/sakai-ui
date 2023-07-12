@@ -9,7 +9,7 @@ describe("sakai-widget-panel tests", () => {
   window.top.portal = { locale: "en_GB" };
 
   fetchMock
-    .get(data.i18nUrl, data.i18n, {overwriteRoutes: true})
+    .get(data.widgetPanelI18nUrl, data.widgetPanelI18n, {overwriteRoutes: true})
     .get("*", 500, {overwriteRoutes: true});
 
   it ("renders in user mode correctly", async () => {

@@ -1,28 +1,31 @@
 import "../sakai-tasks.js";
 import { html } from "lit";
 import * as data from "./data.js";
+import * as dialogContentData from "../../sakai-dialog-content/test/data.js";
+import * as pagerData from "../../sakai-pager/test/data.js";
 import { expect, fixture, waitUntil } from "@open-wc/testing";
 import fetchMock from "fetch-mock/esm/client";
 
 describe("sakai-tasks tests", () => {
 
-  window.moment = { duration: () => { return { humanize: () => "3 days ago" } } };
-  window.top.portal = { locale: "en_GB" };
+  const minusFiveHours = -5 * 60 * 60 * 1000;
+  window.top.portal = { locale: "en_GB", user: { offsetFromServerMillis: minusFiveHours } };
 
   fetchMock
-      .get(data.i18nUrl, data.i18n, {overwriteRoutes: true})
-      .get(data.dialogcontentI18nUrl, data.dialogcontentI18n, {overwriteRoutes: true})
-      .get(data.tasksUrl, data.tasks, {overwriteRoutes: true})
-      .post(data.tasksUrl, (url, opts) => {
+    .get(data.i18nUrl, data.i18n, { overwriteRoutes: true })
+    .get(dialogContentData.i18nUrl, dialogContentData.i18n, { overwriteRoutes: true })
+    .get(pagerData.i18nUrl, pagerData.i18n, { overwriteRoutes: true })
+    .get(data.tasksUrl, data.tasks, { overwriteRoutes: true })
+    .post(data.tasksUrl, (url, opts) => {
 
-        return Object.assign({
-          id: "" + Math.floor(Math.random() * 20) + 1,
-          creator: "adrian",
-          created: Date.now(),
-          creatorDisplayName: "Adrian Fish",
-        }, JSON.parse(opts.body));
-      }, {overwriteRoutes: true})
-      .get("*", 500, {overwriteRoutes: true});
+      return Object.assign({
+        id: "" + Math.floor(Math.random() * 20) + 1,
+        creator: "adrian",
+        created: Date.now(),
+        creatorDisplayName: "Adrian Fish",
+      }, JSON.parse(opts.body));
+    }, {overwriteRoutes: true})
+    .get("*", 500, { overwriteRoutes: true });
 
   it ("renders in user mode correctly", async () => {
 
@@ -47,6 +50,10 @@ describe("sakai-tasks tests", () => {
     expect(el.shadowRoot.querySelectorAll("#tasks > .cell").length).to.equal(6);
     const addTaskButton = el.shadowRoot.querySelector(".add-task-button");
     expect(addTaskButton).to.exist;
+
+    const pager = el.shadowRoot.querySelector("sakai-pager");
+    expect(pager).to.exist;
+    expect(pager.count).to.equal(1);
   });
 
   it ("is accessible", async () => {

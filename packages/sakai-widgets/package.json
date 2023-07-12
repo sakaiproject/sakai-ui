@@ -27,7 +27,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-widget-panel.js": "./sakai-widget-panel.js"
   },
   "dependencies": {
     "@lion/dialog": "^0.16.1",

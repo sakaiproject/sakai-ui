@@ -27,7 +27,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-picture-changer.js": "./sakai-picture-changer.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-button": "file:../sakai-button",

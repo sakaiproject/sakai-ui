@@ -1,46 +1,30 @@
 import { loadProperties } from "@sakai-ui/sakai-i18n";
 
-const SCROLL_THRESHOLD = 500; // px
-
-// DOM Elements
-const portalMainContainer = document.querySelector(".portal-main-container");
-console.log(portalMainContainer);
-const jumpToTopButton = document.createElement("button");
-jumpToTopButton.classList.add("jump-to-top");
-jumpToTopButton.insertAdjacentHTML("beforeend", "<i class=\"si si-arrow-up-circle-fill\"></i>");
-portalMainContainer.appendChild(jumpToTopButton);
-
-// i18n variable
-let jumptotopLabel;
-
 // load i18n properties and initialize the component when ready
 async function init() {
+
   const i18n = await loadProperties("jumptotop");
-  jumptotopLabel = i18n.jumptotop_title;
+  let jumptotopLabel = i18n.jumptotop_title;
+
+  // DOM Elements
+  const portalMainContainer = document.querySelector(".portal-main-container");
+  const jumpToTopButton = document.createElement("button");
   jumpToTopButton.title = jumptotopLabel;
   jumpToTopButton.ariaLabel = jumptotopLabel;
+  jumpToTopButton.classList.add("jump-to-top");
+  jumpToTopButton.insertAdjacentHTML("beforeend", "<i class=\"si si-arrow-up-circle-fill\"></i>");
+  jumpToTopButton.addEventListener("click", function () {
+    portalMainContainer.scrollTo({ top: 0, behavior: "smooth" });
+  });
+  portalMainContainer.appendChild(jumpToTopButton);
+  portalMainContainer.addEventListener("scroll", function () {
+
+    if (portalMainContainer.scrollTop > 500) {
+      jumpToTopButton.classList.add("show");
+    } else {
+      jumpToTopButton.classList.remove("show");
+    }
+  });
 }
 
-// show/hide jump to top button based on scroll position
-function handleScroll() {
-  if (portalMainContainer.scrollTop > SCROLL_THRESHOLD) {
-    jumpToTopButton.classList.add("show");
-  } else {
-    jumpToTopButton.classList.remove("show");
-  }
-}
-
-// scroll to top of the page when jump to top button is clicked
-function handleJumpToTopClick() {
-  const scrollOptions = {
-    top: 0,
-    behavior: "smooth"
-  };
-  portalMainContainer.scrollTo(scrollOptions);
-}
-
-// initialize component
-init();
-
-portalMainContainer.addEventListener("scroll", handleScroll);
-jumpToTopButton.addEventListener("click", handleJumpToTopClick);
+export { init };

@@ -1,9 +1,10 @@
 import { css, html } from "lit";
 import { loadProperties } from "@sakai-ui/sakai-i18n";
 import { SakaiDialogContent } from "@sakai-ui/sakai-dialog-content";
-import "@sakai-ui/sakai-date-picker";
+import "@sakai-ui/sakai-date-picker/sakai-date-picker.js";
 import "@sakai-ui/sakai-icon";
-import "@sakai-ui/sakai-editor";
+import "@sakai-ui/sakai-editor/sakai-editor.js";
+import { GROUP, SITE, USER } from "./assignation-types.js";
 
 /**
  * Handles the creation or updating of user or site tasks
@@ -40,7 +41,7 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
     this.deliverTasks = false;
     this.defaultTask = { taskId: "", description: "", priority: "3", notes: "", due: Date.now(), assignationType: "", selectedGroups: [], siteId: "", owner: "", taskAssignedTo: "", complete: null };
     this.task = { ...this.defaultTask };
-    this.assignationType = "user";
+    this.assignationType = USER;
     this.mode = "create";
     this.optionsGroup = [];
     loadProperties("tasks").then(r => this.i18n = r);
@@ -127,39 +128,8 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
     if (!this.siteId && value.siteId) {
       this.siteId = value.siteId;
     }
-    this.requestUpdate("task", old);
-    this.updateComplete.then(() => {
 
-      const datePicker = this.shadowRoot.getElementById("due");
-      const disableFields = (this.task.owner !== this.userId && this.mode === "edit");
-      if (value.system) {
-        datePicker.disabled = true;
-      } else {
-        datePicker.disabled = false;
-        datePicker.epochMillis = value.due;
-      }
-      const descriptionEl = this.shadowRoot.getElementById("description");
-      descriptionEl.disabled = value.system;
-      descriptionEl.value = value.description;
-      this.shadowRoot.getElementById("priority").value = value.priority;
-      const editor = this.getEditor();
-      if (editor) {
-        editor.setContent(value.notes);
-        editor.isReadOnly = value.system;
-      }
-      if (disableFields) {
-        descriptionEl.disabled = true;
-        datePicker.disabled = true;
-      }
-      const completeEl = this.shadowRoot.getElementById("complete");
-      if (completeEl) {
-        if (value.complete) {
-          completeEl.checked = true;
-        } else {
-          completeEl.checked = false;
-        }
-      }
-    });
+    this.requestUpdate("task", old);
   }
 
   get task() {
@@ -168,6 +138,42 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
 
   shouldUpdate(changed) {
     return this.task && this.i18n && super.shouldUpdate(changed);
+  }
+
+  firstUpdated() {
+
+    const datePicker = this.shadowRoot.getElementById("due");
+    const disableFields = (this.task.owner !== this.userId && this.mode === "edit");
+    if (this.task.system) {
+      datePicker.disabled = true;
+    } else {
+      datePicker.disabled = false;
+      datePicker.epochMillis = this.task.due;
+    }
+    const descriptionEl = this.shadowRoot.getElementById("description");
+    descriptionEl.disabled = this.task.system;
+    descriptionEl.value = this.task.description;
+    this.shadowRoot.getElementById("priority").value = this.task.priority;
+    const editor = this.getEditor();
+    if (editor) {
+      editor.updateComplete.then(() => {
+
+        editor.setContent(this.task.notes);
+        editor.isReadOnly = this.task.system;
+      });
+    }
+    if (disableFields) {
+      descriptionEl.disabled = true;
+      datePicker.disabled = true;
+    }
+    const completeEl = this.shadowRoot.getElementById("complete");
+    if (completeEl) {
+      if (this.task.complete) {
+        completeEl.checked = true;
+      } else {
+        completeEl.checked = false;
+      }
+    }
   }
 
   connectedCallback() {
@@ -221,7 +227,7 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
     descriptionEl.disabled = false;
     if (completeEl) { completeEl.checked = false; }
     this.task = { ...this.defaultTask };
-    this.assignationType = "user";
+    this.assignationType = USER;
     this.mode = "create";
     this.siteId = this.siteIdBackup;
   }
@@ -243,7 +249,7 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
           aria-label="${this.i18n.groups}"
           @change=${e => this.selectedGroups = e.target.selectedOptions}
           .value=${this.selectedGroups}
-          ?disabled=${this.assignationType !== "group"}>
+          ?disabled=${this.assignationType !== GROUP}>
         ${this.optionsGroup.map(option => html`
         <option value="${Object.keys(option)[0]}" ?selected=${this.selected === Object.keys(option)[0]}>
           ${Object.values(option)[0]}
@@ -331,8 +337,8 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
                 name="deliver-task"
                 title="${this.i18n.deliver_my_dashboard}"
                 value="user"
-                @click=${() => this.assignationType = "user"}
-                ?checked=${this.assignationType === "user"} >
+                @click=${() => this.assignationType = USER}
+                ?checked=${this.assignationType === USER} >
             <label for="task-current-user">${this.i18n.deliver_my_dashboard}</label>
           </div>
           <div>
@@ -341,8 +347,8 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
                 name="deliver-task"
                 title="${this.i18n.deliver_site}"
                 value="site"
-                @click=${() => this.assignationType = "site"}
-                ?checked=${this.assignationType === "site"}>
+                @click=${() => this.assignationType = SITE}
+                ?checked=${this.assignationType === SITE}>
             <label for="task-students">${this.i18n.deliver_site}</label>
           </div>
           <div style="display:${this.existGroups() ? "inline" : "none"}">
@@ -351,8 +357,8 @@ export class SakaiTasksCreateTask extends SakaiDialogContent {
                name="deliver-task"
                title="${this.i18n.deliver_group}"
                value="group"
-               @click=${() => this.assignationType = "group"}
-               ?checked=${this.assignationType === "group"}>
+               @click=${() => this.assignationType = GROUP}
+               ?checked=${this.assignationType === GROUP}>
             <label for="task-groups">${this.i18n.deliver_group}</label>
           </div>
           <div style="display:${this.existGroups() ? "block" : "none"}; margin-left:20px; margin-top:5px;">

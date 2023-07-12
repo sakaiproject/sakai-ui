@@ -10,9 +10,6 @@ export class SakaiNotifications extends SakaiElement {
     super();
 
     this.filteredNotifications = new Map();
-
-    this.i18nLoaded = this.loadTranslations("sakai-notifications");
-    this.i18nLoaded.then(i18n => this.i18n = i18n);
   }
 
   static get properties() {
@@ -29,6 +26,7 @@ export class SakaiNotifications extends SakaiElement {
 
     if (name === "user-id" && (oldValue !== newValue)) {
       this.i18nLoaded = this.loadTranslations("sakai-notifications");
+      this.i18nLoaded.then(i18n => this.i18n = i18n);
       this.loadInitialNotifications();
     }
   }

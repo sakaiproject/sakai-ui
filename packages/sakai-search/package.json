@@ -28,7 +28,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-search.js": "./sakai-search.js"
   },
   "dependencies": {
     "@sakai-ui/sakai-element": "file:../sakai-element",

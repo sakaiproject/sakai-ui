@@ -2,8 +2,14 @@ import { SakaiPageableElement } from "../src/SakaiPageableElement.js";
 import { expect, fixture, waitUntil } from "@open-wc/testing";
 import { html } from "lit";
 import * as data from "./data.js";
+import * as pagerData from "../../sakai-pager/test/data.js";
+import fetchMock from "fetch-mock/esm/client";
 
 describe("sakai-pageable-element tests", () => {
+
+  fetchMock
+    .get(pagerData.i18nUrl, pagerData.i18n, { overwriteRoutes: true })
+    .get("*", 500, { overwriteRoutes: true });
 
   class MyPageable extends SakaiPageableElement {
 

@@ -26,7 +26,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-pager.js": "./sakai-pager.js"
   },
   "dependencies": {
     "@lion/pagination": "^0.9.1",

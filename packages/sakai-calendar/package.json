@@ -27,7 +27,8 @@
     "access": "public"
   },
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./sakai-calendar.js": "./sakai-calendar.js"
   },
   "dependencies": {
     "@lion/calendar": "^0.20.1",

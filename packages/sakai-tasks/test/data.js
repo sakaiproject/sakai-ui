@@ -67,8 +67,6 @@ alert_want_to_delete=Are you sure you want to delete this task?
 groups=Groups
 `;
 
-export const dialogcontentI18nUrl = /getI18nProperties.*dialog-content$/;
-
 export const userId = "adrian";
 export const siteId = "xyz";
 export const siteTitle = "XYZ Site";

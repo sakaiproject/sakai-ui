@@ -1,11 +1,12 @@
 import { html, css, LitElement } from "lit";
 import { ifDefined } from "lit-html/directives/if-defined.js";
 import { unsafeHTML } from "lit-html/directives/unsafe-html.js";
-import "@sakai-ui/sakai-icon";
+import "@sakai-ui/sakai-icon/sakai-icon.js";
 import { loadProperties } from "@sakai-ui/sakai-i18n";
-import "@sakai-ui/sakai-course-list";
+import "@sakai-ui/sakai-course-list/sakai-course-list.js";
 import "@sakai-ui/sakai-widgets";
-import "@sakai-ui/sakai-button";
+import "@sakai-ui/sakai-widgets/sakai-widget-panel.js";
+import "@sakai-ui/sakai-button/sakai-button.js";
 
 export class SakaiHomeDashboard extends LitElement {
 
@@ -25,7 +26,7 @@ export class SakaiHomeDashboard extends LitElement {
       userId: { attribute: "user-id", type: String },
       showSites: { attribute: "show-sites", type: Boolean },
       showMotd: Boolean,
-      editing: { type: Boolean },
+      editing: { attribute: false, type: Boolean },
     };
   }
 

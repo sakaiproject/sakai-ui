@@ -2,17 +2,19 @@ import "../sakai-tasks-create-task.js";
 import { html } from "lit";
 import * as data from "./data.js";
 import * as dialogContentData from "../../sakai-dialog-content/test/data.js";
+import { SITE } from "../src/assignation-types.js";
 import { expect, fixture, waitUntil, aTimeout } from "@open-wc/testing";
 import fetchMock from "fetch-mock/esm/client";
 
 describe("sakai-tasks-create-task tests", () => {
 
-  window.top.portal = { locale: "en_GB" };
+  const minusFiveHours = -5 * 60 * 60 * 1000;
+  window.top.portal = { locale: "en_GB", user: { offsetFromServerMillis: minusFiveHours } };
   window.moment = { duration: () => { return { humanize: () => "3 days ago" } } };
 
   fetchMock
     .get(data.i18nUrl, data.i18n, { overwriteRoutes: true })
-    .get(data.dialogcontentI18nUrl, dialogContentData.i18n, { overwriteRoutes: true })
+    .get(dialogContentData.i18nUrl, dialogContentData.i18n, { overwriteRoutes: true })
     .get(data.tasksUrl, data.tasks, { overwriteRoutes: true })
     .post(data.tasksUrl, (url, opts) => {
 
@@ -32,6 +34,8 @@ describe("sakai-tasks-create-task tests", () => {
       <sakai-tasks-create-task user-id="${data.userId}"></sakai-tasks-create-task>
     `);
 
+    el.assignationType = SITE;
+
     const description = "Go to space";
     const notes = "This task is about going to space";
     const priority = "5";
@@ -42,17 +46,14 @@ describe("sakai-tasks-create-task tests", () => {
     expect(descriptionEl).to.exist;
     descriptionEl.value = description;
 
-    const notesEl = el.shadowRoot.getElementById("notes");
+    const notesEl = el.shadowRoot.querySelector("[element-id='task-text-editor']");
     expect(notesEl).to.exist;
-    notesEl.value = notes;
+    notesEl.setContent(notes);
 
     const priorityEl = el.shadowRoot.getElementById("priority");
     expect(priorityEl).to.exist;
     priorityEl.value = priority;
     priorityEl.dispatchEvent(new Event("change"));
-
-    const saveEl = el.shadowRoot.querySelector("sakai-button");
-    expect(saveEl).to.exist;
 
     el.addEventListener("task-created", e => {
 
@@ -60,8 +61,11 @@ describe("sakai-tasks-create-task tests", () => {
       expect(e.detail.task.description).to.equal(description);
       expect(e.detail.task.notes).to.equal(notes);
       expect(e.detail.task.priority).to.equal(priority);
+      expect(e.detail.task.assignationType).to.equal(SITE);
     });
 
+    const saveEl = el.shadowRoot.querySelector("sakai-button");
+    expect(saveEl).to.exist;
     saveEl.click();
   });
 
